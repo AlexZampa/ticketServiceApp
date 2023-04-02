@@ -11,18 +11,16 @@
 */
 
 //Imports
-import ProductTable from "../../components/ui-core/ProductTable/ProductTable";
-const Home = () => {
+const Profile = () => {
     return (
         <>
             <div className='mt-4 d-flex flex-column justify-content-center align-items-center'>
                 <h1 className='text-center fw-bold fst-italic mt-4'>
-                    PRODUCT LIST
+                    PROFILE INFORMATION'S
                 </h1>
-                <ProductTable/>
             </div>
         </>
     );
 }
 
-export default Home;
+export default Profile;

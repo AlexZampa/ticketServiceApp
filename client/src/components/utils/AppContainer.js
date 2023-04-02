@@ -9,7 +9,7 @@
 */
 
 //Imports
-import {Container} from "react-bootstrap";
+import {Container, Row} from "react-bootstrap";
 
 //Components
 import Navbar from "../ui-core/Navbar/Navbar";
@@ -17,8 +17,11 @@ import Navbar from "../ui-core/Navbar/Navbar";
 const AppContainer = ({ ...props }) => {
 
     return (
-        <Container fluid className='app-container bg-primary'>
+        <Container fluid className='app-container'>
             <Navbar/>
+            <Row className='mt-4 p-0'>
+                {props.children}
+            </Row>
         </Container >
     );
 }

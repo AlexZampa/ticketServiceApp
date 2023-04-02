@@ -9,35 +9,36 @@
  */
 
 //Imports
-import "./Navbar.css"
-import {Container, Navbar as MyNavbar, Button, Dropdown, Row,Col} from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Container, Navbar as MyNavbar, Button, Dropdown, Row,Col,Form} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import logo from "../../../logo.svg"
+import { Film, PersonCircle, Ticket } from 'react-bootstrap-icons';
 
 const Navbar = (props) => {
 
     return (
-        <MyNavbar collapseOnSelect bg="light" variant="light" className="shadow p-2 bg-white sticky-top">
-                <Container fluid>
-                    <MyNavbar.Brand as={Link} to="/" data-testid='home-logo-button'>
-                        <img src={logo} alt="Logo Icon" width={40} height={40} />
-                    </MyNavbar.Brand>
-                    <Link to={"/"} data-testid='home-icon-button'>
-                        <FaHome className="home-icon-navbar" />
-                    </Link>
-                    <>
-                        <Link to={"/signup"}>
-                            <Button variant="secondary" className="btn-navbar mb-2 mb-sm-0">
-                                SignUp
-                            </Button>
-                        </Link>
-                        <Link to={"/login"}>
-                            <Button className="btn-navbar mx-sm-2 justify-content-end">Login</Button>
-                        </Link>
-                    </>
-                </Container>
-        </MyNavbar >
+        <MyNavbar expand="lg" variant="dark" fixed="top" className='bg-black'>
+            <MyNavbar.Brand href="#home" className='ms-2'>
+                <Ticket/>
+                <span className="ms-2"> Ticket Service</span>
+                
+            </MyNavbar.Brand>
+            <MyNavbar.Collapse>
+                <Form className='mx-auto'>
+                    <Form.Group>
+                        <Form.Control type="text" placeholder="Search" />
+                    </Form.Group>
+                </Form>
+            </MyNavbar.Collapse>
+            <MyNavbar.Brand href="#account" className='justify-content-end logout-text'>
+                <PersonCircle className='person-circle' color='white' size={25} />
+                <Button size='sm' className= "ms-2" variant={'secondary '} >
+                    Profile
+                </Button>
+            </MyNavbar.Brand>
+        </MyNavbar>
     );
 };
 

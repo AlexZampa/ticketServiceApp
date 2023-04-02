@@ -11,6 +11,7 @@
 .btn-navbar {
     transition: 0.5s;
     cursor: pointer;
+    justify-content: end;
 }
 
 .btn-navbar:hover {
@@ -32,9 +33,9 @@
     transform: scale(1.20);
 }
 
-.sign-up-navabar{
+.div-end{
     background: #282c34;
-    align-content: end;
+    align-items: end;
 }
 
 /* Dropdown menù animation */

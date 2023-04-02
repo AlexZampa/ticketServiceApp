@@ -12,8 +12,10 @@ function App() {
   return (
 
       <AppContainer>
-        <Routes location={location} key={location.pathname}>
-          <Route path={'/'} element={View.Home}/>
+        <Routes>
+          <Route index path={'/'} element={<View.Home/>}/>
+            <Route path='/profile' element={<View.Profile/>} />
+            <Route path='*' element={<View.Error/>}/>
         </Routes>
 
       </AppContainer>
