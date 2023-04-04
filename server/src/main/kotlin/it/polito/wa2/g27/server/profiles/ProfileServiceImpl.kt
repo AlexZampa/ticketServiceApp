@@ -20,12 +20,7 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository): Prof
         }
 
         val p = Profile()
-        p.email = profileDTO.email
-        p.username = profileDTO.username
-        p.name = profileDTO.name
-        p.surname = profileDTO.surname
-        p.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth)
-        p.hash = profileDTO.hash
+        parseProfileDTO(p, profileDTO)
         profileRepository.save(p)
     }
 
@@ -35,12 +30,17 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository): Prof
         }
 
         val p = profileRepository.findByIdOrNull(email) ?: throw ProfileNotFoundException("Profile Not Found")
-        p.email = profileDTO.email
-        p.username = profileDTO.username
-        p.name = profileDTO.name
-        p.surname = profileDTO.surname
-        p.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth)
-        p.hash = profileDTO.hash
+        parseProfileDTO(p, profileDTO)
         profileRepository.save(p)
+    }
+
+    fun parseProfileDTO(p: Profile, profileDTO: ProfileDTO) : Profile{
+        p.email = profileDTO.email.toString()
+        p.username = profileDTO.username.toString()
+        p.name = profileDTO.name.toString()
+        p.surname = profileDTO.surname.toString()
+        p.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth.toString())
+        p.hash = profileDTO.hash.toString()
+        return p
     }
 }
