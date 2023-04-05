@@ -14,6 +14,7 @@ class ProductController(private val productService: ProductService) {
         return productService.getAll()
     }
 
+    @CrossOrigin(origins = ["http://localhost:3000"])
     @GetMapping("/products/{productId}")
     fun getProduct(@PathVariable productId: String) : ProductDTO? {
         return productService.getProduct(productId)
