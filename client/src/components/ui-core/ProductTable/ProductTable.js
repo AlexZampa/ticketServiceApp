@@ -14,7 +14,6 @@ import {Container, Navbar as MyNavbar, Button, Dropdown, Row, Col, Form, Table} 
 import {Link} from "react-router-dom";
 
 const ProductTable = (props) => {
-
     return (
         <>
             <Container>
@@ -28,6 +27,9 @@ const ProductTable = (props) => {
                     </tr>
                     </thead>
                     <tbody>
+                        {props.products.map((product) =>
+                            <ProductRow key ={product.id} product = {product}/>
+                        )}
 
                     </tbody>
                 </Table>
@@ -36,5 +38,33 @@ const ProductTable = (props) => {
         </>
     );
 };
+
+function ProductRow(props){
+    console.log(props.product)
+    return(
+        <tr>
+            <ProductData product = {props.product}/>
+        </tr>
+    )
+}
+
+function ProductData(props){
+    return(
+        <>
+            <td>
+                {props.product.id}
+            </td>
+            <td>
+                {props.product.name}
+            </td>
+            <td>
+                {props.product.brand}
+            </td>
+            <td>
+                {props.product.description}
+            </td>
+        </>
+    )
+}
 
 export default ProductTable;
