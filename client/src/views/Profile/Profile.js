@@ -11,14 +11,12 @@
 */
 
 //Imports
+import ProfileContent from "../../components/ui-core/ProfileContent/ProfileContent";
 const Profile = () => {
     return (
         <>
             <div className='mt-4 d-flex flex-column justify-content-center align-items-center'>
-                <h1 className='text-center fw-bold fst-italic mt-4'>
-                    PROFILE INFORMATION'S
-                    <Profile/>
-                </h1>
+                <ProfileContent/>
             </div>
         </>
     );

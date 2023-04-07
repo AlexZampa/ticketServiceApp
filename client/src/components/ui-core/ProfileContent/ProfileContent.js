@@ -13,7 +13,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Navbar as MyNavbar, Button, Dropdown, Row, Col, Form, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {BsSearch} from "react-icons/bs";
+import {BsSearch, BsPencil} from "react-icons/bs";
 import Api from "../../../services/Api";
 import {useState} from "react";
 import ProductTable from "../ProductTable/ProductTable";
@@ -28,6 +28,7 @@ const ProfileContent = (props) => {
     const handleSearch = () =>{
         Api.getProfileByEmail(search)
             .then(profile =>{
+                console.log(profile)
                 setProfile(profile);
             })
             .catch( err =>{
@@ -37,8 +38,7 @@ const ProfileContent = (props) => {
 
     return (
         <>
-            <div>
-                <Row className="w-75">
+                <Row className="w-75 justify-content-center">
                     <Col className="justify-content-start col-8">
                         <h1 className='fw-bold fst-italic mt-4'>
                             PROFILE
@@ -66,7 +66,6 @@ const ProfileContent = (props) => {
                     :
                     <p>Search for a profile</p>
                 }
-            </div>
         </>
     );
 };
@@ -76,12 +75,19 @@ const ShowProfile = (props) => {
     return (
         <>
             <div className='mt-4 d-flex flex-column justify-content-center align-items-center'>
-                <Card style={{ width: '18rem' }}>
-                <Card.Header>Featured</Card.Header>
+                <Card style={{ width: '20rem' }}>
+                <Card.Header className='text-center'>
+                    <b>Profile's Informations</b>
+                    <Button className='ms-2'>
+                        <BsPencil/>
+                    </Button>
+                </Card.Header>
                 <ListGroup variant="flush">
-                <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                <ListGroup.Item><b>Email: &nbsp;&nbsp; </b> {props.profile.email}</ListGroup.Item>
+                <ListGroup.Item><b>Date: &nbsp;&nbsp;</b> {props.profile.dateOfBirth}</ListGroup.Item>
+                <ListGroup.Item><b>Name: &nbsp;&nbsp;</b> {props.profile.name}</ListGroup.Item>
+                <ListGroup.Item><b>Surname: &nbsp;&nbsp;</b> {props.profile.surname}</ListGroup.Item>
+                <ListGroup.Item><b>Username: &nbsp;&nbsp;</b> {props.profile.username}</ListGroup.Item>
                 </ListGroup>
                 </Card>
             </div>
