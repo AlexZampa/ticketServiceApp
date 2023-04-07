@@ -20,7 +20,7 @@ const Navbar = (props) => {
 
     return (
         <MyNavbar expand="lg" variant="dark" fixed="top" className='bg-black'>
-            <MyNavbar.Brand href="#home" className='ms-2'>
+            <MyNavbar.Brand href="/" className='ms-2'>
                 <Ticket/>
                 <span className="ms-2"> Ticket Service</span>
                 
@@ -32,7 +32,7 @@ const Navbar = (props) => {
                     </Form.Group>
                 </Form>
             </MyNavbar.Collapse>
-            <MyNavbar.Brand href="#account" className='justify-content-end logout-text'>
+            <MyNavbar.Brand href="profile" className='justify-content-end logout-text'>
                 <PersonCircle className='person-circle' color='white' size={25} />
                 <Button size='sm' className= "ms-2" variant={'secondary '} >
                     Profile
