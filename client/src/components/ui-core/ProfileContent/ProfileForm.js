@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import {Form, Row, Col, Button, Container} from "react-bootstrap";
+import {Form, Button, Container} from "react-bootstrap";
 import Api from "../../../services/Api";
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom'
 
 
-function ProfileForm(props) {
+function ProfileForm() {
 
     const location = useLocation();
     const isAdding = !location.state;
@@ -32,7 +32,7 @@ function ProfileForm(props) {
                     console.log(profile)
                 })
                 .catch(err => {
-                    console.log('errore' + err.toString());
+                    console.log('error: ' + err.toString());
                 })
         } else {
             Api.modifyProfile(profile.email, profile)
@@ -40,7 +40,7 @@ function ProfileForm(props) {
                     console.log(profile)
                 })
                 .catch(err => {
-                    console.log('errore' + err.toString());
+                    console.log('error: ' + err.toString());
                 })
         }
         navigate(-1);

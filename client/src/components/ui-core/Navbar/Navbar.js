@@ -10,13 +10,10 @@
 
 //Imports
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Container, Navbar as MyNavbar, Button, Dropdown, Row,Col,Form} from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { FaHome } from "react-icons/fa";
-import logo from "../../../logo.svg"
-import { Film, PersonCircle, Ticket } from 'react-bootstrap-icons';
+import {Button, Form, Navbar as MyNavbar} from "react-bootstrap";
+import {PersonCircle, Ticket} from 'react-bootstrap-icons';
 
-const Navbar = (props) => {
+const Navbar = () => {
 
     return (
         <MyNavbar expand="lg" variant="dark" fixed="top" className='bg-black'>

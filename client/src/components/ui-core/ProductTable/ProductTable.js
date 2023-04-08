@@ -10,8 +10,7 @@
 
 //Imports
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Container, Navbar as MyNavbar, Button, Dropdown, Row, Col, Form, Table} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Container, Table} from "react-bootstrap";
 
 const ProductTable = (props) => {
     return (

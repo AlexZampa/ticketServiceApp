@@ -23,7 +23,7 @@ const Api = {
             axios.get(SERVER_URL + `products/`)
                 .then((res) => resolve(res.data))
                 .catch((err) => {
-                    console.log('ERRORE:   '+ err );reject(err)});
+                    console.log('ERROR:   '+ err );reject(err)});
         })
     },
     getProduct: (productId) => {

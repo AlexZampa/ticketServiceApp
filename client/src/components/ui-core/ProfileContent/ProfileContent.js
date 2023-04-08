@@ -1,4 +1,3 @@
-
 /*
  * --------------------------------------------------------------------
  *
@@ -11,16 +10,15 @@
 
 //Imports
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Container, Navbar as MyNavbar, Button, Dropdown, Row, Col, Form, Table} from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {BsSearch, BsPencil, BsPlus} from "react-icons/bs";
+import {BsPencil, BsPlus, BsSearch} from "react-icons/bs";
 import Api from "../../../services/Api";
 import {useState} from "react";
-import ProductTable from "../ProductTable/ProductTable";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 
-const ProfileContent = (props) => {
+const ProfileContent = () => {
 
     const [profile, setProfile] = useState(null);
     const [search, setSearch] = useState(null);
@@ -33,7 +31,7 @@ const ProfileContent = (props) => {
                 setProfile(profile);
             })
             .catch( err =>{
-                console.log('errore'+ err);
+                console.log('error: '+ err);
             })
     }
 
@@ -84,7 +82,7 @@ const ShowProfile = (props) => {
             <div className='mt-4 d-flex flex-column justify-content-center align-items-center'>
                 <Card style={{ width: '20rem' }}>
                 <Card.Header className='text-center'>
-                    <b>Profile's Informations</b>
+                    <b>Profile's Information</b>
                     <Link className='ms-2' to="/editProfile" state={props.profile}>
                         <BsPencil/>
                     </Link>
