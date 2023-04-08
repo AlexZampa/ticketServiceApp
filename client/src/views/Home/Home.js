@@ -30,7 +30,8 @@ const Home = () => {
                 console.log('errore'+ err);
             })
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
-    const handleSearch = () =>{
+    const handleSearch = (event) =>{
+        event.preventDefault();
         Api.getProduct(search)
             .then(product =>{
                 let vproduct = [];
@@ -51,21 +52,21 @@ const Home = () => {
                             PRODUCT LIST
                         </h1>
                     </Col>
-                    <Col className="justify-content-end">
-                        <Form className="mt-4">
+                    <Col className="justify-content-end mt-4">
+                        <Form className="d-flex">
                             <Form.Control
-                                data-testid="name-select"
-                                type="text"
+                                type="search"
                                 placeholder="Search"
+                                className="me-2"
+                                aria-label="Search"
+                                data-testid="name-select"
                                 onChange={(event) => { setSearch(event.target.value) }}
-                                //value={hutName}
+
                             />
+                            <Button type="submit" className='fw-bold fst-italic' onClick={event => handleSearch(event)}>
+                                <BsSearch className='p-0 m-0'/>
+                            </Button>
                         </Form>
-                    </Col>
-                    <Col className="justify-content-end p-0">
-                        <Button className=' fw-bold fst-italic mt-4' onClick={() => handleSearch()}>
-                            <BsSearch className='p-0 m-0'/>
-                        </Button>
                     </Col>
                 </Row>
                 {search?

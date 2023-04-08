@@ -18,7 +18,9 @@ const AppContainer = ({ ...props }) => {
 
     return (
         <Container fluid className='app-container'>
-            <Navbar/>
+            <Row>
+                <Navbar/>
+            </Row>
             <Row className='mt-4 p-0'>
                 {props.children}
             </Row>

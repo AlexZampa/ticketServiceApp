@@ -15,6 +15,8 @@ function App() {
         <Routes>
           <Route index path={'/'} element={<View.Home/>}/>
             <Route path='/profile' element={<View.Profile/>} />
+            <Route path='/editProfile' element={<View.EditProfile/>} />
+            <Route path='/newProfile' element={<View.EditProfile/>} />
             <Route path='*' element={<View.Error/>}/>
         </Routes>
 

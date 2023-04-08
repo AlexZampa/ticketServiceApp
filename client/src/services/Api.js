@@ -44,7 +44,7 @@ const Api = {
     },
     addNewProfile: (formData) => {
         return new Promise((resolve, reject) => {
-            axios.post(SERVER_URL + 'profiles/', formData)
+            axios.post(SERVER_URL + 'profiles', formData)
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })

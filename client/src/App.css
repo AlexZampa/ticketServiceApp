@@ -47,3 +47,8 @@
     transform: rotate(360deg);
   }
 }
+
+.profile-form {
+  padding: 40px 15%;
+  max-width: 100%;
+}

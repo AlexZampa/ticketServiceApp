@@ -28,7 +28,8 @@ const Navbar = (props) => {
             <MyNavbar.Collapse>
                 <Form className='mx-auto'>
                     <Form.Group>
-                        <Form.Control type="text" placeholder="Search" />
+                        {//Ciao Fab
+                        }
                     </Form.Group>
                 </Form>
             </MyNavbar.Collapse>
