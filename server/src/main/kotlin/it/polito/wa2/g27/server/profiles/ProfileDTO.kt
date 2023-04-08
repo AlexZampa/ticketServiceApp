@@ -8,18 +8,18 @@ import jakarta.validation.constraints.NotNull
 data class ProfileDTO (
     @field:NotEmpty(message = "Email can not be blank")
     @field:NotNull(message = "Email can not be null")
-    @field:Email(message = "Email not valid") var email: String?,
+    @field:Email(message = "Email not valid") var email: String,
     @field:NotEmpty(message = "Username can not be blank")
-    @field:NotNull(message = "Username can not be null") var username: String?,
+    @field:NotNull(message = "Username can not be null") var username: String,
     @field:NotEmpty(message = "Name can not be blank")
-    @field:NotNull(message = "Name can not be null") var name: String?,
+    @field:NotNull(message = "Name can not be null") var name: String,
     @field:NotEmpty(message = "Surname can not be blank")
-    @field:NotNull(message = "Surname can not be null") var surname: String?,
+    @field:NotNull(message = "Surname can not be null") var surname: String,
     @field:NotEmpty(message = "Date can not be blank")
     @field:NotNull(message = "Date can not be null")
-    @field:Pattern( regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\$", message = "Not valid data format") var dateOfBirth: String?,
+    @field:Pattern( regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\$", message = "Not valid data format") var dateOfBirth: String,
     @field:NotEmpty(message = "Hash can not be blank")
-    @field:NotNull(message = "Hash can not be null") var hash: String?
+    @field:NotNull(message = "Hash can not be null") var hash: String
 )
 
 fun Profile.toDTO() : ProfileDTO{

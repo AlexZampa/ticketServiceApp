@@ -6,6 +6,7 @@ import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.security.MessageDigest
 
 @Service
 class ProfileServiceImpl(private val profileRepository: ProfileRepository): ProfileService {
@@ -35,12 +36,13 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository): Prof
     }
 
     fun parseProfileDTO(p: Profile, profileDTO: ProfileDTO) : Profile{
-        p.email = profileDTO.email.toString()
-        p.username = profileDTO.username.toString()
-        p.name = profileDTO.name.toString()
-        p.surname = profileDTO.surname.toString()
-        p.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth.toString())
-        p.hash = profileDTO.hash.toString()
+        p.email = profileDTO.email
+        p.username = profileDTO.username
+        p.name = profileDTO.name
+        p.surname = profileDTO.surname
+        p.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth)
+        val digest = MessageDigest.getInstance("SHA-256").digest(profileDTO.hash.toByteArray())
+        p.hash = digest.fold("") { str, it -> str + "%02x".format(it) }
         return p
     }
 }
