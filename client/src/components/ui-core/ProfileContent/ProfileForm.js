@@ -4,7 +4,7 @@ import {Form, Button, Container} from "react-bootstrap";
 import Api from "../../../services/Api";
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom'
-
+import useNotification from "../../utils/useNotification";
 
 function ProfileForm() {
 
@@ -15,10 +15,11 @@ function ProfileForm() {
     const [name, setName] = useState(location.state ? location.state.name:"");
     const [surname, setSurname] = useState(location.state ? location.state.surname:"");
     const [username, setUsername] = useState(location.state ? location.state.username:"");
-    const [password, setPassword] = useState("");
-    const [date, setDate] = useState(location.state ? location.state.dateOfBirth:undefined);
+    const [password, setPassword] = useState("hash");
+    const [date, setDate] = useState(location.state ? location.state.dateOfBirth:dayjs().format('YYYY-MM-DD'));
 
     const navigate = useNavigate();
+    const notify = useNotification()
 
     const handleSubmit = async(event) => {
         event.preventDefault();
@@ -28,22 +29,31 @@ function ProfileForm() {
         if (isAdding) {
             // API CALL
             Api.addNewProfile(profile)
-                .then(profile => {
-                    console.log(profile)
+                .then(() => {
+                    notify.success("New profile created")
+                    navigate("/profile", {
+                        state: {
+                            profile: profile,
+                        }
+                    });
                 })
                 .catch(err => {
-                    console.log('error: ' + err.toString());
+                    notify.error(err.title ? err.title.toString() : "Server error")
                 })
         } else {
             Api.modifyProfile(profile.email, profile)
-                .then(profile => {
-                    console.log(profile)
+                .then(() => {
+                    notify.success("Profile modified successfully")
+                    navigate("/profile", {
+                        state: {
+                            profile: profile,
+                        }
+                    });
                 })
                 .catch(err => {
-                    console.log('error: ' + err.toString());
+                    notify.error(err.title ? err.title.toString() : "Server error")
                 })
         }
-        navigate(-1);
     }
 
     return (
@@ -66,21 +76,24 @@ function ProfileForm() {
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Date of Birth</Form.Label>
-                        <Form.Control type="date" required={true} max={dayjs().format('YYYY-MM-DD')} value={date} onChange={event => setDate(event.target.value)}/>
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
                         <Form.Label>Surname</Form.Label>
                         <Form.Control type="text" maxLength={50} required={true} value={surname} onChange={event => setSurname(event.target.value)}/>
                     </Form.Group>
 
                     <Form.Group className="mb-3">
+                        <Form.Label>Date of Birth</Form.Label>
+                        <Form.Control type="date" required={true} max={dayjs().format('YYYY-MM-DD')} value={date} onChange={event => setDate(dayjs(event.target.value).format('YYYY-MM-DD'))}/>
+                    </Form.Group>
+
+                    {/*
+                    <Form.Group className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" maxLength={16} required={true} value={password} onChange={event => setPassword(event.target.value)}/>
                     </Form.Group>
+                    */
+                    }
 
-                    <Button variant="primary" type="submit">{isAdding ? "Create" : "Edit"}</Button>
+                    <Button variant="primary" type="submit">{isAdding ? "Create" : "Submit"}</Button>
                 </Form>
             </Container>
     );

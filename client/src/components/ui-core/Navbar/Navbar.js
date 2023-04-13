@@ -16,21 +16,13 @@ import {PersonCircle, Ticket} from 'react-bootstrap-icons';
 const Navbar = () => {
 
     return (
-        <MyNavbar expand="lg" variant="dark" fixed="top" className='bg-black'>
+        <MyNavbar expand="lg" variant="dark" fixed="top" className='bg-black w-100'>
             <MyNavbar.Brand href="/" className='ms-2'>
                 <Ticket/>
                 <span className="ms-2"> Ticket Service</span>
                 
             </MyNavbar.Brand>
-            <MyNavbar.Collapse>
-                <Form className='mx-auto'>
-                    <Form.Group>
-                        {//Ciao Fab
-                        }
-                    </Form.Group>
-                </Form>
-            </MyNavbar.Collapse>
-            <MyNavbar.Brand href="profile" className='justify-content-end logout-text'>
+            <MyNavbar.Brand href="profile" className='justify-content-end logout-text ms-lg-auto'>
                 <PersonCircle className='person-circle' color='white' size={25} />
                 <Button size='sm' className= "ms-2" variant={'secondary '} >
                     Profile

@@ -20,17 +20,16 @@ const Api = {
 
     getAllProduct: () => {
         return new Promise((resolve, reject) => {
-            axios.get(SERVER_URL + `products/`)
+            axios.get(SERVER_URL + `products`)
                 .then((res) => resolve(res.data))
-                .catch((err) => {
-                    console.log('ERROR:   '+ err );reject(err)});
+                .catch((err) => reject(err.response.data));
         })
     },
     getProduct: (productId) => {
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `products/${productId}`)
                 .then((res) => resolve(res.data))
-                .catch((err) =>reject(err));
+                .catch((err) =>reject(err.response.data));
         })
     },
     //PROFILE API
@@ -39,7 +38,7 @@ const Api = {
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `profiles/${email}`)
                 .then((res) => resolve(res.data))
-                .catch((err) => reject(err));
+                .catch((err) => reject(err.response.data));
         })
     },
     addNewProfile: (formData) => {
@@ -53,7 +52,7 @@ const Api = {
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `profiles/${email}`, formData)
                 .then((res) => resolve(res.data))
-                .catch((err) => reject(err));
+                .catch((err) => reject(err.response.data));
         })
     }
 }

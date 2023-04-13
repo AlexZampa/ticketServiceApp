@@ -11,27 +11,33 @@
 //Imports
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button, Col, Form, Row} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {BsPencil, BsPlus, BsSearch} from "react-icons/bs";
 import Api from "../../../services/Api";
 import {useState} from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import useNotification from "../../utils/useNotification";
 
 const ProfileContent = () => {
 
-    const [profile, setProfile] = useState(null);
+    const location = useLocation();
+    const [profile, setProfile] = useState(location.state ? location.state.profile : null);
     const [search, setSearch] = useState(null);
+    const notify = useNotification()
 
     const handleSearch = (event) =>{
         event.preventDefault();
+        if (search === "" || search.includes(" ")) {
+            return;
+        }
         Api.getProfileByEmail(search)
             .then(profile =>{
-                console.log(profile)
                 setProfile(profile);
+                notify.success("Profile found");
             })
             .catch( err =>{
-                console.log('error: '+ err);
+                notify.error(err.title ? err.title.toString() : "Server error");
             })
     }
 

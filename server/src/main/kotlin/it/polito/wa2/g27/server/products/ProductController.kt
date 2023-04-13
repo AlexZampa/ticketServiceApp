@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 class ProductController(private val productService: ProductService) {
 
     @CrossOrigin(origins = ["http://localhost:3000"])
-    @GetMapping("/products/")
+    @GetMapping("/products")
     fun getAll(): List<ProductDTO> {
         return productService.getAll()
     }

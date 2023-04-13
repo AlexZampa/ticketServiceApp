@@ -13,13 +13,15 @@
 //Imports
 import ProductTable from "../../components/ui-core/ProductTable/ProductTable";
 import Api from "../../services/Api";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Button, Col, Form, Row} from "react-bootstrap";
 import { BsSearch } from "react-icons/bs";
+import useNotification from "../../components/utils/useNotification";
 const Home = () => {
 
     const [products, setProducts] = useState([]);
-    const [search, setSearch] = useState(null);
+    const [search, setSearch] = useState("");
+    const notify = useNotification()
 
     useEffect(() => {
         Api.getAllProduct()
@@ -27,11 +29,22 @@ const Home = () => {
                 setProducts(products);
             })
             .catch( err =>{
-                console.log('errore'+ err);
+                notify.error("Server error")
             })
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
     const handleSearch = (event) =>{
         event.preventDefault();
+        if (search === "" || search.includes(" ")) {
+            Api.getAllProduct()
+                .then(products =>{
+                    setProducts(products);
+                })
+                .catch( err =>{
+                    notify.error("Server error")
+                })
+            return;
+        }
+
         Api.getProduct(search)
             .then(product =>{
                 let vproduct = [];
@@ -39,7 +52,7 @@ const Home = () => {
                 setProducts(vproduct);
             })
             .catch( err =>{
-                console.log('errore'+ err);
+                notify.error("Product not found")
             })
 
     }
@@ -69,11 +82,7 @@ const Home = () => {
                         </Form>
                     </Col>
                 </Row>
-                {search?
                     <ProductTable products={products}/>
-                    :
-                    <ProductTable products={products}/>}
-
             </div>
         </>
     );
