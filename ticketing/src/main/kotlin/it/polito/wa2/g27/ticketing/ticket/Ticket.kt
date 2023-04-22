@@ -19,5 +19,5 @@ class Ticket {
     var expertId: String = ""
     var chatId: String = ""
     @OneToMany(mappedBy = "id")
-    var ticketHistory: Set<TicketHistory>? = null
+    var ticketHistory: List<TicketHistory> = emptyList()
 }

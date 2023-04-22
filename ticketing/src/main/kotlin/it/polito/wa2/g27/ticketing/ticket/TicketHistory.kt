@@ -12,8 +12,8 @@ import java.time.LocalDateTime
 class TicketHistory {
     @Id @GeneratedValue
     var id: Int = 0
-    @ManyToOne
-    var ticket: Ticket? = null
+    @ManyToOne(optional = false)
+    var ticket: Ticket = Ticket()
     var status: String = ""
     var date: LocalDateTime = LocalDateTime.now()
 }
