@@ -13,6 +13,6 @@ data class TicketDTO(
 )
 
 fun Ticket.toDTO(): TicketDTO {
-    var status = ticketHistory[ticketHistory.size.minus(1)].status
+    var status = ticketHistory.sortedByDescending { it.date }[0].status
     return TicketDTO(id, productId, category, priority, description, userId, expertId, chatId, status)
 }

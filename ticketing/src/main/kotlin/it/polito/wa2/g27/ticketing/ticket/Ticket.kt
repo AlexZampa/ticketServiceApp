@@ -18,6 +18,6 @@ class Ticket {
     var userId: String = ""
     var expertId: String = ""
     var chatId: String = ""
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "ticket")
     var ticketHistory: List<TicketHistory> = emptyList()
 }
