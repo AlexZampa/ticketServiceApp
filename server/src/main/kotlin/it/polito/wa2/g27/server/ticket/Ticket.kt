@@ -12,7 +12,7 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "ticket")
+@Table(name = "tickets")
 class Ticket {
     @Id @GeneratedValue
     var id : Int = 0
