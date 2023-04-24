@@ -19,15 +19,22 @@ class Profile {
     var dateofbirth: LocalDate = LocalDate.now()
     var hash: String = ""
     @OneToMany(mappedBy = "profile")
-    var tickets: MutableSet<Ticket> = mutableSetOf()
+    var ticketsCreated: MutableSet<Ticket> = mutableSetOf()
+    @OneToMany(mappedBy = "expert")
+    var ticketsAssigned: MutableSet<Ticket> = mutableSetOf()
     @OneToMany(mappedBy = "sender")
     var messagesSent: MutableSet<Message> = mutableSetOf()
     @OneToMany(mappedBy = "receiver")
     var messagesReceived: MutableSet<Message> = mutableSetOf()
 
-    fun addTicket(t: Ticket) {
+    fun addTicketCreated(t: Ticket) {
         t.profile = this
-        tickets.add(t)
+        ticketsCreated.add(t)
+    }
+
+    fun addTicketAssigned(t: Ticket) {
+        t.expert = this
+        ticketsAssigned.add(t)
     }
 
     fun addMessageSent(m: Message) {

@@ -23,7 +23,8 @@ class Ticket {
     var description: String = ""
     @ManyToOne(optional = false)
     var profile: Profile? = null
-    var expertId: String = ""
+    @ManyToOne(optional = true)
+    var expert: Profile? = null
     var chatId: String = ""
     @OneToMany(mappedBy = "ticket")
     var ticketHistory: MutableSet<TicketHistory> = mutableSetOf()
