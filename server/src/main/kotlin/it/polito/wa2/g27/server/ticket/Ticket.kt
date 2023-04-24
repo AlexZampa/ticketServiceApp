@@ -1,0 +1,34 @@
+package it.polito.wa2.g27.server.ticket
+
+import it.polito.wa2.g27.server.products.Product
+import it.polito.wa2.g27.server.profiles.Profile
+import it.polito.wa2.g27.server.ticketHistory.TicketHistory
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
+
+@Entity
+@Table(name = "ticket")
+class Ticket {
+    @Id @GeneratedValue
+    var id : Int = 0
+    @ManyToOne(optional = false)
+    var product : Product? = null
+    var category: String = ""
+    var priority: Int = 0
+    var description: String = ""
+    @ManyToOne(optional = false)
+    var profile: Profile? = null
+    var expertId: String = ""
+    var chatId: String = ""
+    @OneToMany(mappedBy = "ticket")
+    var ticketHistory: MutableSet<TicketHistory> = mutableSetOf()
+
+    fun addTicketHistory(th: TicketHistory) {
+        th.ticket = this
+        ticketHistory.add(th)
+    }
+}

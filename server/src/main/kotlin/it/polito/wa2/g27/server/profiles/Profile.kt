@@ -1,7 +1,9 @@
 package it.polito.wa2.g27.server.profiles
 
+import it.polito.wa2.g27.server.ticket.Ticket
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.time.LocalDate
 
@@ -15,4 +17,6 @@ class Profile {
     var surname: String = ""
     var dateofbirth: LocalDate = LocalDate.now()
     var hash: String = ""
+    @OneToMany(mappedBy = "profile")
+    var tickets: MutableSet<Ticket> = mutableSetOf()
 }
