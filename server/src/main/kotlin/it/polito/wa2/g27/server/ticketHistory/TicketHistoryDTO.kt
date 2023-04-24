@@ -3,10 +3,10 @@ package it.polito.wa2.g27.server.ticketHistory
 import java.time.LocalDateTime
 
 data class TicketHistoryDTO(
-    var id : Int,
-    var ticketId: Int?,
-    var status: String,
-    var date: LocalDateTime,
+    val id : Int,
+    val ticketId: Int?,
+    val status: String,
+    val date: LocalDateTime,
 )
 
 fun TicketHistory.toDTO(): TicketHistoryDTO {

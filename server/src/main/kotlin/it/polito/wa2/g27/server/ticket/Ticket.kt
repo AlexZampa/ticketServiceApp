@@ -1,5 +1,6 @@
 package it.polito.wa2.g27.server.ticket
 
+import it.polito.wa2.g27.server.messages.Message
 import it.polito.wa2.g27.server.products.Product
 import it.polito.wa2.g27.server.profiles.Profile
 import it.polito.wa2.g27.server.ticketHistory.TicketHistory
@@ -26,9 +27,16 @@ class Ticket {
     var chatId: String = ""
     @OneToMany(mappedBy = "ticket")
     var ticketHistory: MutableSet<TicketHistory> = mutableSetOf()
+    @OneToMany(mappedBy = "ticket")
+    var messages: MutableSet<Message> = mutableSetOf()
 
     fun addTicketHistory(th: TicketHistory) {
         th.ticket = this
         ticketHistory.add(th)
+    }
+
+    fun addMessage(m: Message) {
+        m.ticket = this
+        messages.add(m)
     }
 }

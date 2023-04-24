@@ -1,5 +1,6 @@
 package it.polito.wa2.g27.server.products
 
+import it.polito.wa2.g27.server.messages.Message
 import it.polito.wa2.g27.server.ticket.Ticket
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -16,4 +17,9 @@ class Product {
     var description: String = ""
     @OneToMany(mappedBy = "product")
     var tickets : MutableSet<Ticket> = mutableSetOf()
+
+    fun addTicket(t: Ticket) {
+        t.product = this
+        tickets.add(t)
+    }
 }

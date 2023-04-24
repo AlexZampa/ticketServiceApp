@@ -1,15 +1,15 @@
 package it.polito.wa2.g27.server.ticket
 
 data class TicketDTO(
-    var id : Int,
-    var productId : String?,
-    var category: String,
-    var priority: Int,
-    var description: String,
-    var profileId: String?,
-    var expertId: String,
-    var chatId: String,
-    var status: String
+    val id : Int,
+    val productId : String?,
+    val category: String,
+    val priority: Int,
+    val description: String,
+    val profileId: String?,
+    val expertId: String,
+    val chatId: String,
+    val status: String
 )
 
 fun Ticket.toDTO(): TicketDTO {
