@@ -45,4 +45,25 @@ class TicketController(private val ticketService: TicketService,
         ticketService.createTicket(ticketDTO)
     }
 
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping("/tickets/{id}/priority/{priority}")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun postModifyPriority(@PathVariable id: Int, @PathVariable priority: Int) {
+        ticketService.modifyPriority(id, priority)
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping("/tickets/{id}/status/{status}")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun postModifyStatus(@PathVariable id: Int, @PathVariable status: String) {
+        ticketService.modifyStatus(id, status.uppercase())
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping("/tickets/{id}/expert")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun postModifyExpert(@PathVariable id: Int, @RequestBody email: String) {
+        ticketService.assignExpert(id, email)
+    }
+
 }

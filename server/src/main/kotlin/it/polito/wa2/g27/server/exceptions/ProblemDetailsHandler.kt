@@ -56,5 +56,34 @@ class ProblemDetailsHandler {
         d.title= "Product Not Found"
         return d
     }
+
+    @ExceptionHandler(TicketNotFoundException::class)
+    fun handleTicketNotFound(e: TicketNotFoundException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
+        d.title= "Ticket Not Found"
+        return d
+    }
+
+    @ExceptionHandler(TicketStatusNotValidException::class)
+    fun handleTicketStatusNotValid(e: TicketStatusNotValidException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
+        d.title= "Wrong Ticket Status"
+        return d
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(TicketStatusException::class)
+    fun handleTicketStatus(e: TicketStatusException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
+        d.title= "Wrong Ticket Status"
+        return d
+    }
+
+    @ExceptionHandler(TicketPriorityNotValidException::class)
+    fun handleTicketStatus(e: TicketPriorityNotValidException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
+        d.title= "Wrong Ticket Priority"
+        return d
+    }
 }
 

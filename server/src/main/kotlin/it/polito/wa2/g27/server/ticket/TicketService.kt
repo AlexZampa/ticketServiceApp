@@ -1,8 +1,6 @@
 package it.polito.wa2.g27.server.ticket
 
-import it.polito.wa2.g27.server.products.ProductDTO
 import it.polito.wa2.g27.server.profiles.ProfileDTO
-import it.polito.wa2.g27.server.ticket.TicketDTO
 
 interface TicketService {
     fun getOpenTickets(): List<TicketDTO>
@@ -10,8 +8,11 @@ interface TicketService {
     fun getAssignedTickets(profileDTO: ProfileDTO): List<TicketDTO>
     fun getSingleTicket(id: Int): TicketDTO?
     fun createTicket(ticketDTO: TicketDTO)
-    fun modifyPriority(ticketId: Int, priority: String)
-    fun modifyExpert(ticketId: Int, expertId: String)
+    fun modifyPriority(ticketId: Int, priority: Int)
+    fun assignExpert(ticketId: Int, expertEmail: String)
+
     fun modifyStatus(ticketId: Int, status: String)
-    fun modifyTicket(ticketId: Int, ticket: TicketDTO)
+
+    fun closeTicket(ticketId: Int)
+
 }
