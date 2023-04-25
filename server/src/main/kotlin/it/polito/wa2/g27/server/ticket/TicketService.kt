@@ -9,10 +9,14 @@ interface TicketService {
     fun getSingleTicket(id: Int): TicketDTO?
     fun createTicket(ticketDTO: TicketDTO)
     fun modifyPriority(ticketId: Int, priority: Int)
-    fun assignExpert(ticketId: Int, expertEmail: String)
+    fun assignExpert(ticketId: Int, expertEmail: String, priority: Int)
 
     fun modifyStatus(ticketId: Int, status: String)
 
     fun closeTicket(ticketId: Int)
+    fun stopTicketProgress(ticketId: Int)
+    fun resolveTicketIssue(ticketId: Int)
+    fun reopenTicket(ticketId: Int)
+
 
 }

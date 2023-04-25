@@ -4,3 +4,4 @@ class TicketNotFoundException(override val message: String?): RuntimeException(m
 class TicketStatusNotValidException(override val message: String?): RuntimeException(message)
 class TicketStatusException(override val message: String?): RuntimeException(message)
 class TicketPriorityNotValidException(override val message: String?): RuntimeException(message)
+class TicketBodyException(override val message: String?): RuntimeException(message)

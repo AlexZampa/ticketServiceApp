@@ -1,5 +1,6 @@
 package it.polito.wa2.g27.server.ticket
 
+import it.polito.wa2.g27.server.exceptions.TicketBodyException
 import it.polito.wa2.g27.server.products.ProductService
 import it.polito.wa2.g27.server.profiles.ProfileDTO
 import it.polito.wa2.g27.server.profiles.ProfileService
@@ -48,22 +49,54 @@ class TicketController(private val ticketService: TicketService,
     @CrossOrigin(origins = ["http://localhost:3000"])
     @PutMapping("/tickets/{id}/priority/{priority}")
     @ResponseStatus(HttpStatus.CREATED)
-    fun postModifyPriority(@PathVariable id: Int, @PathVariable priority: Int) {
+    fun putModifyPriority(@PathVariable id: Int, @PathVariable priority: Int) {
         ticketService.modifyPriority(id, priority)
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
     @PutMapping("/tickets/{id}/status/{status}")
     @ResponseStatus(HttpStatus.CREATED)
-    fun postModifyStatus(@PathVariable id: Int, @PathVariable status: String) {
+    fun putModifyStatus(@PathVariable id: Int, @PathVariable status: String) {
         ticketService.modifyStatus(id, status.uppercase())
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
     @PutMapping("/tickets/{id}/expert")
     @ResponseStatus(HttpStatus.CREATED)
-    fun postModifyExpert(@PathVariable id: Int, @RequestBody email: String) {
-        ticketService.assignExpert(id, email)
+    fun putAssignExpert(@PathVariable id: Int, @RequestBody body: Map<String, Any>) {
+        if(!body.containsKey("email") || !body.containsKey("priority") || (body["email"] !is String) || (body["priority"] !is Int))
+            throw TicketBodyException("Invalid body format")
+        ticketService.assignExpert(id, body["email"].toString(), body["priority"].toString().toInt())
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping("/tickets/{id}/stop")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun putStopTicket(@PathVariable id: Int) {
+        ticketService.stopTicketProgress(id)
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping("/tickets/{id}/close")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun putCloseTicket(@PathVariable id: Int) {
+        ticketService.closeTicket(id)
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping("/tickets/{id}/resolve")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun putResolveTicket(@PathVariable id: Int) {
+        ticketService.resolveTicketIssue(id)
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping("/tickets/{id}/reopen")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun putReopenTicket(@PathVariable id: Int) {
+        ticketService.reopenTicket(id)
     }
 
 }
+
+
