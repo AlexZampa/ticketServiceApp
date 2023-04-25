@@ -6,7 +6,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "attachments")
 class Attachment {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     var id : Int = 0
     var type: String = ""
     var size: Long = 0

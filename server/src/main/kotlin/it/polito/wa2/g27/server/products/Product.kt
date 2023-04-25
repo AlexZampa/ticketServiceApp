@@ -23,3 +23,12 @@ class Product {
         tickets.add(t)
     }
 }
+
+fun ProductDTO.toProduct(): Product{
+    val p = Product()
+    p.id = id
+    p.name = name
+    p.brand = brand
+    p.description = description
+    return p
+}

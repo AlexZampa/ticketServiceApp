@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 
 data class ProfileDTO (
+    var id: Int?,
     @field:NotEmpty(message = "Email can not be blank")
     @field:NotNull(message = "Email can not be null")
     @field:Email(message = "Email not valid") var email: String,
@@ -23,5 +24,5 @@ data class ProfileDTO (
 )
 
 fun Profile.toDTO() : ProfileDTO{
-    return ProfileDTO(email, username, name, surname, dateofbirth.toString(), hash)
+    return ProfileDTO(id, email, username, name, surname, dateofbirth.toString(), hash)
 }

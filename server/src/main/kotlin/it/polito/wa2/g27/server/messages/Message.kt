@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "messages")
 class Message {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     var id : Int = 0
     @ManyToOne(optional = false)
     var ticket: Ticket? = null

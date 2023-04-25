@@ -10,19 +10,20 @@ import java.security.MessageDigest
 
 @Service
 class ProfileServiceImpl(private val profileRepository: ProfileRepository): ProfileService {
-    override fun getByEmail(email: String): ProfileDTO? {
-        return profileRepository.findByIdOrNull(email)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
+    override fun getByEmail(email: String): ProfileDTO {
+        return profileRepository.findByEmail(email)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
+    }
+
+    override fun getById(id: Int): ProfileDTO {
+        return profileRepository.findByIdOrNull(id)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
     }
 
     override fun createProfile(profileDTO: ProfileDTO) {
-        val oldProfile = profileRepository.findByIdOrNull(profileDTO.email)
+        val oldProfile = profileRepository.findByEmail(profileDTO.email)
         if(oldProfile != null){
             throw ProfileAlreadyExistsException("Profile Already Exists")
         }
-
-        val p = Profile()
-        parseProfileDTO(p, profileDTO)
-        profileRepository.save(p)
+        profileRepository.save(profileDTO.toProfile())
     }
 
     override fun modifyProfile(email: String, profileDTO: ProfileDTO) {
@@ -30,19 +31,8 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository): Prof
             throw ProfileEmailModificationException("Email Update not possible")
         }
 
-        val p = profileRepository.findByIdOrNull(email) ?: throw ProfileNotFoundException("Profile Not Found")
-        parseProfileDTO(p, profileDTO)
-        profileRepository.save(p)
+        val p = profileRepository.findByEmail(email) ?: throw ProfileNotFoundException("Profile Not Found")
+        profileRepository.save(profileDTO.toProfile())
     }
 
-    fun parseProfileDTO(p: Profile, profileDTO: ProfileDTO) : Profile{
-        p.email = profileDTO.email
-        p.username = profileDTO.username
-        p.name = profileDTO.name
-        p.surname = profileDTO.surname
-        p.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth)
-        val digest = MessageDigest.getInstance("SHA-256").digest(profileDTO.hash.toByteArray())
-        p.hash = digest.fold("") { str, it -> str + "%02x".format(it) }
-        return p
-    }
 }

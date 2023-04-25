@@ -2,16 +2,15 @@ package it.polito.wa2.g27.server.profiles
 
 import it.polito.wa2.g27.server.messages.Message
 import it.polito.wa2.g27.server.ticket.Ticket
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
+import jakarta.persistence.*
+import java.security.MessageDigest
 import java.time.LocalDate
 
 @Entity
 @Table(name = "profiles")
 class Profile {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Int = 0
     var email: String = ""
     var username: String = ""
     var name: String = ""
@@ -46,5 +45,16 @@ class Profile {
         m.receiver = this
         messagesReceived.add(m)
     }
+}
 
+fun ProfileDTO.toProfile(): Profile{
+    val p = Profile()
+    p.email = email
+    p.username = username
+    p.name = name
+    p.surname = surname
+    p.dateofbirth = LocalDate.parse(dateOfBirth)
+    val digest = MessageDigest.getInstance("SHA-256").digest(hash.toByteArray())
+    p.hash = digest.fold("") { str, it -> str + "%02x".format(it) }
+    return p
 }
