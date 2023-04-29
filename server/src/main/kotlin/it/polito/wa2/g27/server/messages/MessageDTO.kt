@@ -1,5 +1,7 @@
 package it.polito.wa2.g27.server.messages
 
+import it.polito.wa2.g27.server.messages.attachments.AttachmentDTO
+import it.polito.wa2.g27.server.messages.attachments.toDTO
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
@@ -27,25 +29,9 @@ data class MessageDTO(
     @field:NotNull(message = "Date can not be null")
     @field:Pattern( regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\$", message = "Not valid data format")
     val dateTime: LocalDateTime,
-    val attachments: List<MultipartFile>?
+    val attachments: List<AttachmentDTO>?
 )
 
 fun Message.toDTO(): MessageDTO {
-    val multipartFiles = mutableListOf<MultipartFile>()
-    /*
-    attachments.forEach {
-        // Convert the byte array into a MultipartFile
-
-
-
-        val mockMultipartFile = MultipartFile(
-            it.name,
-            it.name,
-            it.type,
-            ByteArrayInputStream(it.data)
-        )
-        multipartFiles.add(mockMultipartFile)
-    }
-     */
-    return MessageDTO(id, ticket?.id, sender?.id, receiver?.id, text, datetime, multipartFiles)
+    return MessageDTO(id, ticket?.id, sender?.id, receiver?.id, text, datetime, attachments.map { it.toDTO() })
 }
