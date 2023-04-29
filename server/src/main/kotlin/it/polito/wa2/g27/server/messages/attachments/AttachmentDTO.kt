@@ -1,7 +1,9 @@
 package it.polito.wa2.g27.server.messages.attachments
 
+
 data class AttachmentDTO(
     val id : Int,
+    val name: String,
     val type: String,
     val size: Long,
     val data: ByteArray,
@@ -21,6 +23,6 @@ data class AttachmentDTO(
 }
 
 fun Attachment.toDTO(): AttachmentDTO {
-    return AttachmentDTO(id, type, size, data, message?.id)
+    return AttachmentDTO(id, name, type, size, data, message?.id)
 }
 

@@ -27,3 +27,12 @@ class Message {
         attachments.add(a)
     }
 }
+
+fun MessageDTO.toMessage(): Message {
+    val m = Message()
+    m.id = id
+    m.text = text
+    m.datetime = dateTime
+
+    return m
+}

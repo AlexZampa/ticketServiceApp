@@ -2,6 +2,9 @@ package it.polito.wa2.g27.server.ticketHistory
 
 import it.polito.wa2.g27.server.ticket.Ticket
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import org.hibernate.validator.constraints.Length
 import java.time.LocalDateTime
 
 @Entity

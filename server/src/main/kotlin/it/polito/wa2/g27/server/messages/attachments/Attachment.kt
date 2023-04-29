@@ -8,6 +8,7 @@ import jakarta.persistence.*
 class Attachment {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     var id : Int = 0
+    var name : String = ""
     var type: String = ""
     var size: Long = 0
     @Lob
