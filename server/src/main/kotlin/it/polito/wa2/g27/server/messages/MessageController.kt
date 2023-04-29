@@ -1,9 +1,14 @@
 package it.polito.wa2.g27.server.messages
 
+import it.polito.wa2.g27.server.exceptions.AttachmentNotFoundException
+import it.polito.wa2.g27.server.exceptions.TicketNotFoundException
 import it.polito.wa2.g27.server.messages.attachments.AttachmentDTO
+import it.polito.wa2.g27.server.messages.attachments.AttachmentRepository
+import it.polito.wa2.g27.server.messages.attachments.AttachmentService
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -27,42 +32,19 @@ data class MessageReturn(
 )
 
 @RestController
-class MessageController(private val messageService: MessageService) {
+class MessageController(private val messageService: MessageService, private val attachmentService: AttachmentService
+) {
 
     @CrossOrigin(origins = ["http://localhost:3000"])
     @GetMapping("/tickets/{id}/chat")
-    fun getMessages(@PathVariable id: Int, response: HttpServletResponse) : ResponseEntity<Resource>? {
-
-        val messages = messageService.getMessages(id)
-
-        var ciao = messages[0]
-
-        var file = convertByteArrayToFile(ciao.attachments?.get(0)?.data!!, ciao.attachments?.get(0)?.name!!)
-
-        var resource = FileSystemResource(file.path)
-
-        //return messageService.getMessages(id)
-        val contentType = determineContentType(resource)
-        response.contentType = contentType.toString()
-        response.setContentLength(resource.contentLength().toInt())
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${resource.filename}")
-        resource.inputStream.use { inputStream ->
-            inputStream.copyTo(response.outputStream)
-            response.flushBuffer()
-        }
-        return ResponseEntity.ok()
-            .contentType(contentType)
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=${resource.filename}")
-            .body(resource)
+    fun getMessages(@PathVariable id: Int, response: HttpServletResponse) : List<MessageDTO>? {
+        return messageService.getMessages(id)
     }
 
-    private fun determineContentType(resource: Resource): MediaType {
-        val contentType = try {
-            MediaType.parseMediaType(resource.file.absolutePath)
-        } catch (ex: Exception) {
-            MediaType.APPLICATION_OCTET_STREAM
-        }
-        return contentType
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @GetMapping("/tickets/{id}/chat/{attId}")
+    fun getAttachment(@PathVariable id: Int, @PathVariable attId: Int, response: HttpServletResponse) : ResponseEntity<Resource>? {
+        return attachmentService.getAttachment(attId, response)
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
@@ -74,8 +56,6 @@ class MessageController(private val messageService: MessageService) {
                     @RequestParam("receiverId") receiverId: Int,
                     @RequestParam("text") text: String
                     ) {
-
-        println("Sono qui")
         val messageDTO = MessageDTO(0, ticketId, senderId, receiverId, text, LocalDateTime.now(), attachments.map {
             AttachmentDTO(0, it.originalFilename ?:"", it.contentType?:"", it.size, it.bytes, 0) })
         messageService.sendMessage(messageDTO)
