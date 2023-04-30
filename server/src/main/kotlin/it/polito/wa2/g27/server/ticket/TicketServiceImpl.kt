@@ -36,7 +36,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         return ticketRepository.findByIdOrNull(id)?.toDTO()
     }
 
-    override fun createTicket(ticketDTO: TicketDTO) {
+    override fun createTicket(ticketDTO: TicketDTO) : TicketDTO {
         val product: Product = productRepository.findByIdOrNull(ticketDTO.productId!!) ?: throw ProductNotFoundException("Product Not Found")
         val profile: Profile = profileRepository.findByIdOrNull(ticketDTO.profileId!!) ?: throw ProfileNotFoundException("Profile not found")
         val ticketHistory = TicketHistory()
@@ -47,6 +47,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         ticket.addTicketHistory(ticketHistory)
         ticketRepository.save(ticket)
         ticketHistoryRepository.save(ticketHistory)
+        return ticket.toDTO()
     }
 
     override fun modifyPriority(ticketId: Int, priority: Int) {
@@ -65,42 +66,12 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         val prevStatus = ticket.ticketHistory.sortedByDescending { it.date }[0].status
         if( prevStatus != TicketStatus.OPEN.name && prevStatus != TicketStatus.REOPENED.name) throw TicketStatusException("The Ticket is not Opened or Reopened")
         ticket.priority = priority
-        val ticketHistory = TicketHistory()
-        ticketHistory.status = TicketStatus.PROGRESS.name
+        val updatedTicketHistory = TicketHistory()
+        updatedTicketHistory.status = TicketStatus.PROGRESS.name
         expert.addTicketAssigned(ticket)
-        ticket.addTicketHistory(ticketHistory)
+        ticket.addTicketHistory(updatedTicketHistory)
         ticketRepository.save(ticket)
-        ticketHistoryRepository.save(ticketHistory)
-    }
-
-    //TODO: DA TOGLIERE
-    override fun modifyStatus(ticketId: Int, status: String) {
-        try {
-            val newStatus = TicketStatus.valueOf(status)
-            val ticket = ticketRepository.findByIdOrNull(ticketId) ?: throw TicketNotFoundException("Ticket Not Found")
-            val ticketHistory = TicketHistory()
-            ticketHistory.status = newStatus.name
-            ticket.addTicketHistory(ticketHistory)
-            ticketHistoryRepository.save(ticketHistory)
-        }
-        catch (e:IllegalArgumentException){
-            throw TicketStatusNotValidException("Wrong Ticket Status")
-        }
-
-    }
-
-    override fun closeTicket(ticketId: Int) {
-        val ticket = ticketRepository.findByIdOrNull(ticketId) ?: throw TicketNotFoundException("Ticket Not Found")
-        ticket.expert = null
-        ticket.priority = 0
-        if(ticket.ticketHistory.sortedByDescending { it.date }[0].status == TicketStatus.CLOSED.name){
-            throw TicketStatusException("Ticket already closed")
-        }
-        val ticketHistory = TicketHistory()
-        ticketHistory.status = TicketStatus.CLOSED.name
-        ticket.addTicketHistory(ticketHistory)
-        ticketRepository.save(ticket)
-        ticketHistoryRepository.save(ticketHistory)
+        ticketHistoryRepository.save(updatedTicketHistory)
     }
 
     override fun stopTicketProgress(ticketId: Int) {
@@ -112,6 +83,20 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         }
         val ticketHistory = TicketHistory()
         ticketHistory.status = TicketStatus.OPEN.name
+        ticket.addTicketHistory(ticketHistory)
+        ticketRepository.save(ticket)
+        ticketHistoryRepository.save(ticketHistory)
+    }
+
+    override fun closeTicket(ticketId: Int) {
+        val ticket = ticketRepository.findByIdOrNull(ticketId) ?: throw TicketNotFoundException("Ticket Not Found")
+        ticket.expert = null
+        ticket.priority = 0
+        if(ticket.ticketHistory.sortedByDescending { it.date }[0].status == TicketStatus.CLOSED.name){
+            throw TicketStatusException("Ticket already closed")
+        }
+        val ticketHistory = TicketHistory()
+        ticketHistory.status = TicketStatus.CLOSED.name
         ticket.addTicketHistory(ticketHistory)
         ticketRepository.save(ticket)
         ticketHistoryRepository.save(ticketHistory)

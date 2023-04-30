@@ -38,7 +38,7 @@ class Ticket {
 
 
 fun TicketDTO.toTicket(): Ticket {
-    val t: Ticket = Ticket()
+    val t = Ticket()
     t.id = id
     t.category = category
     t.description = description

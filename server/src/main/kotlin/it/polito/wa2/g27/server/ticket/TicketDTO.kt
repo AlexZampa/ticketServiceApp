@@ -27,5 +27,13 @@ data class TicketDTO(
 
 fun Ticket.toDTO(): TicketDTO {
     var status = TicketStatus.valueOf(ticketHistory.sortedByDescending { it.date }[0].status)
+    println(this.product.toString())
     return TicketDTO(id, product?.id, category, priority, description, profile?.id, expert?.id, status)
 }
+
+fun convertToDTO(ticket : Ticket): TicketDTO {
+    var status = TicketStatus.valueOf(ticket.ticketHistory.sortedByDescending { it.date }[0].status)
+    println(ticket.product.toString())
+    return TicketDTO(ticket.id, ticket.product?.id, ticket.category, ticket.priority, ticket.description, ticket.profile?.id, ticket.expert?.id, status)
+}
+

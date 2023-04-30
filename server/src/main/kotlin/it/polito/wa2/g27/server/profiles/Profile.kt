@@ -16,7 +16,6 @@ class Profile {
     var name: String = ""
     var surname: String = ""
     var dateofbirth: LocalDate = LocalDate.now()
-    var hash: String = ""
     @OneToMany(mappedBy = "profile")
     var ticketsCreated: MutableSet<Ticket> = mutableSetOf()
     @OneToMany(mappedBy = "expert")
@@ -49,12 +48,13 @@ class Profile {
 
 fun ProfileDTO.toProfile(): Profile{
     val p = Profile()
+    if (id != null && id!! > 0) {
+        p.id = id!!
+    }
     p.email = email
     p.username = username
     p.name = name
     p.surname = surname
     p.dateofbirth = LocalDate.parse(dateOfBirth)
-    val digest = MessageDigest.getInstance("SHA-256").digest(hash.toByteArray())
-    p.hash = digest.fold("") { str, it -> str + "%02x".format(it) }
     return p
 }

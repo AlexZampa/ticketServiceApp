@@ -54,13 +54,6 @@ class TicketController(private val ticketService: TicketService,
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
-    @PutMapping("/tickets/{id}/status/{status}")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun putModifyStatus(@PathVariable id: Int, @PathVariable status: String) {
-        ticketService.modifyStatus(id, status.uppercase())
-    }
-
-    @CrossOrigin(origins = ["http://localhost:3000"])
     @PutMapping("/tickets/{id}/expert")
     @ResponseStatus(HttpStatus.CREATED)
     fun putAssignExpert(@PathVariable id: Int, @RequestBody body: Map<String, Any>) {
