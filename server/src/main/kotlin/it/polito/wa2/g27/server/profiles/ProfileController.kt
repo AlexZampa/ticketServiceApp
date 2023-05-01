@@ -15,7 +15,7 @@ class ProfileController(private val profileService: ProfileService) {
     @CrossOrigin(origins = ["http://localhost:3000"])
     @PostMapping("/profiles")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createProfile(@Valid @RequestBody profileDTO: ProfileDTO) {
+    fun createProfile(@Valid @RequestBody profileDTO: ProfileDTO): ProfileDTO {
         return profileService.createProfile(profileDTO)
     }
 

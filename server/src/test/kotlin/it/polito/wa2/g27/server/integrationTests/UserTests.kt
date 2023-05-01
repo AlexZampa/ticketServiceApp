@@ -1,5 +1,6 @@
-package it.polito.wa2.g27.server.integrationTests;
+package it.polito.wa2.g27.server.integrationTests
 
+import it.polito.wa2.g27.server.profiles.Profile
 import it.polito.wa2.g27.server.profiles.ProfileDTO
 import it.polito.wa2.g27.server.profiles.ProfileRepository
 import it.polito.wa2.g27.server.profiles.ProfileService
@@ -9,14 +10,13 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.io.File
-import java.sql.DriverManager
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @Testcontainers
@@ -35,43 +35,57 @@ class UserTests {
             registry.add("spring.jpa.hibernate.ddl-auto") {"create-drop"}
         }
     }
-    @LocalServerPort
-    protected var port: Int = 0
+
     @Autowired
     lateinit var profileService: ProfileService
     @Autowired
     private lateinit var profileRepository: ProfileRepository
 
+    val user1 = ProfileDTO(1, "user1@mail.com", "user1", "Frank", "Matano", "1989-09-14" )
+    val user2 = ProfileDTO(2, "user2@mail.com", "user2", "Marco", "Bay", "1999-10-02" )
+
+
     @BeforeEach
     fun populateDB() {
-        DriverManager.getConnection(postgres.jdbcUrl, postgres.username, postgres.password).use { conn ->
-            val script = File("src/test/resources/schema_populate.sql").readText()
-            conn.createStatement().use { stmt ->
-                stmt.execute(script)
-            }
+        val profile1 = Profile().apply {
+            id = 1; email = user1.email
+            name = user1.name; surname = user1.surname; username = user1.username
+            dateofbirth = LocalDate.parse(user1.dateOfBirth, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         }
+
+        val profile2 = Profile().apply {
+            id = 2; email = user2.email
+            name = user2.name; surname = user2.surname; username = user2.username
+            dateofbirth = LocalDate.parse(user2.dateOfBirth, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        }
+
+        profileRepository.delete(profile1)
+        profileRepository.delete(profile2)
+        profileRepository.save(profile1)
+        profileRepository.save(profile2)
+
     }
+
 
     @Test
     fun getUserByEmailTest() {
-        var expectedProfileDTO = ProfileDTO(null, "ciaone.matano@gmail.com", "frank_m", "Frank", "Matano", "1989-09-14")
-        val profileDTO = profileService.getByEmail("ciaone.matano@gmail.com")
-        Assertions.assertEquals(expectedProfileDTO, profileDTO)
+        val profileDTO = profileService.getByEmail(user2.email)
+        Assertions.assertEquals(user2, profileDTO)
     }
 
     @Test
     fun createUserTest() {
         val profileDTO = ProfileDTO(null, "marco.bay@gmail.com", "marco_seaside", "Marco", "Bay", "1999-10-02")
-        profileService.createProfile(profileDTO)
+        val newProfileDTO = profileService.createProfile(profileDTO)
+        profileDTO.id = newProfileDTO.id
 
-        val newProfileDTO = profileService.getByEmail("marco.bay@gmail.com")
         Assertions.assertEquals(profileDTO, newProfileDTO)
     }
 
     @Test
     fun modifyUserTest() {
-        val profileDTO = profileService.getByEmail("ciaone.matano@gmail.com")
-        val newProfileDTO = ProfileDTO(profileDTO.id, profileDTO.email, "marco_seaside", "Marco", "Bay", "1999-10-02")
+        val profileDTO = profileService.getByEmail(user1.email)
+        val newProfileDTO = ProfileDTO(profileDTO.id, profileDTO.email, "f_mark", "Franky", "Marky", "1999-10-02")
 
         profileService.modifyProfile(profileDTO.email, newProfileDTO)
 
@@ -79,14 +93,3 @@ class UserTests {
         Assertions.assertEquals(newProfileDTO, modifiedProfileDTO)
     }
 }
-
-/*
-
-//Write here your integration test
-val testRestTemplate = TestRestTemplate()
-val response: ResponseEntity<String> = testRestTemplate.getForEntity<String>(
-    "http://localhost:8080/profiles/pollo2.matano@gmail.com",
-    String
-)
-
- */
