@@ -45,9 +45,9 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         profile.addTicketCreated(ticket)
         product.addTicket(ticket)
         ticket.addTicketHistory(ticketHistory)
-        ticketRepository.save(ticket)
-        ticketHistoryRepository.save(ticketHistory)
-        return ticket.toDTO()
+        val newTicket = ticketRepository.save(ticket)
+        val newTicketHIstory = ticketHistoryRepository.save(ticketHistory)
+        return newTicket.toDTO()
     }
 
     override fun modifyPriority(ticketId: Int, priority: Int) {
