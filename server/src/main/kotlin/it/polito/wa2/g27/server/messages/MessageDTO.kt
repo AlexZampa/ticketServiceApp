@@ -5,12 +5,6 @@ import it.polito.wa2.g27.server.messages.attachments.toDTO
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
-import org.springframework.mock.web.MockMultipartFile
-import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.servlet.function.RequestPredicates.contentType
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.InputStream
 import java.time.LocalDateTime
 
 

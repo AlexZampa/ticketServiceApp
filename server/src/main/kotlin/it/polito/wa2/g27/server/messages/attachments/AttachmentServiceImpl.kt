@@ -1,14 +1,6 @@
 package it.polito.wa2.g27.server.messages.attachments
 
 import it.polito.wa2.g27.server.exceptions.AttachmentNotFoundException
-import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
-import it.polito.wa2.g27.server.exceptions.TicketNotFoundException
-import it.polito.wa2.g27.server.messages.attachments.toAttachment
-import it.polito.wa2.g27.server.messages.convertByteArrayToFile
-import it.polito.wa2.g27.server.profiles.Profile
-import it.polito.wa2.g27.server.profiles.ProfileRepository
-import it.polito.wa2.g27.server.ticket.Ticket
-import it.polito.wa2.g27.server.ticket.TicketRepository
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
@@ -18,6 +10,8 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.io.File
+import java.io.FileOutputStream
 
 @Service @Transactional
 class AttachmentServiceImpl(private val attachmentRepository: AttachmentRepository
@@ -50,4 +44,13 @@ class AttachmentServiceImpl(private val attachmentRepository: AttachmentReposito
         return contentType
     }
 
+}
+
+
+fun convertByteArrayToFile(byteArray: ByteArray, fileName: String): File {
+    val file = File(fileName)
+    val outputStream = FileOutputStream(file)
+    outputStream.write(byteArray)
+    outputStream.close()
+    return file
 }

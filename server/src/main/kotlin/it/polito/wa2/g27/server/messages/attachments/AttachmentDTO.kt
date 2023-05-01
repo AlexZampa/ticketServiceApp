@@ -1,8 +1,5 @@
 package it.polito.wa2.g27.server.messages.attachments
 
-import it.polito.wa2.g27.server.messages.MessageController
-import java.io.File
-
 
 data class AttachmentDTO(
     val id : Int,

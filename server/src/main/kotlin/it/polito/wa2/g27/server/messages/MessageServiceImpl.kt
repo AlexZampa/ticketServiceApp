@@ -1,21 +1,16 @@
 package it.polito.wa2.g27.server.messages
 
-import it.polito.wa2.g27.server.exceptions.ProductNotFoundException
 import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
 import it.polito.wa2.g27.server.exceptions.TicketNotFoundException
-import it.polito.wa2.g27.server.messages.attachments.Attachment
 import it.polito.wa2.g27.server.messages.attachments.AttachmentRepository
 import it.polito.wa2.g27.server.messages.attachments.toAttachment
 import it.polito.wa2.g27.server.profiles.Profile
 import it.polito.wa2.g27.server.profiles.ProfileRepository
 import it.polito.wa2.g27.server.ticket.Ticket
 import it.polito.wa2.g27.server.ticket.TicketRepository
-import it.polito.wa2.g27.server.ticket.toTicket
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.io.File
-import java.io.FileOutputStream
 
 @Service @Transactional
 class MessageServiceImpl(private val messageRepository: MessageRepository,
