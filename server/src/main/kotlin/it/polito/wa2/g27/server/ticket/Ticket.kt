@@ -42,5 +42,6 @@ fun TicketDTO.toTicket(): Ticket {
     t.id = id
     t.category = category
     t.description = description
+    if(priority != null) t.priority = priority
     return t
 }

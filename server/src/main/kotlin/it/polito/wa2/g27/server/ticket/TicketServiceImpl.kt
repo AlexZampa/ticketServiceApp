@@ -19,19 +19,24 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
     private val productRepository: ProductRepository,
     private val ticketHistoryRepository: TicketHistoryRepository
 ): TicketService {
+
+    @Transactional(readOnly = true)
     override fun getOpenTickets(): List<TicketDTO> {
         return ticketRepository.findAll().filter {ticket -> ticket.ticketHistory.sortedByDescending { it.date }[0].status == TicketStatus.OPEN.name}
             .map { it.toDTO() }
     }
 
+    @Transactional(readOnly = true)
     override fun getTicketsByProfile(profileDTO: ProfileDTO): List<TicketDTO> {
         return ticketRepository.findAllByProfileId(profileDTO.id!!).map { it.toDTO() }
     }
 
+    @Transactional(readOnly = true)
     override fun getAssignedTickets(profileDTO: ProfileDTO): List<TicketDTO> {
         return ticketRepository.findAllByExpertId(profileDTO.id!!).map { it.toDTO() }
     }
 
+    @Transactional(readOnly = true)
     override fun getSingleTicket(id: Int): TicketDTO? {
         return ticketRepository.findByIdOrNull(id)?.toDTO()
     }
@@ -46,7 +51,7 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
         product.addTicket(ticket)
         ticket.addTicketHistory(ticketHistory)
         val newTicket = ticketRepository.save(ticket)
-        val newTicketHIstory = ticketHistoryRepository.save(ticketHistory)
+        ticketHistoryRepository.save(ticketHistory)
         return newTicket.toDTO()
     }
 
