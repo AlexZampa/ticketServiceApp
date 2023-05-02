@@ -6,7 +6,7 @@ interface TicketService {
     fun getOpenTickets(): List<TicketDTO>
     fun getTicketsByProfile(profileDTO: ProfileDTO): List<TicketDTO>
     fun getAssignedTickets(profileDTO: ProfileDTO): List<TicketDTO>
-    fun getSingleTicket(id: Int): TicketDTO?
+    fun getSingleTicket(id: Int): TicketDTO
     fun createTicket(ticketDTO: TicketDTO) : TicketDTO
     fun modifyPriority(ticketId: Int, priority: Int)
     fun assignExpert(ticketId: Int, expertEmail: String, priority: Int)

@@ -1,9 +1,10 @@
 package it.polito.wa2.g27.server.integrationTests;
 
+import it.polito.wa2.g27.server.exceptions.ProductNotFoundException
 import it.polito.wa2.g27.server.products.ProductDTO
+import it.polito.wa2.g27.server.products.ProductRepository
 import it.polito.wa2.g27.server.products.ProductService
-import it.polito.wa2.g27.server.profiles.ProfileDTO
-import it.polito.wa2.g27.server.profiles.ProfileService
+import it.polito.wa2.g27.server.products.toProduct
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,8 +17,6 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.io.File
-import java.sql.DriverManager
 
 
 @Testcontainers
@@ -41,14 +40,26 @@ class ProductTests {
     @Autowired
     lateinit var productService: ProductService
 
+    val prod1 = ProductDTO("A01", "Lego Star Wars", "LEGO", "Space");
+    val prod2 = ProductDTO("A02", "Lego Indiana Jones", "LEGO", "Historical");
+    val prod3 = ProductDTO("B01", "Lego Duplo Fashion Blogger", "LEGO Duplo", "Fashion");
+    val prod4 = ProductDTO("B02", "Lego Dublo TikToker", "LEGO Duplo", "Influencer")
+    @Autowired
+    private lateinit var productRepository: ProductRepository
+
     @BeforeEach
     fun populateDB() {
-        DriverManager.getConnection(postgres.jdbcUrl, postgres.username, postgres.password).use { conn ->
-            val script = File("src/test/resources/schema_populate.sql").readText()
-            conn.createStatement().use { stmt ->
-                stmt.execute(script)
-            }
-        }
+        productRepository.deleteAll()
+
+        val product1 = prod1.toProduct()
+        val product2 = prod2.toProduct()
+        val product3 = prod3.toProduct()
+        val product4 = prod4.toProduct()
+
+        productRepository.save(product1)
+        productRepository.save(product2)
+        productRepository.save(product3)
+        productRepository.save(product4)
     }
 
     @Test
@@ -72,6 +83,14 @@ class ProductTests {
         val expectedProduct = ProductDTO("B01", "Lego Duplo Fashion Blogger", "LEGO Duplo", "Fashion");
 
         Assertions.assertEquals(expectedProduct, product)
+    }
+
+    @Test
+    fun getProductByIdNotExist() {
+
+        Assertions.assertThrows(ProductNotFoundException::class.java, {
+            productService.getProduct("C01")
+        }, "Product Not Found")
     }
 
 }

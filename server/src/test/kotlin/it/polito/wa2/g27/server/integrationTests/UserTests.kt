@@ -1,5 +1,9 @@
 package it.polito.wa2.g27.server.integrationTests
 
+import it.polito.wa2.g27.server.exceptions.ProductNotFoundException
+import it.polito.wa2.g27.server.exceptions.ProfileAlreadyExistsException
+import it.polito.wa2.g27.server.exceptions.ProfileEmailModificationException
+import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
 import it.polito.wa2.g27.server.profiles.Profile
 import it.polito.wa2.g27.server.profiles.ProfileDTO
 import it.polito.wa2.g27.server.profiles.ProfileRepository
@@ -59,17 +63,16 @@ class UserTests {
             dateofbirth = LocalDate.parse(user2.dateOfBirth, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         }
 
-        profileRepository.delete(profile1)
-        profileRepository.delete(profile2)
+        profileRepository.deleteAll()
         profileRepository.save(profile1)
         profileRepository.save(profile2)
 
     }
 
-
     @Test
     fun getUserByEmailTest() {
         val profileDTO = profileService.getByEmail(user2.email)
+        user2.id = profileDTO.id
         Assertions.assertEquals(user2, profileDTO)
     }
 
@@ -92,4 +95,34 @@ class UserTests {
         val modifiedProfileDTO = profileService.getByEmail(profileDTO.email)
         Assertions.assertEquals(newProfileDTO, modifiedProfileDTO)
     }
+
+    @Test
+    fun getUserByEmailNotExists() {
+
+        ProfileNotFoundException("Profile not found")
+        Assertions.assertThrows(ProfileNotFoundException::class.java, {
+            profileService.getByEmail("")
+        }, "Profile not found")
+    }
+
+    @Test
+    fun profileAlreadyExists() {
+
+        val profileDTO = ProfileDTO(null, "user1@mail.com", "marco_seaside", "Marco", "Bay", "1999-10-02")
+
+        Assertions.assertThrows(ProfileAlreadyExistsException::class.java, {
+            profileService.createProfile(profileDTO)
+        }, "Profile Already exists")
+    }
+
+    @Test
+    fun modifyUserEmail() {
+        val profileDTO = profileService.getByEmail(user1.email)
+        val newProfileDTO = ProfileDTO(profileDTO.id, profileDTO.email + "###", "f_mark", "Franky", "Marky", "1999-10-02")
+
+        Assertions.assertThrows(ProfileEmailModificationException::class.java, {
+            profileService.modifyProfile(profileDTO.email, newProfileDTO)
+        }, "Email Update not possible")
+    }
+
 }

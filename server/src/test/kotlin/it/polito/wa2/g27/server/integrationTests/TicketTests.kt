@@ -1,8 +1,18 @@
 package it.polito.wa2.g27.server.integrationTests
 
-import it.polito.wa2.g27.server.products.*
-import it.polito.wa2.g27.server.profiles.*
-import it.polito.wa2.g27.server.ticket.*
+import it.polito.wa2.g27.server.exceptions.TicketNotFoundException
+import it.polito.wa2.g27.server.exceptions.TicketPriorityNotValidException
+import it.polito.wa2.g27.server.exceptions.TicketStatusException
+import it.polito.wa2.g27.server.products.ProductDTO
+import it.polito.wa2.g27.server.products.ProductRepository
+import it.polito.wa2.g27.server.products.toProduct
+import it.polito.wa2.g27.server.profiles.ProfileDTO
+import it.polito.wa2.g27.server.profiles.ProfileRepository
+import it.polito.wa2.g27.server.profiles.ProfileService
+import it.polito.wa2.g27.server.profiles.toProfile
+import it.polito.wa2.g27.server.ticket.TicketDTO
+import it.polito.wa2.g27.server.ticket.TicketRepository
+import it.polito.wa2.g27.server.ticket.TicketService
 import it.polito.wa2.g27.server.ticketHistory.TicketHistoryRepository
 import it.polito.wa2.g27.server.ticketHistory.TicketStatus
 import org.junit.jupiter.api.Assertions
@@ -70,7 +80,7 @@ class TicketTests {
         profileRepository.save(profile2)
 
         productRepository.save(product1)
-         productRepository.save(product2)
+        productRepository.save(product2)
 
         ticketHistoryRepository.deleteAll()
         ticketRepository.deleteAll()
@@ -125,7 +135,7 @@ class TicketTests {
         val newTicket1 = ticketService.createTicket(ticket1)
         ticketService.modifyPriority(newTicket1.id, 2)
         val modifiedTicket = ticketService.getSingleTicket(newTicket1.id)
-        Assertions.assertEquals(2, modifiedTicket?.priority)
+        Assertions.assertEquals(2, modifiedTicket.priority)
     }
 
     @Test
@@ -134,8 +144,8 @@ class TicketTests {
         val profile = profileService.getById(newTicket1.profileId!!)
         ticketService.assignExpert(newTicket1.id, profile.email, 3)
         val modifiedTicket = ticketService.getSingleTicket(newTicket1.id)
-        Assertions.assertEquals(profile.id, modifiedTicket?.expertId)
-        Assertions.assertEquals(TicketStatus.PROGRESS, modifiedTicket?.status)
+        Assertions.assertEquals(profile.id, modifiedTicket.expertId)
+        Assertions.assertEquals(TicketStatus.PROGRESS, modifiedTicket.status)
     }
 
     @Test
@@ -144,9 +154,9 @@ class TicketTests {
         ticketService.assignExpert(newTicket1.id, user1.email, 2)
         ticketService.stopTicketProgress(newTicket1.id)
         val modifiedTicket = ticketService.getSingleTicket(newTicket1.id)
-        Assertions.assertEquals(TicketStatus.OPEN, modifiedTicket?.status)
-        Assertions.assertEquals(null, modifiedTicket?.expertId)
-        Assertions.assertEquals(0, modifiedTicket?.priority)
+        Assertions.assertEquals(TicketStatus.OPEN, modifiedTicket.status)
+        Assertions.assertEquals(null, modifiedTicket.expertId)
+        Assertions.assertEquals(0, modifiedTicket.priority)
 
     }
 
@@ -155,9 +165,9 @@ class TicketTests {
         val newTicket1 = ticketService.createTicket(ticket1)
         ticketService.closeTicket(newTicket1.id)
         val modifiedTicket = ticketService.getSingleTicket(newTicket1.id)
-        Assertions.assertEquals(TicketStatus.CLOSED, modifiedTicket?.status)
-        Assertions.assertEquals(null, modifiedTicket?.expertId)
-        Assertions.assertEquals(0, modifiedTicket?.priority)
+        Assertions.assertEquals(TicketStatus.CLOSED, modifiedTicket.status)
+        Assertions.assertEquals(null, modifiedTicket.expertId)
+        Assertions.assertEquals(0, modifiedTicket.priority)
     }
 
     @Test
@@ -165,9 +175,9 @@ class TicketTests {
         val newTicket1 = ticketService.createTicket(ticket1)
         ticketService.resolveTicketIssue(newTicket1.id)
         val modifiedTicket = ticketService.getSingleTicket(newTicket1.id)
-        Assertions.assertEquals(TicketStatus.RESOLVED, modifiedTicket?.status)
-        Assertions.assertEquals(null, modifiedTicket?.expertId)
-        Assertions.assertEquals(0, modifiedTicket?.priority)
+        Assertions.assertEquals(TicketStatus.RESOLVED, modifiedTicket.status)
+        Assertions.assertEquals(null, modifiedTicket.expertId)
+        Assertions.assertEquals(0, modifiedTicket.priority)
     }
 
     @Test
@@ -176,9 +186,68 @@ class TicketTests {
         ticketService.closeTicket(newTicket1.id)
         ticketService.reopenTicket(newTicket1.id)
         val modifiedTicket = ticketService.getSingleTicket(newTicket1.id)
-        Assertions.assertEquals(TicketStatus.REOPENED, modifiedTicket?.status)
-        Assertions.assertEquals(null, modifiedTicket?.expertId)
-        Assertions.assertEquals(0, modifiedTicket?.priority)
+        Assertions.assertEquals(TicketStatus.REOPENED, modifiedTicket.status)
+        Assertions.assertEquals(null, modifiedTicket.expertId)
+        Assertions.assertEquals(0, modifiedTicket.priority)
+    }
+
+    @Test
+    fun getTicketNotExist() {
+        Assertions.assertThrows(TicketNotFoundException::class.java, {
+            ticketService.getSingleTicket(1)
+        }, "Ticket Not Found")
+    }
+
+    @Test
+    fun putModifyPriorityNotValid() {
+        val newTicket1 = ticketService.createTicket(ticket1)
+
+        Assertions.assertThrows(TicketPriorityNotValidException::class.java, {
+            ticketService.modifyPriority(newTicket1.id, 0)
+        }, "Priority Invalid")
+
+        Assertions.assertThrows(TicketPriorityNotValidException::class.java, {
+            ticketService.modifyPriority(newTicket1.id, 4)
+        }, "Priority Invalid")
+
+    }
+
+    @Test
+    fun putTicketNotInProgress() {
+        val newTicket1 = ticketService.createTicket(ticket1)
+        //ticketService.assignExpert(newTicket1.id, user1.email, 2)
+        Assertions.assertThrows(TicketStatusException::class.java, {
+            ticketService.stopTicketProgress(newTicket1.id)
+        }, "Ticket not in Progress")
+
+    }
+
+    @Test
+    fun putTicketAlreadyClosed() {
+        val newTicket1 = ticketService.createTicket(ticket1)
+        ticketService.closeTicket(newTicket1.id)
+        Assertions.assertThrows(TicketStatusException::class.java, {
+            ticketService.closeTicket(newTicket1.id)
+        }, "Ticket already closed")
+    }
+
+    @Test
+    fun putTicketIsClosed() {
+        val newTicket1 = ticketService.createTicket(ticket1)
+        ticketService.closeTicket(newTicket1.id)
+
+        Assertions.assertThrows(TicketStatusException::class.java, {
+            ticketService.resolveTicketIssue(newTicket1.id)
+        }, "Ticket is Closed")
+    }
+
+    @Test
+    fun putTicketIsNotClosedOrResolved() {
+        val newTicket1 = ticketService.createTicket(ticket1)
+
+        Assertions.assertThrows(TicketStatusException::class.java, {
+            ticketService.reopenTicket(newTicket1.id)
+        }, "The Ticket is not Closed or Resolved")
     }
 
 }

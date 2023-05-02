@@ -37,8 +37,8 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
     }
 
     @Transactional(readOnly = true)
-    override fun getSingleTicket(id: Int): TicketDTO? {
-        return ticketRepository.findByIdOrNull(id)?.toDTO()
+    override fun getSingleTicket(id: Int): TicketDTO {
+        return ticketRepository.findByIdOrNull(id)?.toDTO() ?: throw TicketNotFoundException("Ticket Not Found")
     }
 
     override fun createTicket(ticketDTO: TicketDTO) : TicketDTO {
