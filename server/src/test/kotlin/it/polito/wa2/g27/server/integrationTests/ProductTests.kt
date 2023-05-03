@@ -67,10 +67,7 @@ class ProductTests {
         val products = productService.getAll()
 
         val expectedProducts = listOf(
-            ProductDTO("A01", "Lego Star Wars", "LEGO", "Space"),
-            ProductDTO("A02", "Lego Indiana Jones", "LEGO", "Historical"),
-            ProductDTO("B01", "Lego Duplo Fashion Blogger", "LEGO Duplo", "Fashion"),
-            ProductDTO("B02", "Lego Dublo TikToker", "LEGO Duplo", "Influencer")
+            prod1, prod2, prod3, prod4
         )
 
         Assertions.assertEquals(expectedProducts.toSet(), products.toSet())
@@ -78,9 +75,9 @@ class ProductTests {
 
     @Test
     fun getProductById() {
-        val product = productService.getProduct("B01")
+        val product = productService.getProduct(prod3.id)
         
-        val expectedProduct = ProductDTO("B01", "Lego Duplo Fashion Blogger", "LEGO Duplo", "Fashion");
+        val expectedProduct = prod3
 
         Assertions.assertEquals(expectedProduct, product)
     }
@@ -94,14 +91,3 @@ class ProductTests {
     }
 
 }
-
-/*
-
-//Write here your integration test
-val testRestTemplate = TestRestTemplate()
-val response: ResponseEntity<String> = testRestTemplate.getForEntity<String>(
-    "http://localhost:8080/profiles/pollo2.matano@gmail.com",
-    String
-)
-
- */

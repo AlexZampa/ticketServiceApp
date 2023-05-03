@@ -4,10 +4,7 @@ import it.polito.wa2.g27.server.exceptions.ProductNotFoundException
 import it.polito.wa2.g27.server.exceptions.ProfileAlreadyExistsException
 import it.polito.wa2.g27.server.exceptions.ProfileEmailModificationException
 import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
-import it.polito.wa2.g27.server.profiles.Profile
-import it.polito.wa2.g27.server.profiles.ProfileDTO
-import it.polito.wa2.g27.server.profiles.ProfileRepository
-import it.polito.wa2.g27.server.profiles.ProfileService
+import it.polito.wa2.g27.server.profiles.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -51,17 +48,8 @@ class UserTests {
 
     @BeforeEach
     fun populateDB() {
-        val profile1 = Profile().apply {
-            id = 1; email = user1.email
-            name = user1.name; surname = user1.surname; username = user1.username
-            dateofbirth = LocalDate.parse(user1.dateOfBirth, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        }
-
-        val profile2 = Profile().apply {
-            id = 2; email = user2.email
-            name = user2.name; surname = user2.surname; username = user2.username
-            dateofbirth = LocalDate.parse(user2.dateOfBirth, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        }
+        val profile1 = user1.toProfile()
+        val profile2 = user2.toProfile()
 
         profileRepository.deleteAll()
         profileRepository.save(profile1)
