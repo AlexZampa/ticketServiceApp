@@ -5,24 +5,24 @@ import it.polito.wa2.g27.server.exceptions.ProfileEmailModificationException
 import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.time.LocalDate
-import java.security.MessageDigest
 
 @Service
 class ProfileServiceImpl(private val profileRepository: ProfileRepository): ProfileService {
-    override fun getByEmail(email: String): ProfileDTO? {
-        return profileRepository.findByIdOrNull(email)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
+    override fun getByEmail(email: String): ProfileDTO {
+        return profileRepository.findByEmail(email)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
     }
 
-    override fun createProfile(profileDTO: ProfileDTO) {
-        val oldProfile = profileRepository.findByIdOrNull(profileDTO.email)
+    override fun getById(id: Int): ProfileDTO {
+        return profileRepository.findByIdOrNull(id)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
+    }
+
+    override fun createProfile(profileDTO: ProfileDTO): ProfileDTO {
+        val oldProfile = profileRepository.findByEmail(profileDTO.email)
         if(oldProfile != null){
             throw ProfileAlreadyExistsException("Profile Already Exists")
         }
-
-        val p = Profile()
-        parseProfileDTO(p, profileDTO)
-        profileRepository.save(p)
+        val newProfile: Profile = profileRepository.save(profileDTO.toProfile())
+        return newProfile.toDTO()
     }
 
     override fun modifyProfile(email: String, profileDTO: ProfileDTO) {
@@ -30,19 +30,8 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository): Prof
             throw ProfileEmailModificationException("Email Update not possible")
         }
 
-        val p = profileRepository.findByIdOrNull(email) ?: throw ProfileNotFoundException("Profile Not Found")
-        parseProfileDTO(p, profileDTO)
-        profileRepository.save(p)
+        val p = profileRepository.findByEmail(email) ?: throw ProfileNotFoundException("Profile Not Found")
+        profileRepository.save(profileDTO.toProfile())
     }
 
-    fun parseProfileDTO(p: Profile, profileDTO: ProfileDTO) : Profile{
-        p.email = profileDTO.email
-        p.username = profileDTO.username
-        p.name = profileDTO.name
-        p.surname = profileDTO.surname
-        p.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth)
-        val digest = MessageDigest.getInstance("SHA-256").digest(profileDTO.hash.toByteArray())
-        p.hash = digest.fold("") { str, it -> str + "%02x".format(it) }
-        return p
-    }
 }

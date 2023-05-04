@@ -10,7 +10,7 @@ class ProductServiceImpl(private val productRepository: ProductRepository): Prod
         return productRepository.findAll().map {it.toDTO()}
     }
 
-    override fun getProduct(productId: String): ProductDTO? {
+    override fun getProduct(productId: String): ProductDTO {
         return productRepository.findByIdOrNull(productId)?.toDTO() ?: throw ProductNotFoundException("Product Not Found")
     }
 

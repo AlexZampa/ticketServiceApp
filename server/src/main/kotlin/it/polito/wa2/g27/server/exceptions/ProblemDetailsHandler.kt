@@ -30,6 +30,7 @@ class ProblemDetailsHandler {
     }
 
     @ExceptionHandler(ProfileNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleProfileNotFound(e: ProfileNotFoundException): ProblemDetail {
         val d = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
         d.title= "Profile Not Found"
@@ -37,23 +38,66 @@ class ProblemDetailsHandler {
     }
 
     @ExceptionHandler(ProfileAlreadyExistsException::class)
-    fun handleProfileNotFound(e: ProfileAlreadyExistsException): ProblemDetail {
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleProfileAlreadyExists(e: ProfileAlreadyExistsException): ProblemDetail {
         val d = ProblemDetail.forStatusAndDetail( HttpStatus.CONFLICT, e.message!! )
         d.title= "Profile Already exists"
         return d
     }
 
     @ExceptionHandler(ProfileEmailModificationException::class)
-    fun handleProfileNotFound(e: ProfileEmailModificationException): ProblemDetail {
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleProfileEmailModification(e: ProfileEmailModificationException): ProblemDetail {
         val d = ProblemDetail.forStatusAndDetail( HttpStatus.CONFLICT, e.message!! )
         d.title= "Profile Email Update not possible"
         return d
     }
 
     @ExceptionHandler(ProductNotFoundException::class)
-    fun handleProfileNotFound(e: ProductNotFoundException): ProblemDetail {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleProductNotFound(e: ProductNotFoundException): ProblemDetail {
         val d = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
         d.title= "Product Not Found"
+        return d
+    }
+
+    @ExceptionHandler(TicketNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleTicketNotFound(e: TicketNotFoundException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.NOT_FOUND, e.message!! )
+        d.title= "Ticket Not Found"
+        return d
+    }
+
+    @ExceptionHandler(TicketStatusNotValidException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleTicketStatusNotValid(e: TicketStatusNotValidException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+        d.title= "Wrong Ticket Status"
+        return d
+    }
+
+    @ExceptionHandler(TicketStatusException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleTicketStatus(e: TicketStatusException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+        d.title= "Wrong Ticket Status"
+        return d
+    }
+
+    @ExceptionHandler(TicketPriorityNotValidException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleTicketPriorityNotValid(e: TicketPriorityNotValidException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+        d.title= "Wrong Ticket Priority"
+        return d
+    }
+
+    @ExceptionHandler(TicketBodyException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleTicketBody(e: TicketBodyException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, e.message!! )
+        d.title= "Wrong Ticket Priority"
         return d
     }
 }
