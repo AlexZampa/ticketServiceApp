@@ -1,6 +1,5 @@
-package it.polito.wa2.g27.server.integrationTests
+package it.polito.wa2.g27.server.test.serviceTest
 
-import it.polito.wa2.g27.server.exceptions.ProductNotFoundException
 import it.polito.wa2.g27.server.exceptions.ProfileAlreadyExistsException
 import it.polito.wa2.g27.server.exceptions.ProfileEmailModificationException
 import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
@@ -16,8 +15,6 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 @Testcontainers

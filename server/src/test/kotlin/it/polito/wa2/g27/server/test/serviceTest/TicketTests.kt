@@ -1,4 +1,4 @@
-package it.polito.wa2.g27.server.integrationTests
+package it.polito.wa2.g27.server.test.serviceTest
 
 import it.polito.wa2.g27.server.exceptions.TicketNotFoundException
 import it.polito.wa2.g27.server.exceptions.TicketPriorityNotValidException
