@@ -22,9 +22,6 @@ jib {
     from {
         image = "gradle:latest"
     }
-    to {
-        image = "gcr.io/ticketserviceapp/ticketservice"
-    }
     container {
         environment =  mapOf(
             "DB_HOST" to (dbHost ?: "localhost")

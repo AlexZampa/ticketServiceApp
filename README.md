@@ -1,5 +1,30 @@
 # ticketServiceApp
 
+## Installation guide
+### Build the docker image using Jib
+
+Make sure you are in the server folder.
+Run the following command replacing:
+- `PROJECT` with your Google Cloud project ID (actually using `jibDockerBuild` you don't need it to exist)
+- `IMAGE` with your image name
+```shell
+gradle jibDockerBuild --image=gcr.io//{PROJECT}/{IMAGE}
+```
+
+### Run the containers
+
+Run this command to create the postgres db container:
+```shell
+docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres:latest
+```
+
+Then, you can run the container previously built specifying the ip address of your machine (or the one running the postgres db container).
+```shell
+docker run -p 8080:8080 -e DB_HOST={IP_ADDRESS} gcr.io/{PROJECT}/{IMAGE}
+```
+_**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine_
+
+
 ## List of APIs
 - [Products APIs](#products-apis)
   - [Retrieve all products](#retrieve-all-products)
