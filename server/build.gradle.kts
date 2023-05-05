@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
+    id("com.google.cloud.tools.jib") version "3.3.1"
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
     kotlin("plugin.jpa") version "1.7.22"
@@ -11,9 +12,24 @@ plugins {
 group = "it.polito.wa2.g27"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
+val dbHost: String? by project
 
 repositories {
     mavenCentral()
+}
+
+jib {
+    from {
+        image = "gradle:latest"
+    }
+    to {
+        image = "gcr.io/ticketserviceapp/ticketservice"
+    }
+    container {
+        environment =  mapOf(
+            "DB_HOST" to (dbHost ?: "localhost")
+        )
+    }
 }
 
 dependencies {

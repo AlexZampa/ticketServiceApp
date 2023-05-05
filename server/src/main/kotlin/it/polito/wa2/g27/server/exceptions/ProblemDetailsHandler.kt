@@ -23,7 +23,7 @@ class ProblemDetailsHandler {
             val errorMessage = error.getDefaultMessage()
             errors[fieldName] = errorMessage
         }
-        val d = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, ex.message!! )
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.BAD_REQUEST, ex.message)
         d.title= errors.values.first()
         d.detail= errors.keys.first()
         return d
