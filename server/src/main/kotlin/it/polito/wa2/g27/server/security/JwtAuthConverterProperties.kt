@@ -9,5 +9,6 @@ import org.springframework.validation.annotation.Validated
 @ConfigurationProperties(prefix = "jwt.auth.converter")
 data class JwtAuthConverterProperties (
     var resourceId: String? = null,
-    var principalAttribute: String? = null
+    var principalAttribute: String? = null,
+    var jwkSetUri: String? = null
 )

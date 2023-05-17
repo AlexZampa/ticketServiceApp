@@ -7,3 +7,4 @@ class ProfileAlreadyExistsException(override val message: String?): RuntimeExcep
 
 class ProfileEmailModificationException(override val message: String?): RuntimeException(message)
 
+class ProfileAuthenticationException(override val message: String?): RuntimeException(message)

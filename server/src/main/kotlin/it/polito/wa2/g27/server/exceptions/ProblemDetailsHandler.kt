@@ -100,5 +100,13 @@ class ProblemDetailsHandler {
         d.title= "Wrong Ticket Priority"
         return d
     }
+
+    @ExceptionHandler(ProfileAuthenticationException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleProfileAuthentication(e: ProfileAuthenticationException): ProblemDetail {
+        val d = ProblemDetail.forStatusAndDetail( HttpStatus.UNAUTHORIZED, e.message!! )
+        d.title= "Invalid credentials"
+        return d
+    }
 }
 
