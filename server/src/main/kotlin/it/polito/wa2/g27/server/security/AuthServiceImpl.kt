@@ -13,20 +13,17 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.ResponseErrorHandler
 import org.springframework.web.client.RestTemplate
 
-
 class CustomErrorHandler: ResponseErrorHandler {
-    override fun hasError(httpResponse: ClientHttpResponse): Boolean {
-        return httpResponse.statusCode == HttpStatus.UNAUTHORIZED
+    override fun hasError(response: ClientHttpResponse): Boolean {
+        return response.statusCode == HttpStatus.UNAUTHORIZED
     }
 
-    override fun handleError(httpResponse: ClientHttpResponse) {
+    override fun handleError(response: ClientHttpResponse) {
         // Implementa la logica per gestire l'errore
         // Puoi accedere allo status code, al corpo della risposta, agli header, ecc.
+        val statusCode = response.statusCode
+        val responseBody = response.body
         // Esegui le azioni desiderate per gestire l'errore
-        val statusCode = httpResponse.statusCode
-        val responseBody = httpResponse.body
-        if (statusCode == HttpStatus.UNAUTHORIZED) throw ProfileAuthenticationException("Invalid credentials")
-
     }
 }
 
@@ -48,20 +45,22 @@ class AuthServiceImpl(
             httpHeaders
         )
 
-        val restTemplate = RestTemplateBuilder().errorHandler(CustomErrorHandler()).build()
-        val response: ResponseEntity<Map<String, Any>> = restTemplate.exchange(
-            keycloackUrlToken, HttpMethod.POST, request,
-            object : ParameterizedTypeReference<Map<String, Any>>() {})
+        val restTemplate = RestTemplateBuilder().build()
+        try {
+            val response: ResponseEntity<Map<String, Any>> = restTemplate.exchange(
+                keycloackUrlToken, HttpMethod.POST, request,
+                object : ParameterizedTypeReference<Map<String, Any>>() {})
 
+            val token = response.body?.get("access_token") as String
+            val email = jwtAuthConverter.getEmail(token)
+            val username = jwtAuthConverter.getUsername(token)
 
-        val token = response.body?.get("access_token") as String
-        // val profileUuid = jwtAuthConverter.getUUID(token)
-        val email = jwtAuthConverter.getEmail(token)
-        val username = jwtAuthConverter.getUsername(token)
+            val profile = profileRepository.findByEmail(email) ?: throw ProfileNotFoundException("Profile Not Found")
 
-        val profile = profileRepository.findByEmail(email)?: throw ProfileNotFoundException("Profile Not Found")
-        return UserDTO(token, email, username, profile.name, profile.surname)
-
+            return UserDTO(token, email, username, profile.name, profile.surname)
+        }catch (e: HttpClientErrorException){
+            throw ProfileAuthenticationException("Invalid Credentials")
+        }
     }
 
     override fun logout(token: String): HttpStatusCode {
@@ -74,6 +73,5 @@ class AuthServiceImpl(
 
         return response.statusCode
     }
-
 
 }

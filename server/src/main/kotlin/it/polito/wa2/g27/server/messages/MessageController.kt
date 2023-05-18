@@ -17,19 +17,19 @@ class MessageController(private val messageService: MessageService, private val 
 ) {
 
     @CrossOrigin(origins = ["http://localhost:3000"])
-    @GetMapping("/tickets/{id}/chat")
+    @GetMapping("/authenticated/tickets/{id}/chat")
     fun getMessages(@PathVariable id: Int, response: HttpServletResponse) : List<MessageDTO>? {
         return messageService.getMessages(id)
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
-    @GetMapping("/tickets/{id}/chat/{attId}")
+    @GetMapping("/authenticated/tickets/{id}/chat/{attId}")
     fun getAttachment(@PathVariable id: Int, @PathVariable attId: Int, response: HttpServletResponse) : ResponseEntity<Resource>? {
         return attachmentService.getAttachment(attId, response)
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
-    @PostMapping("/tickets/{id}/chat")
+    @PostMapping("/authenticated/tickets/{id}/chat")
     @ResponseStatus(HttpStatus.CREATED)
     fun postMessage(@PathVariable id: Int,
                     @RequestParam("attachments") attachments: List<MultipartFile>,

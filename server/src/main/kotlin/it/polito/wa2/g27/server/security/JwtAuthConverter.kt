@@ -1,6 +1,5 @@
 package it.polito.wa2.g27.server.security
 
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.convert.converter.Converter
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
@@ -18,10 +17,7 @@ import java.util.stream.Stream
 
 
 @Component
-class JwtAuthConverter(
-
-    private val properties: JwtAuthConverterProperties
-) :
+class JwtAuthConverter(private val properties: JwtAuthConverterProperties) :
     Converter<Jwt?, AbstractAuthenticationToken?> {
 
     private val jwtGrantedAuthoritiesConverter = JwtGrantedAuthoritiesConverter()
@@ -46,9 +42,6 @@ class JwtAuthConverter(
         val resourceAccess = jwt.getClaim<Map<String, Any>>("resource_access")
         val resource = resourceAccess?.get(properties.resourceId) as? Map<*, *>
         val resourceRoles = resource?.get("roles") as? Collection<*>
-        //val resourceAccess: Map<String, Any>? = jwt.getClaim("resource_access")
-        //val resource: Map<String?, Any?>? = resourceAccess?.get(properties.resourceId) as MutableMap<String?, Any?>?
-        //val resourceRoles: Collection<String?>? = resource?.get("roles") as Collection<String?>?
 
         return if (resourceAccess == null || resource == null || resourceRoles == null) {
             setOf<GrantedAuthority>()
@@ -62,17 +55,6 @@ class JwtAuthConverter(
     private fun convertStringToJwt(accessTokenString: String): Jwt {
         val jwtDecoder: JwtDecoder = NimbusJwtDecoder.withJwkSetUri(properties.jwkSetUri).build()
         return jwtDecoder.decode(accessTokenString)
-    }
-
-    fun getRole(accessToken: String): String {
-        val jwt = this.convertStringToJwt(accessToken)
-        val clientAccess = jwt.getClaim<Map<*, *>>("resource_access")[properties.resourceId] as Map<*, *>
-        return (clientAccess["roles"] as List<String>)[0]
-    }
-
-    fun getUUID(accessToken: String): UUID {
-        val jwt = this.convertStringToJwt(accessToken)
-        return UUID.fromString(jwt.getClaim<String>("sub"))
     }
 
     fun getEmail(accessToken: String): String {
