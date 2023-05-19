@@ -14,4 +14,49 @@ INSERT INTO public.ticket_history (id, date, status, ticket_id) VALUES (13, '202
 INSERT INTO public.ticket_history (id, date, status, ticket_id) VALUES (14, '2022-09-10', 'OPEN', 10);
 
 INSERT INTO public.messages(id, datetime, text, receiver_id, sender_id, ticket_id)
-        VALUES (0, '2000-07-16T19:20+01:00', 'Ciao bella', 32, 31, 10)
+        VALUES (0, '2000-07-16T19:20+01:00', 'Ciao bella', 32, 31, 10);
+
+
+CREATE TABLE IF NOT EXISTS public.products(
+                                              id varchar(255) PRIMARY KEY,
+                                              name varchar(255) NOT NULL,
+                                              brand varchar(255),
+                                              description varchar(255)
+);
+
+CREATE TABLE IF NOT EXISTS public.profiles(
+                                              id SERIAL PRIMARY KEY,
+                                              email varchar(255) NOT NULL,
+                                              name varchar(255) NOT NULL,
+                                              surname varchar(255) NOT NULL,
+                                              username varchar(255) NOT NULL,
+                                              dateofbirth DATE
+);
+
+CREATE TABLE IF NOT EXISTS public.tickets(
+                                              id SERIAL PRIMARY KEY,
+                                              category varchar(255) NOT NULL,
+                                              description varchar(255) NOT NULL,
+                                              priority int NOT NULL,
+                                              expert_id int,
+                                              product_id varchar(255) NOT NULL,
+                                              profile_id int
+);
+
+CREATE TABLE IF NOT EXISTS public.ticket_history(
+                                              id SERIAL PRIMARY KEY,
+                                              date DATE NOT NULL,
+                                              status varchar(255) NOT NULL,
+                                              ticket_id int
+);
+
+CREATE TABLE IF NOT EXISTS public.messages(
+                                              id SERIAL PRIMARY KEY,
+                                              datetime DATE NOT NULL,
+                                              text varchar(255) NOT NULL,
+                                              receiver_id int NOT NULL,
+                                              sender_id int NOT NULL,
+                                              ticket_id int
+);
+
+
