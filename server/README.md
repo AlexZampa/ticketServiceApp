@@ -1,5 +1,18 @@
 # ticketServiceApp
 
+## Installation guide
+### Build the docker image using Jib
+
+Make sure you are in the server folder.
+Run the following command:
+```shell
+gradle jibDockerBuild && docker-compose up
+```
+
+If you don't have installed gradle you can use the `gradlew` or `gradlew.bat` commands for linux or windows respectively.
+
+_**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine_
+
 ## List of APIs
 - [Products APIs](#products-apis)
   - [Retrieve all products](#retrieve-all-products)
