@@ -3,15 +3,22 @@
 ## Installation guide
 ### Build the docker image using Jib
 
+The solution is supposed to be run in a linux host.
+
 Make sure you are in the server folder.
 Run the following command:
 ```shell
-gradle jibDockerBuild && docker-compose up
+gradle jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-compose up -d
 ```
-
 If you don't have installed gradle you can use the `gradlew` or `gradlew.bat` commands for linux or windows respectively.
 
-_**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine_
+If you are on a windows host, you must delete the line 28 in the [docker-compose.yml](../docker-compose.yml) file.
+
+Then insert the ip address of your host in the [application.properties](./src/main/resources/application.properties) in the first line instead of localhost
+
+Example: _spring.datasource.url=jdbc:postgresql://<your_ip>:5432/postgres_
+
+_**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine.
 
 ## List of APIs
 - [Products APIs](#products-apis)
@@ -40,11 +47,11 @@ _**NB**: 'localhost' won't work because when you run the application from a cont
 
 ### __Retrieve all products__
 
-GET `/products`
+GET `/public/products`
 
 Description: Get all the products
 
-Example Request URL: `http://localhost:port/products`
+Example Request URL: `http://localhost:port/public/products`
 Request body: _None_
 
 Successfull Response Header: `200 OK` (success)
@@ -72,11 +79,11 @@ Error Response Header:
 
 ### __Retrieve single product__
 
-GET `/products/{productId}`
+GET `/public/products/{productId}`
 
 Description: Get single product
 
-Example Request URL: `http://localhost:port/products/A01`
+Example Request URL: `http://localhost:port/public/products/A01`
 Request body: _None_
 
 Successfull Response Header: `200 OK` (success)
@@ -98,11 +105,11 @@ Error Response Header:
 
 ### __Retrieve profile by email__
 
-GET `/profiles/{email}`
+GET `/authenticated/profiles/{email}`
 
 Description: Get single profile by email
 
-Example Request URL: `http://localhost:port/profiles/test@mail.com`
+Example Request URL: `http://localhost:port/authenticated/profiles/test@mail.com`
 Request body: _None_
 
 Successfull Response Header: `200 OK` (success)
@@ -124,11 +131,11 @@ Error Response Header:
 
 ### __Create profile__
 
-POST `/profiles`
+POST `/public/profiles`
 
 Description: Create a profile
 
-Example Request URL: `http://localhost:port/profiles`
+Example Request URL: `http://localhost:port/public/profiles`
 Request body:
 ```
 {
@@ -149,11 +156,11 @@ Error Response Header:
 
 ### __Modify profile__
 
-PUT `/profiles/{email}`
+PUT `/authenticated/profiles/{email}`
 
 Description: Modify a profile
 
-Example Request URL: `http://localhost:port/profiles/test@mail.com`
+Example Request URL: `http://localhost:port/authenticated/profiles/test@mail.com`
 Request body:
 ```
 {
@@ -168,6 +175,7 @@ Successfull Response Header: `201 Created` (success)
 Response body: _None_
 
 Error Response Header:
+- `401 Unauthorized` (Not authorized to perform this action)
 - `409 Conflicts` (email cannot be modified)
 - `500 Internal Server Error` (generic error)
 
@@ -176,11 +184,11 @@ Error Response Header:
 
 ### __Retrieve ticket by id__
 
-GET `/tickets/{id}`
+GET `/authenticated/tickets/{id}`
 
 Description: Get single ticket by id
 
-Example Request URL: `http://localhost:port/tickets/2`
+Example Request URL: `http://localhost:port/authenticated/tickets/2`
 Request body: _None_
 
 Successfull Response Header: `200 OK` (success)
@@ -198,17 +206,18 @@ Response body:
 }
 ```
 Error Response Header:
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (no ticket associated to id)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Retrieve open tickets__
 
-GET `/tickets/open`
+GET `/manager/tickets/open`
 
 Description: Get list of open tickets
 
-Example Request URL: `http://localhost:port/tickets/open`
+Example Request URL: `http://localhost:port/manager/tickets/open`
 Request body: _None_
 
 Successfull Response Header: `200 OK` (success)
@@ -229,16 +238,17 @@ Response body:
 ]
 ```
 Error Response Header:
+- `401 Unauthorized` (Not authorized to perform this action)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Retrieve tickets created by profile__
 
-GET `/tickets/created/{email}`
+GET `/client/tickets/created/{email}`
 
 Description: Get list of tickets created by profile
 
-Example Request URL: `http://localhost:port/tickets/created/test@mail.com`
+Example Request URL: `http://localhost:port/client/tickets/created/test@mail.com`
 Request body: _None_
 
 Successfull Response Header: `200 OK` (success)
@@ -259,6 +269,7 @@ Response body:
 ]
 ```
 Error Response Header:
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (no profile associated to email)
 - `500 Internal Server Error` (generic error)
 
@@ -296,12 +307,12 @@ Error Response Header:
 
 ### __Create ticket__
 
-POST `/tickets`
+POST `client/tickets`
 
 Description: Create ticket
 
-Example Request URL: `http://localhost:port/tickets/assigned/test@mail.com`
-Request body: 
+Example Request URL: `http://localhost:port/client/tickets/assigned/test@mail.com`
+Request body:
 ```
 {
     "productId" : "A01",
@@ -316,17 +327,18 @@ Successfull Response Header: `201 Created` (success)
 Response body: _None_
 
 Error Response Header:
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (product or profile not found)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Modify ticket priority__
 
-PUT `tickets/{id}/priority/{priority}`
+PUT `tickets/manager/{id}/priority/{priority}`
 
 Description: Modify ticket priority
 
-Example Request URL: `http://localhost:port/tickets/2/priority/3`
+Example Request URL: `http://localhost:port/manager/tickets/2/priority/3`
 Request body: _None_
 
 Successfull Response Header: `201 Created` (success)
@@ -334,17 +346,18 @@ Response body: _None_
 
 Error Response Header:
 - `400 Bad Request` (priority value not valid)
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (ticket not found)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Assign expert to ticket__
 
-PUT `tickets/{id}/expert`
+PUT `/manager/tickets/{id}/expert`
 
 Description: Assign an expert to the ticket
 
-Example Request URL: `http://localhost:port/tickets/2/expert`
+Example Request URL: `http://localhost:port/manager/tickets/2/expert`
 Request body:
 ```
 {
@@ -357,73 +370,78 @@ Response body: _None_
 
 Error Response Header:
 - `400 Bad Request` (invalid body format or invalid priority)
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (ticket or profile not found)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Stop ticket__
 
-PUT `/tickets/{id}/stop`
+PUT `/manager/tickets/{id}/stop`
 
 Description: Stop ticket progress
 
-Example Request URL: `http://localhost:port/tickets/2/stop`
+Example Request URL: `http://localhost:port/manager/tickets/2/stop`
 Request body: _None_
 Successfull Response Header: `201 Created` (success)
 Response body: _None_
 
 Error Response Header:
 - `400 Bad Request` (Ticket not in Progress)
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (ticket not found)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Close ticket__
 
-PUT `/tickets/{id}/close`
+PUT `/expert/tickets/{id}/close`
 
 Description: Close ticket
 
-Example Request URL: `http://localhost:port/tickets/2/close`
+Example Request URL: `http://localhost:port/expert/tickets/2/close`
 Request body: _None_
 Successfull Response Header: `201 Created` (success)
 Response body: _None_
 
 Error Response Header:
 - `400 Bad Request` (Ticket already closed)
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (ticket not found)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Resolve ticket__
 
-PUT `/tickets/{id}/close`
+PUT `/expert/tickets/{id}/resolve`
 
 Description: Resolve ticket
 
-Example Request URL: `http://localhost:port/tickets/2/resolve`
+Example Request URL: `http://localhost:port/expert/tickets/2/resolve`
 Request body: _None_
 Successfull Response Header: `201 Created` (success)
 Response body: _None_
 
 Error Response Header:
 - `400 Bad Request` (Ticket is Closed)
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (ticket not found)
 - `500 Internal Server Error` (generic error)
 
 
 ### __Reopen ticket__
 
-PUT `/tickets/{id}/reopen`
+PUT `/client/tickets/{id}/reopen`
 
 Description: Reopen ticket
 
-Example Request URL: `http://localhost:port/tickets/2/reopen`
+Example Request URL: `http://localhost:port/client/tickets/2/reopen`
 Request body: _None_
 Successfull Response Header: `201 Created` (success)
 Response body: _None_
 
 Error Response Header:
 - `400 Bad Request` (Ticket is not Closed or Resolved)
+- `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (ticket not found)
 - `500 Internal Server Error` (generic error)

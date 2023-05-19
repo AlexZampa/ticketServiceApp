@@ -3,16 +3,22 @@
 ## Installation guide
 ### Build the docker image using Jib
 
-Make sure you are in the server folder.
-Run the following command changing the DB_HOST variable to be your ip address.
-_**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine_
+The solution is supposed to be run in a linux host.
 
+Make sure you are in the server folder.
+Run the following command:
 ```shell
 gradle jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-compose up -d
 ```
-
 If you don't have installed gradle you can use the `gradlew` or `gradlew.bat` commands for linux or windows respectively.
 
+If you are on a windows host, you must delete the line 28 in the [docker-compose.yml](./docker-compose.yml) file.
+
+Then insert the ip address of your host in the [application.properties](./server/src/main/resources/application.properties) in the first line instead of localhost
+
+Example: _spring.datasource.url=jdbc:postgresql://<your_ip>:5432/postgres_
+
+_**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine.
 
 ## List of APIs
 - [Products APIs](#products-apis)
