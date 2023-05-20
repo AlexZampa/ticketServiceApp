@@ -12,21 +12,24 @@ gradle jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-co
 ```
 If you don't have installed gradle you can use the `gradlew` or `gradlew.bat` commands for linux or windows respectively.
 
-If you are on a windows host, you must delete the line 28 in the [docker-compose.yml](./docker-compose.yml) file.
+If you are on a windows host, you must delete the line 28 in the [docker-compose.yml](../docker-compose.yml) file.
 
-Then insert the ip address of your host in the [application.properties](./server/src/main/resources/application.properties) in the first line instead of localhost
+Then insert the ip address of your host in the [application.properties](./src/main/resources/application.properties) in the first line instead of localhost
 
 Example: _spring.datasource.url=jdbc:postgresql://<your_ip>:5432/postgres_
 
 _**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine.
 
 ## List of APIs
+- [Authentication APIs](#auth-apis)
+  - [login](#login)
+  - [signup](#sign-up)
+  - [logout](#logout)
 - [Products APIs](#products-apis)
   - [Retrieve all products](#retrieve-all-products)
   - [Retrieve-single-product](#retrieve-single-product)
 - [Profile APIs](#profiles-apis)
   - [Retrieve profile by email](#retrieve-profile-by-email)
-  - [Create profile](#create-profile)
   - [Modify profile](#modify-profile)
 - [Ticket APIs](#tickets-apis)
   - [Retrieve ticket by id](#retrieve-ticket-by-id)
@@ -42,6 +45,100 @@ _**NB**: 'localhost' won't work because when you run the application from a cont
   - [Reopen ticket](#reopen-ticket)
 
 ---------------------------------
+
+
+## Auth APIs
+
+### __Login__
+
+POST `/public/login`
+
+Description: login
+
+Example Request URL: `http://localhost:port/public/login`
+Request body:
+```
+{
+    "username": "user1@mail.com",
+    "password": "password"
+}
+```
+
+Successfull Response Header: `200 OK` (success)
+Response body:
+```
+{
+    "id": 1,
+    "email": "user1@mail.com",
+    "username": "user2",
+    "name": "MyName",
+    "surname": "MySurname",
+    "dateOfBirth": "1998-04-23",
+    "password": "",
+    "token": "tokenLongString"
+}
+```
+
+Error Response Header:
+- `500 Internal Server Error` (generic error)
+- `401 Unauthorized` (Invalid credentials)
+
+
+
+### __Sign Up__
+
+POST `/public/signup`
+
+Description: create a client user
+
+Example Request URL: `http://localhost:port/public/signup`
+Request body:
+```
+{
+    "email": "user1@mail.com",
+    "username": "user1",
+    "name": "MyName",
+    "surname": "MySurname",
+    "password": "password",
+    "dateOfBirth": "1998-04-23"
+}
+```
+
+Successfull Response Header: `201 Created` (success)
+Response body:
+```
+{
+    "id": 1,
+    "email": "user2@mail.com",
+    "username": "user2",
+    "name": "Pippo",
+    "surname": "Baudo",
+    "dateOfBirth": "1998-04-23",
+    "password": "",
+    "token": null
+}
+```
+
+Error Response Header:
+- `409 Conflicts` (profile with same email already exists)
+- `500 Internal Server Error` (generic error)
+
+
+### __Logout__
+
+DELETE `/authenticated/logout`
+
+Description: delete the session
+
+Example Request URL: `http://localhost:port/authenticated/logout`
+Request body:_None_
+
+Successfull Response Header: `200 Ok` (success)
+Response body: _None_
+
+Error Response Header:
+- `500 Internal Server Error` (generic error)
+
 
 ## Products APIs
 
@@ -126,31 +223,6 @@ Response body:
 ```
 Error Response Header:
 - `404 Not Found` (no profile associated to email)
-- `500 Internal Server Error` (generic error)
-
-
-### __Create profile__
-
-POST `/public/profiles`
-
-Description: Create a profile
-
-Example Request URL: `http://localhost:port/public/profiles`
-Request body:
-```
-{
-    "email": "test@mail.com",
-    "username": "frank_m",
-    "name": "Frank",
-    "surname": "White",
-    "dateOfBirth": "1989-09-14"
-}
-```
-Successfull Response Header: `201 Created` (success)
-Response body: _None_
-
-Error Response Header:
-- `409 Conflicts` (profile with same email already exists)
 - `500 Internal Server Error` (generic error)
 
 
@@ -312,7 +384,7 @@ POST `client/tickets`
 Description: Create ticket
 
 Example Request URL: `http://localhost:port/client/tickets/assigned/test@mail.com`
-Request body: 
+Request body:
 ```
 {
     "productId" : "A01",
@@ -405,7 +477,7 @@ Successfull Response Header: `201 Created` (success)
 Response body: _None_
 
 Error Response Header:
-- `400 Bad Request` (Ticket already closed) 
+- `400 Bad Request` (Ticket already closed)
 - `401 Unauthorized` (Not authorized to perform this action)
 - `404 Not Found` (ticket not found)
 - `500 Internal Server Error` (generic error)
