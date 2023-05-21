@@ -24,5 +24,5 @@ data class ProfileDTO (
 )
 
 fun Profile.toDTO() : ProfileDTO{
-    return ProfileDTO(id, email, username, name, surname, dateofbirth.toString(), "")
+    return ProfileDTO(id, email, username, name, surname, dateofbirth.toString(), "", "")
 }

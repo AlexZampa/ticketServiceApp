@@ -28,4 +28,11 @@ class AuthController(private val authService: AuthService) {
         authService.logout(token)
     }
 
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PostMapping("/manager/createExpert")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun signupExpert(@Valid @RequestBody profileDTO: ProfileDTO): ProfileDTO {
+        return authService.createExpert(profileDTO)
+    }
+
 }
