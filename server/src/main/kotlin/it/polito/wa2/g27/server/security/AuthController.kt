@@ -1,5 +1,6 @@
 package it.polito.wa2.g27.server.security
 
+import io.micrometer.observation.annotation.Observed
 import it.polito.wa2.g27.server.profiles.ProfileDTO
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -7,6 +8,7 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Observed
 class AuthController(private val authService: AuthService) {
 
     @CrossOrigin(origins = ["http://localhost:3000"])

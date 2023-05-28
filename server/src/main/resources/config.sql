@@ -194,7 +194,7 @@ B02	LEGO Duplo	Influencer	Lego Dublo TikToker
 COPY public.profiles (id, dateofbirth, email, name, surname, username) FROM stdin;
 32	1989-09-14	user1@mail.com	Frank	Matano	user1
 33	1992-09-20	expert1@mail.com	Mary	White	expert1
-34	1987-02-15	manager1@mail.con	Maccio	Capatonda	manager1
+34	1987-02-15	manager1@mail.com	Maccio	Capatonda	manager1
 \.
 
 
