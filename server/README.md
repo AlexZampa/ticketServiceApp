@@ -3,24 +3,28 @@
 ## Installation guide
 ### Build the docker image using Jib
 
-The solution is supposed to be run in a linux host.
-
 Make sure you are in the server folder.
 Run the following command:
 ```shell
-gradle jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-compose up -d
-
-gradlew.bat jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-compose -p observabilty up -d
+gradle jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-compose -p observabilty up -d
 ```
 If you don't have installed gradle you can use the `gradlew` or `gradlew.bat` commands for linux or windows respectively.
 
-If you are on a windows host, you must delete the line 28 in the [docker-compose.yml](../docker-compose.yml) file.
+Before sending request to the server make sure that the keycloak application is up and running (you can verify that by accessing the administrator console).
 
-Then insert the ip address of your host in the [application.properties](./src/main/resources/application.properties) in the first line instead of localhost
+## Users
+| username          | password | role    |
+|-------------------|----------|---------|
+| user1@mail.com    | password | client  |
+| expert1@mail.com  | password | expert  |
+| manager1@mail.com | password | manager |
 
-Example: _spring.datasource.url=jdbc:postgresql://<your_ip>:5432/postgres_
+## Keycloak
 
-_**NB**: 'localhost' won't work because when you run the application from a container, the localhost address in the container refers to the container itself, not your local machine.
+To access the administrator console:
+username: admin
+password: admin
+
 
 ## List of APIs
 - [Authentication APIs](#auth-apis)
