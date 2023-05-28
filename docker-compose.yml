@@ -42,13 +42,12 @@ services:
     ports:
       - 14268:14268  # jaeger ingest
       - 9411:9411 # zipkin
+      - 3200:3200
 
   loki:
     image: grafana/loki
     extra_hosts: [ 'host.docker.internal:host-gateway' ]
     command: [ "-config.file=/etc/loki/local-config.yaml" ]
-  # volumes:
-   #   - ./docker/loki/loki-config.yaml:/etc/loki/config.yaml
     ports:
       - 3100:3100                                   # loki needs to be exposed so it receives logs
     environment:
