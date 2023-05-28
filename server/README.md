@@ -9,6 +9,8 @@ Make sure you are in the server folder.
 Run the following command:
 ```shell
 gradle jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-compose up -d
+
+gradlew.bat jibDockerBuild --image=gcr.io/ticketserviceapp/ticketservice && docker-compose -p observabilty up -d
 ```
 If you don't have installed gradle you can use the `gradlew` or `gradlew.bat` commands for linux or windows respectively.
 

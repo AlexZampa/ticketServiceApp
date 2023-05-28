@@ -206,7 +206,6 @@ COPY public.ticket_history (id, date, status, ticket_id) FROM stdin;
 12	2022-09-14 00:00:00	OPEN	11
 13	2022-09-15 00:00:00	PROGRESS	11
 14	2022-09-10 00:00:00	OPEN	10
-1	2023-05-18 18:46:31.802923	OPEN	1
 \.
 
 
