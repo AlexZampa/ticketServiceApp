@@ -72,7 +72,8 @@ services:
     extra_hosts: [ 'host.docker.internal:host-gateway' ]
     volumes:
       - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
-      - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./docker/grafana/provisioning/dashboards/spring-boot-observability_rev1.json:/etc/grafana/provisioning/dashboards/dashboard.json
+      - ./docker/grafana/provisioning/dashboards/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
