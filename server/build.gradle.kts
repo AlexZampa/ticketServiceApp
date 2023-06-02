@@ -39,7 +39,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.keycloak:keycloak-admin-client:21.0.1")
-    // using new @Observed on class and enaabled @ObservedAspect
+    // using new @Observed on class and enabled @ObservedAspect
     implementation("org.springframework.boot:spring-boot-starter-aop")
     // enabled endpoint and expose metrics
     implementation("org.springframework.boot:spring-boot-starter-actuator")
