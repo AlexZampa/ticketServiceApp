@@ -1,5 +1,6 @@
 package it.polito.wa2.g27.server.messages
 
+import io.micrometer.observation.annotation.Observed
 import it.polito.wa2.g27.server.messages.attachments.AttachmentDTO
 import it.polito.wa2.g27.server.messages.attachments.AttachmentService
 import jakarta.servlet.http.HttpServletResponse
@@ -13,6 +14,7 @@ import java.time.LocalDateTime
 
 
 @RestController
+@Observed
 class MessageController(private val messageService: MessageService, private val attachmentService: AttachmentService
 ) {
 

@@ -1,5 +1,6 @@
 package it.polito.wa2.g27.server.ticket
 
+import io.micrometer.observation.annotation.Observed
 import it.polito.wa2.g27.server.exceptions.TicketBodyException
 import it.polito.wa2.g27.server.products.ProductService
 import it.polito.wa2.g27.server.profiles.ProfileDTO
@@ -10,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Observed
 class TicketController(private val ticketService: TicketService,
                        private val profileService: ProfileService,
                        private val productService: ProductService) {

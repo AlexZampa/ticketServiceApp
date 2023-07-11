@@ -4,9 +4,12 @@ import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
+import io.micrometer.observation.annotation.Observed;
 
 @RestController
+@Observed
 class ProductController(private val productService: ProductService) {
+
 
     @CrossOrigin(origins = ["http://localhost:3000"])
     @GetMapping("/public/products")

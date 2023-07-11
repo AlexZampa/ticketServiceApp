@@ -2,7 +2,6 @@ package it.polito.wa2.g27.server.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -10,7 +9,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
 
-// @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -26,7 +24,7 @@ class WebSecurityConfig (private val jwtAuthConverter: JwtAuthConverter){
             .requestMatchers("/client/**").hasRole(CLIENT)
             .requestMatchers("/expert/**").hasRole(EXPERT)
             .requestMatchers("/manager/**").hasRole(MANAGER)
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
         http.oauth2ResourceServer()
             .jwt()
             .jwtAuthenticationConverter(jwtAuthConverter)
