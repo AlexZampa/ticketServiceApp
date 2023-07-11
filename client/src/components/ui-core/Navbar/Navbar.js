@@ -24,7 +24,7 @@ const Navbar = () => {
             </MyNavbar.Brand>
             <MyNavbar.Brand href="profile" className='justify-content-end logout-text ms-lg-auto'>
                 <PersonCircle className='person-circle' color='white' size={25} />
-                <Button size='sm' className= "ms-2" variant={'secondary '} >
+                <Button size='sm' className= "ms-2" variant={'secondary '}>
                     Profile
                 </Button>
             </MyNavbar.Brand>

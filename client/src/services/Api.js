@@ -16,6 +16,28 @@ const SERVER_URL = 'http://localhost:8080/';
 
 const Api = {
 
+    //Authentication API
+
+    login: (credentials) => {
+        //axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+        return new Promise((resolve, reject) => {
+            axios.post(SERVER_URL + 'public/login', credentials)
+                .then((res) => resolve(res.data))
+                .catch((err) => reject(err.response.data));
+        })
+    },
+
+    logout: (access_token) => {
+        return new Promise((resolve, reject) => {
+            axios.delete(SERVER_URL + 'authenticated/logout', {
+                headers: {
+                    'Authorization': `${access_token}`
+                }
+            }).then((res) => resolve(res.data))
+                .catch((err) => reject(err.response.data));
+        })
+    },
+
     //Product API
 
     getAllProduct: () => {
