@@ -58,7 +58,7 @@ const Api = {
 
     getProfileByEmail: (email) => {
         return new Promise((resolve, reject) => {
-            axios.get(SERVER_URL + `profiles/${email}`)
+            axios.get(SERVER_URL + `/authenticated/profiles/${email}`)
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })
