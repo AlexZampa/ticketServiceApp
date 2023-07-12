@@ -9,33 +9,30 @@ import useNotification from "../../utils/useNotification";
 function ProfileForm() {
 
     const location = useLocation();
-    const isAdding = !location.state;
+    const isAdding = !location.state; //Checks whether the profile variable exists (set in ProfileContent when clicking on edit)
 
     const [email, setEmail] = useState(location.state ? location.state.email :"");
     const [name, setName] = useState(location.state ? location.state.name:"");
     const [surname, setSurname] = useState(location.state ? location.state.surname:"");
     const [username, setUsername] = useState(location.state ? location.state.username:"");
-    const [password, setPassword] = useState("hash");
+    const [password, setPassword] = useState("");
     const [date, setDate] = useState(location.state ? location.state.dateOfBirth:dayjs().format('YYYY-MM-DD'));
 
     const navigate = useNavigate();
     const notify = useNotification()
 
     const handleSubmit = async(event) => {
+
         event.preventDefault();
 
         const profile =
-            { email: email, name: name, surname: surname, username: username, dateOfBirth: dayjs(date).format("YYYY-MM-DD") , hash: password};
+            { email: email, name: name, surname: surname, username: username, dateOfBirth: dayjs(date).format("YYYY-MM-DD") , password: password};
         if (isAdding) {
             // API CALL
-            Api.addNewProfile(profile)
+            Api.signup(profile)
                 .then(() => {
-                    notify.success("New profile created")
-                    navigate("/profile", {
-                        state: {
-                            profile: profile,
-                        }
-                    });
+                    notify.success("New profile created!")
+                    navigate("/login");
                 })
                 .catch(err => {
                     notify.error(err.title ? err.title.toString() : "Server error")
@@ -44,11 +41,7 @@ function ProfileForm() {
             Api.modifyProfile(profile.email, profile)
                 .then(() => {
                     notify.success("Profile modified successfully")
-                    navigate("/profile", {
-                        state: {
-                            profile: profile,
-                        }
-                    });
+                    navigate("/profile");
                 })
                 .catch(err => {
                     notify.error(err.title ? err.title.toString() : "Server error")
@@ -84,16 +77,11 @@ function ProfileForm() {
                         <Form.Label>Date of Birth</Form.Label>
                         <Form.Control type="date" required={true} max={dayjs().format('YYYY-MM-DD')} value={date} onChange={event => setDate(dayjs(event.target.value).format('YYYY-MM-DD'))}/>
                     </Form.Group>
-
-                    {/*
                     <Form.Group className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" maxLength={16} required={true} value={password} onChange={event => setPassword(event.target.value)}/>
                     </Form.Group>
-                    */
-                    }
-
-                    <Button variant="primary" type="submit">{isAdding ? "Create" : "Submit"}</Button>
+                    <Button className="mt-2" variant="primary" type="submit">{isAdding ? "Create" : "Submit"}</Button>
                 </Form>
             </Container>
     );

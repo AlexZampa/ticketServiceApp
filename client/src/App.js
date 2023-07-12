@@ -16,7 +16,19 @@ function App() {
         surname: undefined,
         dateOfBirth: undefined });
 
-    const auth = { user, setUser };
+    const resetUser = () => {
+        setUser({
+            id: undefined,
+            email: undefined,
+            token: undefined,
+            username: undefined,
+            name: undefined,
+            surname: undefined,
+            dateOfBirth: undefined })
+        localStorage.setItem("token", "")
+    }
+
+    const auth = { user, setUser, resetUser };
     return (
       <AppContainer>
           <AuthContext.Provider value={auth}>

@@ -18,6 +18,12 @@ class AuthController(private val authService: AuthService) {
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
+    @PostMapping("/public/session")
+    fun validateToken(@RequestBody authDTO: AuthDTO, br: BindingResult): ProfileDTO? {
+        return authService.login(authDTO)
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
     @PostMapping("/public/signup")
     @ResponseStatus(HttpStatus.CREATED)
     fun signup(@Valid @RequestBody profileDTO: ProfileDTO): ProfileDTO {

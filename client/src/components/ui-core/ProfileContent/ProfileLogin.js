@@ -11,21 +11,7 @@ function ProfileLogin() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const [showAlert, setShowAlert] = useState(false);
-    const [showAlert2, setShowAlert2] = useState(false);
-    const [alertMsg, setAlertMsg] = useState(false);
-
-    const handleLogout = (event) => {
-        event.preventDefault();
-        API.logout(authContext.user.token).then((succes) => {
-            setShowAlert2(true)
-            setAlertMsg("OH YESSSSSS")
-        }).catch(err => {
-            setShowAlert2(true)
-            setAlertMsg("OH NOOOOOOO")
-        })
-    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -42,24 +28,16 @@ function ProfileLogin() {
                     surname: user.surname,
                     dateOfBirth: user.dateOfBirth
                 });
-                console.log(user)
+                localStorage.setItem("token", user.token)
                 navigate('/profile');
             })
             .catch((err) => {
-                authContext.setUser({
-                    id: undefined,
-                    email: undefined,
-                    token: undefined,
-                    username: undefined,
-                    name: undefined,
-                    surname: undefined,
-                    dateOfBirth: undefined
-                });
+                authContext.resetUser()
                 setShowAlert(true);
             });
     }
 
-    function resetAlert() { setShowAlert('') }
+    function resetAlert() { setShowAlert(false) }
     function handleEmail(ev) { setEmail(ev.target.value) }
     function handlePassword(ev) { setPassword(ev.target.value) }
 
@@ -70,12 +48,6 @@ function ProfileLogin() {
                     showAlert === true ?
                         <Alert variant="danger" onClose={resetAlert} dismissible>
                             <Alert.Heading>Incorrect username and/or password</Alert.Heading>
-                        </Alert> : null
-                }
-                {
-                    showAlert2 === true ?
-                        <Alert variant="danger" onClose={resetAlert} dismissible>
-                            <Alert.Heading>{alertMsg}</Alert.Heading>
                         </Alert> : null
                 }
                 <Row>
@@ -104,11 +76,11 @@ function ProfileLogin() {
                                 placeholder="Password" />
                         </Form.Group>
                         <Form.Group>
-                            <Button variant='warning' type='submit' size='lg' onSubmit={handleSubmit}>
+                            <Button className="m-2"type='submit' size='lg' onSubmit={handleSubmit}>
                                 Login
                             </Button>
-                            <Button variant='warning' type='submit' size='lg' onClick={handleLogout}>
-                                Logout
+                            <Button className="m-2" type='submit' size='lg' href='/newProfile'>
+                                Signup
                             </Button>
                         </Form.Group>
                     </Form>

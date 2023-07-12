@@ -19,21 +19,32 @@ const Api = {
     //Authentication API
 
     login: (credentials) => {
-        //axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
         return new Promise((resolve, reject) => {
             axios.post(SERVER_URL + 'public/login', credentials)
+                .then((res) => {
+                    axios.defaults.headers.common['Authorization'] =`Bearer ${res.data.token}`
+                    resolve(res.data)
+                })
+                .catch((err) => reject(err.response.data));
+        })
+    },
+
+    signup: (formData) => {
+        return new Promise((resolve, reject) => {
+            axios.post(SERVER_URL + `public/signup`, formData)
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })
     },
 
-    logout: (access_token) => {
+    logout: () => {
         return new Promise((resolve, reject) => {
-            axios.delete(SERVER_URL + 'authenticated/logout', {
-                headers: {
-                    'Authorization': `${access_token}`
-                }
-            }).then((res) => resolve(res.data))
+            axios.delete(SERVER_URL + 'authenticated/logout')
+                .then((res) => {
+                    axios.defaults.headers.common['Authorization'] = ''
+                    delete axios.defaults.headers.common['Authorization']
+                    resolve(res.data)
+                })
                 .catch((err) => reject(err.response.data));
         })
     },
@@ -58,18 +69,12 @@ const Api = {
 
     getProfileByEmail: (email) => {
         return new Promise((resolve, reject) => {
-            axios.get(SERVER_URL + `/authenticated/profiles/${email}`)
+            axios.get(SERVER_URL + `authenticated/profiles/${email}`)
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })
     },
-    addNewProfile: (formData) => {
-        return new Promise((resolve, reject) => {
-            axios.post(SERVER_URL + 'authenticated/profiles', formData)
-                .then((res) => resolve(res.data))
-                .catch((err) => reject(err.response.data));
-        })
-    },
+
     modifyProfile: (email, formData) => {
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `authenticated/profiles/${email}`, formData)
