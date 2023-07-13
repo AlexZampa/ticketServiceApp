@@ -40,6 +40,7 @@ function App() {
                 <Route path='/newProfile' element={<View.EditProfile/>} />
                 <Route path='/dashboard' element={<View.Dashboard/>} />
                 <Route path='/ticket/:ticketId' element={<View.Ticket/>} />
+                <Route path='/ticket/:ricketId/chat' element={<View.Chat/>} />
                 <Route path='*' element={<View.Error/>}/>
             </Routes>
           </AuthContext.Provider>
