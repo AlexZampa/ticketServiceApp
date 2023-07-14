@@ -1,12 +1,14 @@
-import { useState } from "react";
+import {useContext, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import {Form, Button, Container} from "react-bootstrap";
 import Api from "../../../services/Api";
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom'
 import useNotification from "../../utils/useNotification";
+import {AuthContext} from "../../utils/AuthContext";
 
 function ProfileForm() {
+    const authContext = useContext(AuthContext);
 
     const location = useLocation();
     const isAdding = !location.state; //Checks whether the profile variable exists (set in ProfileContent when clicking on edit)
@@ -38,7 +40,7 @@ function ProfileForm() {
                     notify.error(err.title ? err.title.toString() : "Server error")
                 })
         } else {
-            Api.modifyProfile(profile.email, profile)
+            Api.modifyProfile(profile.email, profile, authContext.user.token)
                 .then(() => {
                     notify.success("Profile modified successfully")
                     navigate("/profile");

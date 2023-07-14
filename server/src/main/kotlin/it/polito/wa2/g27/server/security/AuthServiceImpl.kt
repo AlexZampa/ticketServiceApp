@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus
 
 @Service
 class AuthServiceImpl(
-    private  val properties: AuthServiceProperties,
+    private val properties: AuthServiceProperties,
     private val profileRepository: ProfileRepository,
     private val jwtAuthConverter: JwtAuthConverter
 ): AuthService {

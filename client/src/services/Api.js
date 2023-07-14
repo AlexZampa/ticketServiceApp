@@ -10,6 +10,7 @@
 
 //imports
 import axios from "axios";
+import {useEffect} from "react";
 
 //Server setup
 const SERVER_URL = 'http://localhost:8080/';
@@ -19,6 +20,8 @@ const Api = {
     //Authentication API
 
     login: (credentials) => {
+        axios.defaults.headers.common['Authorization'] = ''
+        delete axios.defaults.headers.common['Authorization']
         return new Promise((resolve, reject) => {
             axios.post(SERVER_URL + 'public/login', credentials)
                 .then((res) => {
@@ -67,7 +70,8 @@ const Api = {
     },
     //PROFILE API
 
-    getProfileByEmail: (email) => {
+    getProfileByEmail: (email, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `authenticated/profiles/${email}`)
                 .then((res) => resolve(res.data))
@@ -75,7 +79,8 @@ const Api = {
         })
     },
 
-    modifyProfile: (email, formData) => {
+    modifyProfile: (email, formData, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `authenticated/profiles/${email}`, formData)
                 .then((res) => resolve(res.data))

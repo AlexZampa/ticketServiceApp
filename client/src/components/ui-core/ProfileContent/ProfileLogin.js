@@ -29,6 +29,7 @@ function ProfileLogin() {
                     dateOfBirth: user.dateOfBirth
                 });
                 localStorage.setItem("token", user.token)
+                localStorage.setItem("email", user.email)
                 navigate('/profile');
             })
             .catch((err) => {

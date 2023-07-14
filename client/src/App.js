@@ -4,13 +4,14 @@ import AppContainer from "./components/utils/AppContainer";
 import { AuthContext } from "./components/utils/AuthContext";
 import {Route, Routes} from "react-router-dom";
 import * as View from './views/index'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 function App() {
+
     const [user, setUser] = useState({
         id: undefined,
-        email: undefined,
-        token: undefined,
+        email: localStorage.getItem("email"),
+        token: localStorage.getItem("token"),
         username: undefined,
         name: undefined,
         surname: undefined,

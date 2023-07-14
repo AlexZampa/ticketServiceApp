@@ -28,10 +28,19 @@ const ProfileContent = () => {
     const notify = useNotification()
     const navigate = useNavigate();
 
-
     useEffect(() => {
-        API.getProfileByEmail(authContext.user.email)
-            .then(profile =>{})
+        API.getProfileByEmail(authContext.user.email, authContext.user.token)
+            .then((user) => {
+                authContext.setUser({
+                    id: user.id,
+                    email: authContext.user.email,
+                    token: authContext.user.token,
+                    username: user.username,
+                    name: user.name,
+                    surname: user.surname,
+                    dateOfBirth: user.dateOfBirth
+                });
+            })
             .catch( err =>{
                 authContext.resetUser()
                 navigate('/login')
