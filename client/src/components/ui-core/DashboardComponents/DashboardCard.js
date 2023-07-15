@@ -3,17 +3,8 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import Api from "../../../services/Api";
 import { Badge, Row, Col } from "react-bootstrap";
+import {useNavigate,Link} from "react-router-dom";
 
-const card = {
-	id: 1,
-	productId: "A01",
-	category: "assist",
-	priority: 1,
-	description: "problem description",
-	profileId: 31,
-	expertId: null,
-	status: "OPEN",
-};
 
 const priorityMap ={
     1 : {
@@ -31,13 +22,15 @@ const priorityMap ={
 }
 
 const DashboardCard = (props) => {
+	const navigate = useNavigate();
+
 	return (
-		<Card style={{ width: "18rem" }}>
+		<Card style={{ width: "18rem", margin: "1rem" }}>
 			<Card.Body>
 				<Card.Title>
 					<Row align="left">
 						<Col>
-							<b>Ticket {card.id}</b>
+							<b>Ticket {props.ticket.id}</b>
 						</Col>
 
 						<Col align="right">
@@ -52,7 +45,7 @@ const DashboardCard = (props) => {
 								<b>ProductId</b>
 							</Col>
 
-							<Col align="right">{card.productId}</Col>
+							<Col align="right">{props.ticket.productId}</Col>
 						</Row>
 					</ListGroup.Item>
 					<ListGroup.Item>
@@ -61,7 +54,7 @@ const DashboardCard = (props) => {
 								<b>category</b>
 							</Col>
 
-							<Col align="right">{card.category}</Col>
+							<Col align="right">{props.ticket.category}</Col>
 						</Row>
 					</ListGroup.Item>
 					<ListGroup.Item>
@@ -71,7 +64,7 @@ const DashboardCard = (props) => {
 							</Col>
 
 							<Col align="right">
-                                <Badge bg={priorityMap[card.priority].status}>{priorityMap[card.priority].name}</Badge>
+                                <Badge bg={priorityMap[props.ticket.priority].status}>{priorityMap[props.ticket.priority].name}</Badge>
                                 </Col>
 						</Row>
 					</ListGroup.Item>
@@ -81,7 +74,7 @@ const DashboardCard = (props) => {
 								<b>ProfileId</b>
 							</Col>
 
-							<Col align="right">{card.profileId}</Col>
+							<Col align="right">{props.ticket.profileId}</Col>
 						</Row>
 					</ListGroup.Item>
 					<ListGroup.Item>
@@ -90,12 +83,22 @@ const DashboardCard = (props) => {
 								<b>ExpertId</b>
 							</Col>
 
-							<Col align="right">{card.expertId}</Col>
+							<Col align="right">{props.ticket.expertId ? props.ticket.expertId:'not assigned'}</Col>
 						</Row>
 					</ListGroup.Item>
+					<ListGroup.Item>
+					</ListGroup.Item>
 				</ListGroup>
-				<Card.Text>{card.description}</Card.Text>
-				<Button variant="info">More Options</Button>
+				<Card.Text>
+					<b>Description: </b>
+					{props.ticket.description}</Card.Text>
+				<Link to={`/ticket/${props.ticket.id}`}>
+					<Button variant="info" >More Options</Button>
+				</Link>
+				<Link to={`/ticket/${props.ticket.id}/chat`}>
+					<Button variant="info" className="ms-2">Chat</Button>
+				</Link>
+
 			</Card.Body>
 		</Card>
 	);

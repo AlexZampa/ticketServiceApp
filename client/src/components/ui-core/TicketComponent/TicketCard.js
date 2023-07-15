@@ -6,16 +6,6 @@ import { Badge, Row, Col } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
-const card = {
-	id: 1,
-	productId: "A01",
-	category: "assist",
-	priority: 1,
-	description: "problem description",
-	profileId: 31,
-	expertId: null,
-	status: "OPEN",
-};
 
 const priorityMap = {
 	1: {
@@ -33,13 +23,14 @@ const priorityMap = {
 };
 
 const TicketCard = (props) => {
+	console.log(props.ticket)
 	return (
 		<Card style={{ width: "40rem" }}>
 			<Card.Body>
 				<Card.Title>
 					<Row align="left">
 						<Col>
-							<b>Ticket {card.id}</b>
+							<b>Ticket {props.ticket.id}</b>
 						</Col>
 
 						<Col align="right">
@@ -54,7 +45,7 @@ const TicketCard = (props) => {
 								<b>ProductId</b>
 							</Col>
 
-							<Col align="right">{card.productId}</Col>
+							<Col align="right">{props.ticket.productId}</Col>
 						</Row>
 					</ListGroup.Item>
 					<ListGroup.Item>
@@ -63,7 +54,7 @@ const TicketCard = (props) => {
 								<b>category</b>
 							</Col>
 
-							<Col align="right">{card.category}</Col>
+							<Col align="right">{props.ticket.category}</Col>
 						</Row>
 					</ListGroup.Item>
 					<ListGroup.Item>
@@ -99,7 +90,7 @@ const TicketCard = (props) => {
 								<b>ProfileId</b>
 							</Col>
 
-							<Col align="right">{card.profileId}</Col>
+							<Col align="right">{props.ticket.profileId}</Col>
 						</Row>
 					</ListGroup.Item>
 					<ListGroup.Item>
@@ -121,8 +112,12 @@ const TicketCard = (props) => {
 							</Col>
 						</Row>
 					</ListGroup.Item>
+				<ListGroup>
 				</ListGroup>
-				<Card.Text>{card.description}</Card.Text>
+				</ListGroup>
+				<Card.Text>
+					<b>Description: </b>
+					{props.ticket.description}</Card.Text>
                 <ListGroup>
                 <Row align="left">
 							<Col>

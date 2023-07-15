@@ -11,21 +11,28 @@
  */
 
 //Imports
-import { ProfileForm } from "../../components/ui-core/ProfileContent/ProfileForm";
 import DashboardCard from "../../components/ui-core/DashboardComponents/DashboardCard";
 import Api from "../../services/Api";
 import { Row, Col } from "react-bootstrap";
+import {useContext, useEffect, useState} from "react";
+import {AuthContext} from "../../components/utils/AuthContext";
+import useNotification from "../../components/utils/useNotification";
 
 const Dashboard = () => {
-	// useEffect(() => {
-	//     Api.getAllProduct()
-	//         .then(products =>{
-	//             setProducts(products);
-	//         })
-	//         .catch( err =>{
-	//             notify.error("Server error")
-	//         })
-	// }, []); //eslint-disable-line react-hooks/exhaustive-deps
+	const authContext = useContext(AuthContext);
+	const notify = useNotification()
+	const [tickets,setTickets] = useState([])
+
+
+	useEffect(() =>{
+		Api.getTicketsByProfile(authContext.user.email,authContext.user.token)
+			.then(tickets =>{
+				setTickets(tickets)
+			})
+			.catch(err =>{
+				console.log(err)
+				notify.error("Server error")
+		})},[])
 
 	return (
 		<>
@@ -36,7 +43,12 @@ const Dashboard = () => {
 					</Col>
 				</Row>
 				<Row>
-					<DashboardCard />
+					{tickets.length>0 ? tickets.map((ticket)=>{
+						return(
+							<DashboardCard key={ticket.id} ticket={ticket}/>
+						)
+
+					}): <></>}
 				</Row>
 			</div>
 		</>

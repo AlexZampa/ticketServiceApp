@@ -90,15 +90,17 @@ const Api = {
 
     // TICKET API
 
-    getTicketById: (ticketId) => {
+    getTicketById: (ticketId,token) => {
         return new Promise((resolve, reject) => {
+            axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
             axios.get(SERVER_URL + `authenticated/tickets/${ticketId}`)
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })
     },
 
-    getOpenTickets: () => {
+    getOpenTickets: (token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `manager/tickets/open`)
                 .then((res) => resolve(res.data))
@@ -106,7 +108,8 @@ const Api = {
         })
     },
 
-    getTicketsByProfile: (email) => {
+    getTicketsByProfile: (email,token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `client/tickets/created/${email}`)
                 .then((res) => resolve(res.data))
@@ -114,7 +117,8 @@ const Api = {
         })
     },
 
-    getAssignedTickets: (email) => {
+    getAssignedTickets: (email, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `expert/tickets/assigned/${email}`)
                 .then((res) => resolve(res.data))
@@ -122,7 +126,8 @@ const Api = {
         })
     },
 
-    addNewTicket: (ticket) => {
+    addNewTicket: (ticket, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.post(SERVER_URL + 'client/tickets', ticket)
                 .then((res) => resolve(res.data))
@@ -130,7 +135,8 @@ const Api = {
         })
     },
 
-    modifyPriority: (ticketId, priority) => {
+    modifyPriority: (ticketId, priority, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `manager/tickets/${ticketId}/priority/${priority}`)
                 .then((res) => resolve(res.data))
@@ -138,7 +144,8 @@ const Api = {
         })
     },
 
-    assignExpert: (ticketId, form) => {
+    assignExpert: (ticketId, form, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `manager/tickets/${ticketId}/expert`, form)
                 .then((res) => resolve(res.data))
@@ -146,7 +153,8 @@ const Api = {
         })
     },
 
-    stopTicket: (ticketId) => {
+    stopTicket: (ticketId, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `manager/tickets/${ticketId}/stop`)
                 .then((res) => resolve(res.data))
@@ -154,7 +162,8 @@ const Api = {
         })
     },
 
-    closeTicket: (ticketId) => {
+    closeTicket: (ticketId, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `expert/tickets/${ticketId}/close`)
                 .then((res) => resolve(res.data))
@@ -162,7 +171,8 @@ const Api = {
         })
     },
 
-    resolveTicket: (ticketId) => {
+    resolveTicket: (ticketId, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `expert/tickets/${ticketId}/resolve`)
                 .then((res) => resolve(res.data))
@@ -170,7 +180,8 @@ const Api = {
         })
     },
 
-    reopenTicket: (ticketId) => {
+    reopenTicket: (ticketId, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.put(SERVER_URL + `client/tickets/${ticketId}/reopen`)
                 .then((res) => resolve(res.data))
@@ -180,7 +191,8 @@ const Api = {
 
     // MESSAGES API
 
-    getMessages: (ticketId) => {
+    getMessages: (ticketId, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `authenticated/tickets/${ticketId}/chat`)
                 .then((res) => resolve(res.data))
@@ -188,7 +200,8 @@ const Api = {
         })
     },
 
-    getAttachment: (ticketId, attId) => {
+    getAttachment: (ticketId, attId, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `authenticated/tickets/${ticketId}/chat/${attId}`)
                 .then((res) => resolve(res.data))
@@ -196,7 +209,8 @@ const Api = {
         })
     },
 
-    addNewMessage: (ticketId, message) => {
+    addNewMessage: (ticketId, message, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.post(SERVER_URL + `authenticated/tickets/${ticketId}/chat`, message)
                 .then((res) => resolve(res.data))

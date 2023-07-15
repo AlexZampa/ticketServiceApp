@@ -1,6 +1,8 @@
 import React, {  useState , useCallback} from 'react'
 import {Button, Form, FormGroup, InputGroup, Row} from 'react-bootstrap'
 import {Download} from "react-bootstrap-icons";
+import {AuthContext} from "../../utils/AuthContext";
+import {useContext} from "react";
 
 const messages = [
     {
@@ -24,6 +26,9 @@ const messages = [
 
 const ChatComponent = () => {
     const [text,setText]=useState('')
+    const authContext = useContext(AuthContext);
+
+    console.log(authContext)
 
     return(
         <div className="d-flex flex-column flex-grow-1">

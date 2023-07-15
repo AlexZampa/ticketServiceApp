@@ -4,9 +4,11 @@ import AppContainer from "./components/utils/AppContainer";
 import { AuthContext } from "./components/utils/AuthContext";
 import {Route, Routes} from "react-router-dom";
 import * as View from './views/index'
-import {useEffect, useState} from "react";
+import {useEffect, useState,} from "react";
 
 function App() {
+
+
 
     const [user, setUser] = useState({
         id: undefined,
@@ -16,6 +18,8 @@ function App() {
         name: undefined,
         surname: undefined,
         dateOfBirth: undefined });
+
+    console.log("APP CONTEXT", user.email);
 
     const resetUser = () => {
         setUser({
@@ -41,7 +45,7 @@ function App() {
                 <Route path='/newProfile' element={<View.EditProfile/>} />
                 <Route path='/dashboard' element={<View.Dashboard/>} />
                 <Route path='/ticket/:ticketId' element={<View.Ticket/>} />
-                <Route path='/ticket/:ricketId/chat' element={<View.Chat/>} />
+                <Route path='/ticket/:ticketId/chat' element={<View.Chat/>} />
                 <Route path='*' element={<View.Error/>}/>
             </Routes>
           </AuthContext.Provider>

@@ -15,6 +15,9 @@ import Api from "../../services/Api";
 import { Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import TicketCard from "../../components/ui-core/TicketComponent/TicketCard";
+import {useContext, useEffect, useState} from "react";
+import {AuthContext} from "../../components/utils/AuthContext";
+import useNotification from "../../components/utils/useNotification";
 
 
 const ticket = {
@@ -44,17 +47,29 @@ const priorityMap ={
 }
 
 const Ticket = () => {
-    const params = useParams();
-	// useEffect(() => {
-	//     Api.getAllProduct()
-	//         .then(products =>{
-	//             setProducts(products);
-	//         })
-	//         .catch( err =>{
-	//             notify.error("Server error")
-	//         })
-	// }, []); //eslint-disable-line react-hooks/exhaustive-deps
+	const authContext = useContext(AuthContext);
+	const params = useParams();
 	const ticketId = params.ticketId;
+	const [ticket,setTicket] = useState(null)
+	const notify = useNotification()
+	console.log(ticketId)
+
+	useEffect(() =>{
+		console.log("before getTicketById")
+
+		Api.getTicketById(ticketId,authContext.user.token)
+			.then(ticket =>{
+				console.log(ticket)
+				setTicket(ticket);
+			})
+			.catch(err=>{
+				notify.error("server error", err)
+			})
+			},[])
+
+
+
+
 	return (
 		<>
 			<div className="mt-4 d-flex flex-column justify-content-center align-items-center">
@@ -64,7 +79,7 @@ const Ticket = () => {
 					</Col>
 				</Row>
 				<Row>
-                    <TicketCard/>
+					<TicketCard ticket={ticket}/>
 				</Row>
 			</div>
 		</>
