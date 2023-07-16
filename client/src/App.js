@@ -2,13 +2,11 @@ import './App.css';
 
 import AppContainer from "./components/utils/AppContainer";
 import { AuthContext } from "./components/utils/AuthContext";
-import {Route, Routes} from "react-router-dom";
+import { Navigate, Route, Routes} from "react-router-dom";
 import * as View from './views/index'
-import {useEffect, useState,} from "react";
+import { useState } from "react";
 
 function App() {
-
-
 
     const [user, setUser] = useState({
         id: undefined,
@@ -18,8 +16,6 @@ function App() {
         name: undefined,
         surname: undefined,
         dateOfBirth: undefined });
-
-    console.log("APP CONTEXT", user.email);
 
     const resetUser = () => {
         setUser({
@@ -35,22 +31,27 @@ function App() {
 
     const auth = { user, setUser, resetUser };
     return (
-      <AppContainer>
-          <AuthContext.Provider value={auth}>
-            <Routes>
-              <Route index path={'/'} element={<View.Home/>}/>
-                <Route path='/login' element={<View.Login/>} />
-                <Route path='/profile' element={<View.Profile/>} />
-                <Route path='/editProfile' element={<View.EditProfile/>} />
-                <Route path='/newProfile' element={<View.EditProfile/>} />
-                <Route path='/dashboard' element={<View.Dashboard/>} />
-                <Route path='/ticket/:ticketId' element={<View.Ticket/>} />
-                <Route path='/ticket/:ticketId/chat' element={<View.Chat/>} />
-                <Route path='*' element={<View.Error/>}/>
-            </Routes>
-          </AuthContext.Provider>
-      </AppContainer>
-  );
+        <AuthContext.Provider value={auth}>
+            <AppContainer>
+                <Routes>
+                    <Route index path={'/'} element={<View.Home/>}/>
+                    <Route path='/login' element={user.token ? <Navigate replace to='/'/> : <View.Login/>}/>
+                    <Route path='/profile' element={user.token ? <View.Profile/> : <Navigate replace to='/login'/>}/>
+                    <Route path='/editProfile'
+                           element={user.token ? <View.EditProfile/> : <Navigate replace to='/login'/>}/>
+                    <Route path='/newProfile'
+                           element={user.token ? <Navigate replace to='/profile'/> : <View.EditProfile/>}/>
+                    <Route path='/dashboard'
+                           element={user.token ? <View.Dashboard/> : <Navigate replace to='/login'/>}/>
+                    <Route path='/ticket/:ticketId'
+                           element={user.token ? <View.Ticket/> : <Navigate replace to='/login'/>}/>
+                    <Route path='/ticket/:ticketId/chat'
+                           element={user.token ? <View.Chat/> : <Navigate replace to='/login'/>}/>
+                    <Route path='*' element={<View.Error/>}/>
+                </Routes>
+            </AppContainer>
+        </AuthContext.Provider>
+    );
 }
 
 export default App;

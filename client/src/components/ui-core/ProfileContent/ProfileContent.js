@@ -10,11 +10,10 @@
 
 //Imports
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Button, Col, Form, Row} from "react-bootstrap";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import {BsPencil, BsPlus, BsSearch} from "react-icons/bs";
-import Api from "../../../services/Api";
-import {useContext, useState, useEffect} from "react";
+import {Button } from "react-bootstrap";
+import {Link, useNavigate} from "react-router-dom";
+import {BsPencil} from "react-icons/bs";
+import {useContext, useEffect} from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import useNotification from "../../utils/useNotification";
@@ -23,8 +22,6 @@ import API from "../../../services/Api";
 
 const ProfileContent = () => {
     const authContext = useContext(AuthContext);
-    const location = useLocation();
-    const [search, setSearch] = useState(null);
     const notify = useNotification()
     const navigate = useNavigate();
 
@@ -41,11 +38,12 @@ const ProfileContent = () => {
                     dateOfBirth: user.dateOfBirth
                 });
             })
-            .catch( err =>{
+            .catch(err => {
                 authContext.resetUser()
                 navigate('/login')
                 //notify.error(err.title ? err.title.toString() : "Session Error");
             })
+        // eslint-disable-next-line
     }, []);
 
     const handleLogout = (event) => {
@@ -56,14 +54,13 @@ const ProfileContent = () => {
             navigate('/login')
         }).catch(err => {
             authContext.resetUser()
-
         })
     }
 
     return (
         <>
             <ShowProfile profile={authContext.user}/>
-            <Button className="mt-2"type='submit' size='lg' onClick={handleLogout}>
+            <Button className="mt-2" type='submit' size='lg' onClick={handleLogout}>
                 Logout
             </Button>
         </>

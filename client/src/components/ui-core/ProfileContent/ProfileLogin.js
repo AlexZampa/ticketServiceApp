@@ -1,7 +1,8 @@
 import { useState, useContext } from 'react';
-import { Button, Form, Container, Row, Alert } from 'react-bootstrap';
+import { Button, Form, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../utils/AuthContext"
+import useNotification from "../../utils/useNotification";
 import API from '../../../services/Api';
 
 
@@ -11,7 +12,7 @@ function ProfileLogin() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showAlert, setShowAlert] = useState(false);
+    const notify = useNotification()
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -30,27 +31,21 @@ function ProfileLogin() {
                 });
                 localStorage.setItem("token", user.token)
                 localStorage.setItem("email", user.email)
+                notify.success(`Welcome ${user.username}!`)
                 navigate('/profile');
             })
             .catch((err) => {
                 authContext.resetUser()
-                setShowAlert(true);
+                notify.error(err.title ? err.title.toString() : "Server error")
             });
     }
 
-    function resetAlert() { setShowAlert(false) }
     function handleEmail(ev) { setEmail(ev.target.value) }
     function handlePassword(ev) { setPassword(ev.target.value) }
 
     return (
         <>
             <Container className='mt-3'>
-                {
-                    showAlert === true ?
-                        <Alert variant="danger" onClose={resetAlert} dismissible>
-                            <Alert.Heading>Incorrect username and/or password</Alert.Heading>
-                        </Alert> : null
-                }
                 <Row>
                     <b style={{ "fontSize": "2rem", "color": 'black', "paddingBottom": "0.3rem" }}>Login</b>
                 </Row>
@@ -77,7 +72,7 @@ function ProfileLogin() {
                                 placeholder="Password" />
                         </Form.Group>
                         <Form.Group>
-                            <Button className="m-2"type='submit' size='lg' onSubmit={handleSubmit}>
+                            <Button className="m-2" type='submit' size='lg' onSubmit={handleSubmit}>
                                 Login
                             </Button>
                             <Button className="m-2" type='submit' size='lg' href='/newProfile'>

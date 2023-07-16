@@ -11,7 +11,7 @@ function ProfileForm() {
     const authContext = useContext(AuthContext);
 
     const location = useLocation();
-    const isAdding = !location.state; //Checks whether the profile variable exists (set in ProfileContent when clicking on edit)
+    const isSignup = !location.state; //Checks whether the profile variable exists (set in ProfileContent when clicking on edit)
 
     const [email, setEmail] = useState(location.state ? location.state.email :"");
     const [name, setName] = useState(location.state ? location.state.name:"");
@@ -29,7 +29,7 @@ function ProfileForm() {
 
         const profile =
             { email: email, name: name, surname: surname, username: username, dateOfBirth: dayjs(date).format("YYYY-MM-DD") , password: password};
-        if (isAdding) {
+        if (isSignup) {
             // API CALL
             Api.signup(profile)
                 .then(() => {
@@ -52,40 +52,52 @@ function ProfileForm() {
     }
 
     return (
-            <Container className='profile-form' >
-                <Form className="profile-form" onSubmit={handleSubmit}>
+        <Container className='profile-form'>
+            <Form className="profile-form" onSubmit={handleSubmit}>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" maxLength={50} required={true} disabled={!isAdding} value={email} onChange={event => setEmail(event.target.value)}/>
-                    </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" maxLength={50} required={true} disabled={!isSignup} value={email}
+                                  onChange={event => setEmail(event.target.value)}/>
+                </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" maxLength={50} required={true} value={username} onChange={event => setUsername(event.target.value)}/>
-                    </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" maxLength={50} required={true} value={username}
+                                  onChange={event => setUsername(event.target.value)}/>
+                </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" maxLength={50} required={true} value={name} onChange={event => setName(event.target.value)}/>
-                    </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" maxLength={50} required={true} value={name}
+                                  onChange={event => setName(event.target.value)}/>
+                </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Surname</Form.Label>
-                        <Form.Control type="text" maxLength={50} required={true} value={surname} onChange={event => setSurname(event.target.value)}/>
-                    </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Surname</Form.Label>
+                    <Form.Control type="text" maxLength={50} required={true} value={surname}
+                                  onChange={event => setSurname(event.target.value)}/>
+                </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Date of Birth</Form.Label>
-                        <Form.Control type="date" required={true} max={dayjs().format('YYYY-MM-DD')} value={date} onChange={event => setDate(dayjs(event.target.value).format('YYYY-MM-DD'))}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" maxLength={16} required={true} value={password} onChange={event => setPassword(event.target.value)}/>
-                    </Form.Group>
-                    <Button className="mt-2" variant="primary" type="submit">{isAdding ? "Create" : "Submit"}</Button>
-                </Form>
-            </Container>
+                <Form.Group className="mb-3">
+                    <Form.Label>Date of Birth</Form.Label>
+                    <Form.Control type="date" required={true} max={dayjs().format('YYYY-MM-DD')} value={date}
+                                  onChange={event => setDate(dayjs(event.target.value).format('YYYY-MM-DD'))}/>
+                </Form.Group>
+                {
+                    isSignup ?
+                        <Form.Group className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" maxLength={16} required={true} value={password}
+                                          onChange={event => setPassword(event.target.value)}/>
+                        </Form.Group>
+                        :
+                        <></>
+                }
+
+                <Button className="mt-2" variant="primary" type="submit">{isSignup ? "Create" : "Submit"}</Button>
+            </Form>
+        </Container>
     );
 
 }
