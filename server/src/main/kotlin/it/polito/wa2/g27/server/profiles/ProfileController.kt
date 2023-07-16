@@ -14,10 +14,4 @@ class ProfileController(private val profileService: ProfileService) {
         return profileService.getByEmail(email)
     }
 
-    @PutMapping("/authenticated/profiles/{email}")
-    @ResponseStatus(HttpStatus.CREATED)
-    @CrossOrigin(origins = ["http://localhost:3000"])
-    fun modifyProfile(@PathVariable email: String, @Valid @RequestBody profileDTO: ProfileDTO) {
-        return profileService.modifyProfile(email, profileDTO)
-    }
 }

@@ -7,5 +7,6 @@ interface AuthService {
     fun login(authDTO: AuthDTO): ProfileDTO
     fun signup(profileDTO: ProfileDTO): ProfileDTO
     fun logout(token: String): HttpStatusCode
+    fun modifyProfile(token: String, profileDTO: ProfileDTO)
     fun createExpert(profileDTO: ProfileDTO): ProfileDTO
 }

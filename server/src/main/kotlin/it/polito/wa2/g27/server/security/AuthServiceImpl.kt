@@ -2,6 +2,7 @@ package it.polito.wa2.g27.server.security
 
 import it.polito.wa2.g27.server.exceptions.ProfileAlreadyExistsException
 import it.polito.wa2.g27.server.exceptions.ProfileAuthenticationException
+import it.polito.wa2.g27.server.exceptions.ProfileEmailModificationException
 import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
 import it.polito.wa2.g27.server.profiles.*
 import org.springframework.boot.web.client.RestTemplateBuilder
@@ -94,6 +95,33 @@ class AuthServiceImpl(
         val response: ResponseEntity<String> = restTemplate.exchange(properties.logoutUrl!!, HttpMethod.GET, request, String::class.java)
         return response.statusCode
     }
+
+
+    override fun modifyProfile(token: String, profileDTO: ProfileDTO) {
+        val keycloak = createKeycloakAdminClient()
+        val email = jwtAuthConverter.getEmail( token.split("Bearer ")[1])
+
+        // get profile
+        val profile = profileRepository.findByEmail(email) ?: throw ProfileNotFoundException("Profile Not Found")
+        val user = keycloak.realm(properties.realm).users().searchByEmail(email,true)[0]
+
+        if(profileDTO.email != email){
+            throw ProfileEmailModificationException("Email Update not possible")
+        }
+
+        user.firstName = profileDTO.name
+        user.lastName = profileDTO.surname
+        user.username = profileDTO.username
+
+        keycloak.realm(properties.realm).users().get(user.id).update(user)
+
+        profile.name = profileDTO.name
+        profile.surname = profileDTO.surname
+        profile.username = profileDTO.username
+
+        profileRepository.save(profile)
+    }
+
 
     override fun createExpert(profileDTO: ProfileDTO): ProfileDTO {
         val keycloak = createKeycloakAdminClient()

@@ -15,13 +15,4 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository): Prof
         return profileRepository.findByIdOrNull(id)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
     }
 
-    override fun modifyProfile(email: String, profileDTO: ProfileDTO) {
-        if(profileDTO.email != email){
-            throw ProfileEmailModificationException("Email Update not possible")
-        }
-
-        profileRepository.findByEmail(email) ?: throw ProfileNotFoundException("Profile Not Found")
-        profileRepository.save(profileDTO.toProfile())
-    }
-
 }

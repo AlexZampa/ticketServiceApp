@@ -17,10 +17,13 @@ class AuthController(private val authService: AuthService) {
         return authService.login(authDTO)
     }
 
+    @PutMapping("/authenticated/profiles/{email}")
+    @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin(origins = ["http://localhost:3000"])
-    @PostMapping("/public/session")
-    fun validateToken(@RequestBody authDTO: AuthDTO, br: BindingResult): ProfileDTO? {
-        return authService.login(authDTO)
+    fun modifyProfile(@PathVariable email: String,
+                      @RequestHeader("Authorization") token: String,
+                      @Valid @RequestBody profileDTO: ProfileDTO) {
+        return authService.modifyProfile(token, profileDTO)
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
