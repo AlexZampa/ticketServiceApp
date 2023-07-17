@@ -12,6 +12,7 @@ function App() {
         id: undefined,
         email: localStorage.getItem("email"),
         token: localStorage.getItem("token"),
+        role: localStorage.getItem("role"),
         username: undefined,
         name: undefined,
         surname: undefined,

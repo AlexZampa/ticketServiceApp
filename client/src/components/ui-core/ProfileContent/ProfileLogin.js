@@ -20,6 +20,7 @@ function ProfileLogin() {
 
         API.login(credentials)
             .then((user) => {
+                console.log("ruolo dello user", user.role)
                 authContext.setUser({
                     id: user.id,
                     email: user.email,
@@ -27,10 +28,12 @@ function ProfileLogin() {
                     username: user.username,
                     name: user.name,
                     surname: user.surname,
-                    dateOfBirth: user.dateOfBirth
+                    dateOfBirth: user.dateOfBirth,
+                    role: user.role
                 });
                 localStorage.setItem("token", user.token)
                 localStorage.setItem("email", user.email)
+                localStorage.setItem("role",user.role)
                 notify.success(`Welcome ${user.username}!`)
                 navigate('/profile');
             })
