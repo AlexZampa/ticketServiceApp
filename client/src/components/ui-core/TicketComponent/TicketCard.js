@@ -2,9 +2,10 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import { Badge, Row, Col, Form} from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import useNotification from "../../utils/useNotification";
+import {AuthContext} from "../../utils/AuthContext";
+import Api from "../../../services/Api";
 
 
 const priorityMap = {
@@ -23,12 +24,29 @@ const priorityMap = {
 };
 
 const TicketCard = (props) => {
+	const authContext = useContext(AuthContext);
+	const notify = useNotification()
 
 	const [priority, setPriority] = useState(props.ticket.priority)
 	const [expert, setExpert] = useState(props.ticket.expertId);
+	const [experts, setExperts] = useState([]);
+
+	useEffect(() =>{
+		if(authContext.user.role == 'manager'){
+		Api.getAllExperts(authContext.user.token)
+			.then(experts =>{
+				console.log(experts)
+				setExperts(experts)
+			})
+			.catch(err =>{
+				console.log(err)
+				notify.error("Server error")
+			})}},[])
+
+
+
 
 	const handlePriority = (priority) =>{
-		console.log(priority.target.value)
 		switch (priority.target.value) {
 			case 'low':
 				setPriority(1)
@@ -44,9 +62,55 @@ const TicketCard = (props) => {
 		}
 	}
 	const handleExpert = (expert) =>{
-		console.log(expert.target.value)
+		console.log(expert.target.value.split(' - ')[1])
 
-		setExpert(expert.target.value)
+		setExpert(expert.target.value.split(' - ')[1])
+	}
+	const handleSave = () =>{
+		switch (authContext.user.role) {
+			case 'manager':
+				Api.modifyPriority(props.ticket.id,priority,authContext.user.token).then(
+					notify.success("Ticket modified correctly")
+				).catch(
+					err =>{
+						notify.error('server error')
+					}
+				)
+				const form={
+					email: expert.trim(),
+					priority: priority
+				}
+				console.log(form)
+				Api.assignExpert(props.ticket.id,form,authContext.user.token).then(
+					notify.success("Ticket modified correctly")
+				).catch(
+					err =>{
+						console.log(err)
+						notify.error('server error')
+					}
+				)
+				break;
+			case 'expert':
+				Api.resolveTicket(props.ticket.id,authContext.user.token).then(
+					notify.success("Ticket modified correctly")
+				).catch(
+					err =>{
+						notify.error('server error')
+					}
+				)
+				break;
+			case 'client':
+				Api.reopenTicket(props.ticket.id,authContext.user.token).then(
+					notify.success("Ticket modified correctly")
+				).catch(
+					err =>{
+						notify.error('server error')
+					}
+				)
+				break;
+			default:
+				console.log(`it is not possible to change priority`);
+		}
 	}
 
 	return (
@@ -127,7 +191,7 @@ const TicketCard = (props) => {
                 <ListGroup>
                 <Row align="left">
 							<Col>
-								<Button variant="success">Save</Button>
+								<Button variant="success" onClick={handleSave}>Save</Button>
 							</Col>
 
 							<Col align="right"><Button variant="danger">Close</Button></Col>
@@ -139,7 +203,10 @@ const TicketCard = (props) => {
 			<Col className='m-3'>
 			<Form.Group className="mb-3">
 				<Form.Label><b>CHANGE PRIORITY</b></Form.Label>
-				<Form.Select onChange={handlePriority}>
+				<Form.Select onChange={handlePriority} disabled={authContext.user.role == 'manager'? false:true}>
+					<option>
+						set priority
+					</option>
 					<option>
 						{priorityMap[1].name}
 					</option>
@@ -159,12 +226,17 @@ const TicketCard = (props) => {
 			</Form.Group>
 			<Form.Group className="mb-3">
 				<Form.Label><b>ASSIGN AN EXPERT</b></Form.Label>
-				<Form.Select onChange={handleExpert}>
-					<option>Disabled select</option>
-					<option> 1</option>
-					<option> 2</option>
-					<option> 3</option>
-					<option> 4</option>
+				<Form.Select onChange={handleExpert} disabled={authContext.user.role == 'manager'? false:true}>
+					<option>
+						{props.ticket.expertId? props.ticket.expertId : 'expert not assigned'}
+					</option>
+					{experts ? experts.map((e) =>{
+						console.log(e)
+						return(
+
+							<option key={e.id}>{e.id} - { e.email}</option>
+						)
+					}): <> Your not a manager</>}
 
 				</Form.Select>
 			</Form.Group>

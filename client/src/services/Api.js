@@ -88,6 +88,15 @@ const Api = {
         })
     },
 
+    getAllExperts: (token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
+        return new Promise((resolve, reject) => {
+            axios.get(SERVER_URL + `manager/profiles/expert`)
+                .then((res) => resolve(res.data))
+                .catch((err) => reject(err.response.data));
+        })
+    },
+
     // TICKET API
 
     getTicketById: (ticketId,token) => {

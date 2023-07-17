@@ -55,7 +55,6 @@ const Ticket = () => {
 	console.log(ticketId)
 
 	useEffect(() =>{
-		console.log('prova')
 		Api.getTicketById(ticketId,authContext.user.token).then(t =>{
 			setTicket(t);
 
