@@ -23,7 +23,7 @@ const Dashboard = () => {
 	const notify = useNotification()
 	const [tickets,setTickets] = useState([])
 
-
+	console.log(authContext.user)
 	useEffect(() =>{
 		Api.getTicketsByProfile(authContext.user.email,authContext.user.token)
 			.then(tickets =>{

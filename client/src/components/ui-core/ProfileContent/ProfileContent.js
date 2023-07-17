@@ -35,7 +35,8 @@ const ProfileContent = () => {
                     username: user.username,
                     name: user.name,
                     surname: user.surname,
-                    dateOfBirth: user.dateOfBirth
+                    dateOfBirth: user.dateOfBirth,
+                    role: user.role
                 });
             })
             .catch(err => {
@@ -86,6 +87,7 @@ const ShowProfile = (props) => {
                 <ListGroup.Item><b>Name: &nbsp;&nbsp;</b> {authContext.user.name}</ListGroup.Item>
                 <ListGroup.Item><b>Surname: &nbsp;&nbsp;</b> {authContext.user.surname}</ListGroup.Item>
                 <ListGroup.Item><b>Username: &nbsp;&nbsp;</b> {authContext.user.username}</ListGroup.Item>
+                <ListGroup.Item><b>Role: &nbsp;&nbsp;</b> {authContext.user.role}</ListGroup.Item>
                 </ListGroup>
                 </Card>
             </div>
