@@ -50,24 +50,19 @@ const Ticket = () => {
 	const authContext = useContext(AuthContext);
 	const params = useParams();
 	const ticketId = params.ticketId;
-	const [ticket,setTicket] = useState(null)
+	const [ticket,setTicket] = useState(false)
 	const notify = useNotification()
 	console.log(ticketId)
 
 	useEffect(() =>{
-		console.log("before getTicketById")
+		console.log('prova')
+		Api.getTicketById(ticketId,authContext.user.token).then(t =>{
+			setTicket(t);
 
-		Api.getTicketById(ticketId,authContext.user.token)
-			.then(ticket =>{
-				console.log(ticket)
-				setTicket(ticket);
-			})
-			.catch(err=>{
-				notify.error("server error", err)
-			})
-			},[])
-
-
+		}).catch(err=>{
+			notify.error('server error')
+		})
+	},[])
 
 
 	return (
@@ -79,7 +74,7 @@ const Ticket = () => {
 					</Col>
 				</Row>
 				<Row>
-					<TicketCard ticket={ticket}/>
+					{ticket ? <TicketCard ticket={ticket}/>: <></>}
 				</Row>
 			</div>
 		</>

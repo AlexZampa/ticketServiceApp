@@ -5,6 +5,9 @@ import Api from "../../../services/Api";
 import { Badge, Row, Col } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import {useContext, useEffect, useState} from "react";
+import useNotification from "../../utils/useNotification";
+import {AuthContext} from "../../utils/AuthContext";
 
 
 const priorityMap = {
@@ -23,7 +26,7 @@ const priorityMap = {
 };
 
 const TicketCard = (props) => {
-	console.log(props.ticket)
+
 	return (
 		<Card style={{ width: "40rem" }}>
 			<Card.Body>
