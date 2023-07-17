@@ -1,13 +1,10 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import Api from "../../../services/Api";
-import { Badge, Row, Col } from "react-bootstrap";
+import { Badge, Row, Col, Form} from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import {useContext, useEffect, useState} from "react";
-import useNotification from "../../utils/useNotification";
-import {AuthContext} from "../../utils/AuthContext";
+import {useState} from "react";
 
 
 const priorityMap = {
@@ -27,7 +24,35 @@ const priorityMap = {
 
 const TicketCard = (props) => {
 
+	const [priority, setPriority] = useState(props.ticket.priority)
+	const [expert, setExpert] = useState(props.ticket.expertId);
+
+	const handlePriority = (priority) =>{
+		console.log(priority.target.value)
+		switch (priority.target.value) {
+			case 'low':
+				setPriority(1)
+				break;
+			case 'medium':
+				setPriority(2)
+				break;
+			case 'high':
+				setPriority(3)
+				break;
+			default:
+				console.log(`it is not possible to change priority`);
+		}
+	}
+	const handleExpert = (expert) =>{
+		console.log(expert.target.value)
+
+		setExpert(expert.target.value)
+	}
+
 	return (
+		<>
+			<Row>
+				<Col>
 		<Card style={{ width: "40rem" }}>
 			<Card.Body>
 				<Card.Title>
@@ -67,23 +92,9 @@ const TicketCard = (props) => {
 							</Col>
 
 							<Col align="right">
-								<DropdownButton id="dropdown-basic-button" title="Change Priority" size="sm">
-									<Dropdown.Item href="#/action-1">
-										<Badge bg={priorityMap[1].status}>
-											{priorityMap[1].name}
-										</Badge>
-									</Dropdown.Item>
-									<Dropdown.Item href="#/action-2">
-										<Badge bg={priorityMap[2].status}>
-											{priorityMap[2].name}
-										</Badge>
-									</Dropdown.Item>
-									<Dropdown.Item href="#/action-3">
-										<Badge bg={priorityMap[3].status}>
-											{priorityMap[3].name}
-										</Badge>
-									</Dropdown.Item>
-								</DropdownButton>
+								<Badge bg={priorityMap[priority].status}>
+									{priorityMap[priority].name}
+								</Badge>
 							</Col>
 						</Row>
 					</ListGroup.Item>
@@ -103,15 +114,7 @@ const TicketCard = (props) => {
 							</Col>
 
 							<Col align="right">
-								<DropdownButton id="dropdown-basic-button" title="Assign Expert" size="sm">
-									<Dropdown.Item href="#/action-1">
-										<Badge bg={priorityMap[1].status}>
-											{priorityMap[1].name}
-										</Badge>
-									</Dropdown.Item>
-									<Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-									<Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-								</DropdownButton>
+								{expert ? expert : 'expert non assigned'}
 							</Col>
 						</Row>
 					</ListGroup.Item>
@@ -132,6 +135,43 @@ const TicketCard = (props) => {
                 </ListGroup>
 			</Card.Body>
 		</Card>
+			</Col>
+			<Col className='m-3'>
+			<Form.Group className="mb-3">
+				<Form.Label><b>CHANGE PRIORITY</b></Form.Label>
+				<Form.Select onChange={handlePriority}>
+					<option>
+						{priorityMap[1].name}
+					</option>
+					<option>
+
+							{priorityMap[2].name}
+					</option>
+					<option>
+
+							{priorityMap[3].name}
+
+					</option>
+
+
+				</Form.Select>
+
+			</Form.Group>
+			<Form.Group className="mb-3">
+				<Form.Label><b>ASSIGN AN EXPERT</b></Form.Label>
+				<Form.Select onChange={handleExpert}>
+					<option>Disabled select</option>
+					<option> 1</option>
+					<option> 2</option>
+					<option> 3</option>
+					<option> 4</option>
+
+				</Form.Select>
+			</Form.Group>
+			</Col>
+			</Row>
+		</>
+
 	);
 };
 
