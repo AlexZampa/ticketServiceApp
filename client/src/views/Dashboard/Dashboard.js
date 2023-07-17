@@ -24,14 +24,47 @@ const Dashboard = () => {
 	const [tickets,setTickets] = useState([])
 
 	useEffect(() =>{
-		Api.getTicketsByProfile(authContext.user.email,authContext.user.token)
-			.then(tickets =>{
-				setTickets(tickets)
-			})
-			.catch(err =>{
-				console.log(err)
-				notify.error("Server error")
-		})},[])
+		switch (authContext.user.role) {
+			case 'manager':
+				Api.getOpenTickets(authContext.user.token)
+					.then(tickets =>{
+						console.log("questi sono i ticket aperti", tickets)
+						setTickets(tickets)
+					})
+					.catch(err =>{
+						console.log(err)
+						notify.error("Server error")
+					})
+
+				break;
+			case 'expert':
+				Api.getAssignedTickets(authContext.user.email,authContext.user.token)
+					.then(tickets =>{
+						setTickets(tickets)
+					})
+					.catch(err =>{
+						console.log(err)
+						notify.error("Server error")
+					})
+
+				break;
+			case 'user':
+				Api.getTicketsByProfile(authContext.user.email,authContext.user.token)
+					.then(tickets =>{
+						console.log(tickets)
+						setTickets(tickets)
+					})
+					.catch(err =>{
+						console.log(err)
+						notify.error("Server error")
+					})
+
+				break;
+			default:
+				console.log(`it is not possible to change priority`);
+		}
+
+		},[])
 
 	return (
 		<>

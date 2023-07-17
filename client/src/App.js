@@ -48,6 +48,8 @@ function App() {
                            element={user.token ? <View.Ticket/> : <Navigate replace to='/login'/>}/>
                     <Route path='/ticket/:ticketId/chat'
                            element={user.token ? <View.Chat/> : <Navigate replace to='/login'/>}/>
+                    <Route path='/ticket/create'
+                           element={user.token ? <View.TicketCreate/> : <Navigate replace to='/login'/>}/>
                     <Route path='*' element={<View.Error/>}/>
                 </Routes>
             </AppContainer>

@@ -112,7 +112,10 @@ const Api = {
         axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `manager/tickets/open`)
-                .then((res) => resolve(res.data))
+                .then((res) => {
+                    console.log(res)
+                    resolve(res.data)
+                })
                 .catch((err) => reject(err.response.data));
         })
     },
@@ -174,7 +177,7 @@ const Api = {
     closeTicket: (ticketId, token) => {
         axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
-            axios.put(SERVER_URL + `expert/tickets/${ticketId}/close`)
+            axios.put(SERVER_URL + `authenticated/tickets/${ticketId}/close`)
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })

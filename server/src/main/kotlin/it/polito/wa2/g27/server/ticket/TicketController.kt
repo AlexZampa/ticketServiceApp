@@ -73,7 +73,7 @@ class TicketController(private val ticketService: TicketService,
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
-    @PutMapping("/expert/tickets/{id}/close")
+    @PutMapping("/authenticated/tickets/{id}/close")
     @ResponseStatus(HttpStatus.CREATED)
     fun putCloseTicket(@PathVariable id: Int) {
         ticketService.closeTicket(id)

@@ -6,6 +6,9 @@ import {useContext, useEffect, useState} from "react";
 import useNotification from "../../utils/useNotification";
 import {AuthContext} from "../../utils/AuthContext";
 import Api from "../../../services/Api";
+import {useNavigate} from "react-router-dom";
+import {ArrowLeftCircle} from "react-bootstrap-icons";
+import ticket from "../../../views/Ticket/Ticket";
 
 
 const priorityMap = {
@@ -26,6 +29,7 @@ const priorityMap = {
 const TicketCard = (props) => {
 	const authContext = useContext(AuthContext);
 	const notify = useNotification()
+	const navigate  = useNavigate();
 
 	const [priority, setPriority] = useState(props.ticket.priority)
 	const [expert, setExpert] = useState(props.ticket.expertId);
@@ -64,11 +68,9 @@ const TicketCard = (props) => {
 	const handleExpert = (expert) =>{
 		console.log(expert.target.value.split(' - ')[1])
 
-		setExpert(expert.target.value.split(' - ')[1])
+		setExpert(expert.target.value)
 	}
 	const handleSave = () =>{
-		switch (authContext.user.role) {
-			case 'manager':
 				Api.modifyPriority(props.ticket.id,priority,authContext.user.token).then(
 					notify.success("Ticket modified correctly")
 				).catch(
@@ -77,7 +79,7 @@ const TicketCard = (props) => {
 					}
 				)
 				const form={
-					email: expert.trim(),
+					email: expert.split(' - ')[1].trim(),
 					priority: priority
 				}
 				console.log(form)
@@ -89,28 +91,52 @@ const TicketCard = (props) => {
 						notify.error('server error')
 					}
 				)
-				break;
-			case 'expert':
-				Api.resolveTicket(props.ticket.id,authContext.user.token).then(
-					notify.success("Ticket modified correctly")
-				).catch(
-					err =>{
-						notify.error('server error')
-					}
-				)
-				break;
-			case 'client':
-				Api.reopenTicket(props.ticket.id,authContext.user.token).then(
-					notify.success("Ticket modified correctly")
-				).catch(
-					err =>{
-						notify.error('server error')
-					}
-				)
-				break;
-			default:
-				console.log(`it is not possible to change priority`);
-		}
+				navigate('/dashboard')
+	}
+
+	const handleClose = ()=>{
+		Api.closeTicket(props.ticket.id,authContext.user.token).then(
+			notify.success("Ticket closed successfully")
+		).catch(
+			err =>{
+				console.log(err)
+				notify.error('server error')
+			}
+		)
+		navigate('/dashboard')
+	}
+	const handleStop = ()=>{
+		Api.stopTicket(props.ticket.id,authContext.user.token).then(
+			notify.success("Ticket Stopped successfully")
+		).catch(
+			err =>{
+				console.log(err)
+				notify.error('server error')
+			}
+		)
+		navigate('/dashboard')
+	}
+	const handleReopen = ()=>{
+		Api.reopenTicket(props.ticket.id,authContext.user.token).then(
+			notify.success("Ticket closed successfully")
+		).catch(
+			err =>{
+				console.log(err)
+				notify.error('server error')
+			}
+		)
+		navigate('/dashboard')
+	}
+	const handleResolve = ()=>{
+		Api.resolveTicket(props.ticket.id,authContext.user.token).then(
+			notify.success("Ticket resolve successfully")
+		).catch(
+			err =>{
+				console.log(err)
+				notify.error('server error')
+			}
+		)
+		navigate('/dashboard')
 	}
 
 	return (
@@ -121,12 +147,20 @@ const TicketCard = (props) => {
 			<Card.Body>
 				<Card.Title>
 					<Row align="left">
+						<Col className='mb-2'>
+
+
+						<Button variant="danger" onClick={() => navigate('/dashboard')}><ArrowLeftCircle className='me-2'/>Back</Button>
+						</Col>
+						</Row>
+
+					<Row align="left">
 						<Col>
 							<b>Ticket {props.ticket.id}</b>
 						</Col>
 
 						<Col align="right">
-							<Badge bg={"success"}>Available</Badge>
+							<Badge bg={"secondary"}>{props.ticket.status}</Badge>
 						</Col>
 					</Row>
 				</Card.Title>
@@ -156,9 +190,7 @@ const TicketCard = (props) => {
 							</Col>
 
 							<Col align="right">
-								<Badge bg={priorityMap[priority].status}>
-									{priorityMap[priority].name}
-								</Badge>
+								{props.ticket.priority == 0 ? <b> - </b>:<Badge bg={priorityMap[props.ticket.priority].status}>{priorityMap[props.ticket.priority].name}</Badge>}
 							</Col>
 						</Row>
 					</ListGroup.Item>
@@ -178,7 +210,7 @@ const TicketCard = (props) => {
 							</Col>
 
 							<Col align="right">
-								{expert ? expert : 'expert non assigned'}
+								{expert ? expert.toString().split(' - ')[0] : 'expert non assigned'}
 							</Col>
 						</Row>
 					</ListGroup.Item>
@@ -191,10 +223,20 @@ const TicketCard = (props) => {
                 <ListGroup>
                 <Row align="left">
 							<Col>
-								<Button variant="success" onClick={handleSave}>Save</Button>
+								{authContext.user.role == 'manager' ?<Button variant="success" onClick={handleSave}>Save</Button>:<></>}
 							</Col>
 
-							<Col align="right"><Button variant="danger">Close</Button></Col>
+							<Col align="right">
+								{props.ticket.status == 'CLOSED' && authContext.user.role == 'user'
+									?<Button onClick={handleReopen} variant="success">Reopen</Button>: <></>}
+								{props.ticket.status !== 'CLOSED'?
+									<Button variant="danger" onClick={handleClose}>Close</Button>:<></>}
+								{authContext.user.role == 'manager' && props.ticket.status == 'PROGRESS'?
+									<Button variant="danger" className='ms-1' onClick={handleStop}>Stop</Button>:<></>}
+								{authContext.user.role == 'expert' && props.ticket.status == 'PROGRESS'?
+									<Button variant="success" className='ms-1' onClick={handleResolve}>Resolve</Button>:<></>}
+
+							</Col>
 						</Row>
                 </ListGroup>
 			</Card.Body>

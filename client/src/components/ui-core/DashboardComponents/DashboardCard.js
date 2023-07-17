@@ -18,10 +18,15 @@ const priorityMap ={
     3: {
       name: "high",
       status: "danger"
-    }
+    },
+	0: {
+		name: "resolved",
+		status: "dark"
+	}
 }
 
 const DashboardCard = (props) => {
+	console.log('ticket passato', props.ticket)
 	const navigate = useNavigate();
 
 	return (
@@ -34,7 +39,7 @@ const DashboardCard = (props) => {
 						</Col>
 
 						<Col align="right">
-							<Badge bg={"success"}>Available</Badge>
+							<Badge bg={"secondary"}>{props.ticket.status}</Badge>
 						</Col>
 					</Row>
 				</Card.Title>
@@ -64,7 +69,8 @@ const DashboardCard = (props) => {
 							</Col>
 
 							<Col align="right">
-                                <Badge bg={priorityMap[props.ticket.priority].status}>{priorityMap[props.ticket.priority].name}</Badge>
+								{props.ticket.priority == 0 ? <b> - </b>:<Badge bg={priorityMap[props.ticket.priority].status}>{priorityMap[props.ticket.priority].name}</Badge>}
+
                                 </Col>
 						</Row>
 					</ListGroup.Item>
