@@ -15,4 +15,8 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository): Prof
         return profileRepository.findByIdOrNull(id)?.toDTO() ?: throw ProfileNotFoundException("Profile not found")
     }
 
+
+    override fun getAllByRole(role: String): List<ProfileDTO> {
+        return profileRepository.findAllByRole(role).map{ it.toDTO() }
+    }
 }

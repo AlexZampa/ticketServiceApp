@@ -19,10 +19,12 @@ data class ProfileDTO (
     @field:NotEmpty(message = "Date can not be blank")
     @field:NotNull(message = "Date can not be null")
     @field:Pattern( regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\$", message = "Not valid data format") var dateOfBirth: String,
+    @field:NotEmpty(message = "Role can not be blank")
+    @field:NotNull(message = "Role can not be null") var role: String,
     var password: String? = null,
     var token: String? = null
 )
 
 fun Profile.toDTO() : ProfileDTO{
-    return ProfileDTO(id, email, username, name, surname, dateofbirth.toString(), "", "")
+    return ProfileDTO(id, email, username, name, surname, dateofbirth.toString(), role, "", "")
 }

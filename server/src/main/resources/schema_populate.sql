@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS public.profiles(
                                               name varchar(255) NOT NULL,
                                               surname varchar(255) NOT NULL,
                                               username varchar(255) NOT NULL,
-                                              dateofbirth DATE
+                                              dateofbirth DATE,
+                                              role varchar(255) NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS public.tickets(
@@ -55,8 +56,8 @@ INSERT INTO public.products (id, name, brand, description) VALUES ('A02', 'Lego 
 INSERT INTO public.products (id, name, brand, description) VALUES ('B01', 'Lego Duplo Fashion Blogger', 'LEGO Duplo', 'Fashion');
 INSERT INTO public.products (id, name, brand, description) VALUES ('B02', 'Lego Dublo TikToker', 'LEGO Duplo', 'Influencer');
 
-INSERT INTO public.profiles (id, email, name, surname, username, dateofbirth) VALUES (32, 'ciaone.matano@gmail.com', 'Frank', 'Matano', 'frank_m', '1989-09-14');
-INSERT INTO public.profiles (id, email, name, surname, username, dateofbirth) VALUES (31, 'paul.dano@gmail.com', 'Paul', 'Dano', 'paul_dano', '1984-06-19');
+INSERT INTO public.profiles (id, email, name, surname, username, dateofbirth, role) VALUES (32, 'ciaone.matano@gmail.com', 'Frank', 'Matano', 'frank_m', '1989-09-14', 'user');
+INSERT INTO public.profiles (id, email, name, surname, username, dateofbirth, role) VALUES (31, 'paul.dano@gmail.com', 'Paul', 'Dano', 'paul_dano', '1984-06-19', 'manager');
 
 INSERT INTO public.tickets (id, category, description, priority, expert_id, product_id, profile_id) VALUES (10, 'Lego', 'Non funziona', 1, null, 'A01', 31);
 INSERT INTO public.tickets (id, category, description, priority, expert_id, product_id, profile_id) VALUES (11, 'Duplo', 'NO istruzioni', 2, null, 'B01', 31);

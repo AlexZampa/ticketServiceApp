@@ -16,6 +16,7 @@ class Profile {
     var name: String = ""
     var surname: String = ""
     var dateofbirth: LocalDate = LocalDate.now()
+    var role: String = ""
     @OneToMany(mappedBy = "profile")
     var ticketsCreated: MutableSet<Ticket> = mutableSetOf()
     @OneToMany(mappedBy = "expert")
@@ -56,5 +57,6 @@ fun ProfileDTO.toProfile(): Profile{
     p.name = name
     p.surname = surname
     p.dateofbirth = LocalDate.parse(dateOfBirth)
+    p.role = role
     return p
 }

@@ -14,4 +14,10 @@ class ProfileController(private val profileService: ProfileService) {
         return profileService.getByEmail(email)
     }
 
+    @GetMapping("/manager/profiles/expert")
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    fun getAllByRole(): List<ProfileDTO> {
+        return profileService.getAllByRole("expert")
+    }
+
 }

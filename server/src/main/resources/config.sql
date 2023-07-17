@@ -79,7 +79,8 @@ CREATE TABLE public.profiles (
     email character varying(255),
     name character varying(255),
     surname character varying(255),
-    username character varying(255)
+    username character varying(255),
+    role character varying(255)
 );
 
 
@@ -191,10 +192,10 @@ B02	LEGO Duplo	Influencer	Lego Dublo TikToker
 -- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.profiles (id, dateofbirth, email, name, surname, username) FROM stdin;
-32	1989-09-14	user1@mail.com	Frank	Matano	user1
-33	1992-09-20	expert1@mail.com	Mary	White	expert1
-34	1987-02-15	manager1@mail.com	Maccio	Capatonda	manager1
+COPY public.profiles (id, dateofbirth, email, name, surname, username, role) FROM stdin;
+32	1989-09-14	user1@mail.com	Frank	Matano	user1	user
+33	1992-09-20	expert1@mail.com	Mary	White	expert1	expert
+34	1987-02-15	manager1@mail.com	Maccio	Capatonda	manager1	manager
 \.
 
 
