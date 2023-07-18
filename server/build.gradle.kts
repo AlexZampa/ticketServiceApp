@@ -52,6 +52,8 @@ dependencies {
     implementation("io.zipkin.reporter2:zipkin-reporter-brave")
     // send logs by log Appender through URL
     implementation("com.github.loki4j:loki-logback-appender:1.4.0-rc2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.+")
+    implementation("org.apache.kafka:kafka-clients:2.6.0")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation ("org.testcontainers:junit-jupiter:1.16.3")

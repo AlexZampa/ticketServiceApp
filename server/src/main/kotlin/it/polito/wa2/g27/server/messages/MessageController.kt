@@ -11,6 +11,20 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.io.*
 import java.time.LocalDateTime
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.Producer
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.common.serialization.StringSerializer
+import java.util.Properties;
+
+private fun createProducer(): Producer<String, String> {
+    val props = Properties()
+    props["bootstrap.servers"] = "host.docker.internal:9092"
+    props["key.serializer"] = StringSerializer::class.java
+    props["value.serializer"] = StringSerializer::class.java
+    return KafkaProducer<String, String>(props)
+}
+val producer = createProducer()
 
 
 @RestController
@@ -40,8 +54,11 @@ class MessageController(private val messageService: MessageService, private val 
                     @RequestParam("receiverId") receiverId: Int,
                     @RequestParam("text") text: String
     ) {
+
         val messageDTO = MessageDTO(0, id, senderId, receiverId, text, LocalDateTime.now(), attachments.map {
             AttachmentDTO(0, it.originalFilename ?:"", it.contentType?:"", it.size, it.bytes, 0) })
+        val future = producer.send(ProducerRecord(ticketId.toString(), id.toString(), messageDTO.toString()))
+        future.get()
         messageService.sendMessage(messageDTO)
     }
 }
