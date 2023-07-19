@@ -68,8 +68,8 @@ class IntegrationTestTicket {
     @Autowired
     private lateinit var ticketHistoryRepository: TicketHistoryRepository
 
-    var user1 = ProfileDTO(1, "user1@mail.com", "user1", "Frank", "Matano", "1989-09-14" )
-    var user2 = ProfileDTO(2, "user2@mail.com", "user2", "Marco", "Bay", "1999-10-02" )
+    var user1 = ProfileDTO(1, "user1@mail.com", "user1", "Frank", "Matano", "1989-09-14" , "client")
+    var user2 = ProfileDTO(2, "user2@mail.com", "user2", "Marco", "Bay", "1999-10-02", "client" )
 
     var prod1 = ProductDTO("A01", "Lego Star Wars", "LEGO", "Space")
     var prod2 = ProductDTO("B01", "Lego Duplo Fashion Blogger", "LEGO Duplo", "Fashion")
