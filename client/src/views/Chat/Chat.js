@@ -13,8 +13,10 @@
 //Imports
 import { Row, Col } from "react-bootstrap";
 import ChatComponent from "../../components/ui-core/ChatComponents/ChatComponent";
+import {useParams} from "react-router-dom";
 
 const Chat = () => {
+    const params = useParams()
     // useEffect(() => {
     //     Api.getAllProduct()
     //         .then(products =>{
@@ -34,7 +36,7 @@ const Chat = () => {
                     </Col>
                 </Row >
                 <Row className="w-75">
-                    <ChatComponent/>
+                    <ChatComponent ticketId={params.ticketId}/>
                 </Row>
             </div>
         </>

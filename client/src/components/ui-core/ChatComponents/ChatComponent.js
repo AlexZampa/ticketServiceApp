@@ -1,8 +1,11 @@
-import React, {  useState , useCallback} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import {Button, Form, FormGroup, InputGroup, Row} from 'react-bootstrap'
 import {Download} from "react-bootstrap-icons";
 import {AuthContext} from "../../utils/AuthContext";
 import {useContext} from "react";
+import useWebSocket from 'react-use-websocket';
+
+const WS_URL = 'ws://localhost:8080/chat';
 
 const messages = [
     {
@@ -24,11 +27,24 @@ const messages = [
 
 ]
 
-const ChatComponent = () => {
+
+const ChatComponent = (props) => {
+    const [ws,setWebsocket] = useState(null);
     const [text,setText]=useState('')
     const authContext = useContext(AuthContext);
 
-    console.log(authContext)
+    const [messages, setMessages] = useState([])
+    const [user, setUser] = useState(null)
+
+    useEffect(()=>{
+        setWebsocket(()=>{
+            const ws = new WebSocket(WS_URL);
+        })
+    },[])
+
+
+    console.log("web soccket", ws)
+
 
     return(
         <div className="d-flex flex-column flex-grow-1">
