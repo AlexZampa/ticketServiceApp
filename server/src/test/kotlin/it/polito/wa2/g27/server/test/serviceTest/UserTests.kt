@@ -6,6 +6,7 @@ import it.polito.wa2.g27.server.exceptions.ProfileNotFoundException
 import it.polito.wa2.g27.server.profiles.*
 import it.polito.wa2.g27.server.security.AuthDTO
 import it.polito.wa2.g27.server.security.AuthService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -50,13 +51,17 @@ class UserTests {
 
     @BeforeEach
     fun populateDB() {
-        authService.deleteProfile(user1.email)
-        authService.deleteProfile(user2.email)
-        authService.deleteProfile(user3.email)
         authenticatedProfile1 = authService.signup(user1)
         authenticatedProfile2 = authService.signup(user2)
         authenticatedProfile1 = authService.login(AuthDTO(user1.email, user1.password!!))
         authenticatedProfile2 = authService.login(AuthDTO(user2.email, user2.password!!))
+    }
+
+    @AfterEach
+    fun deleteDB() {
+        authService.deleteProfile(user1.email)
+        authService.deleteProfile(user2.email)
+        authService.deleteProfile(user3.email)
     }
 
     @Test

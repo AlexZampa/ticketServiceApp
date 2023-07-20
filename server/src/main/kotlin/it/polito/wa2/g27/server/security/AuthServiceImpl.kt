@@ -69,7 +69,7 @@ class AuthServiceImpl(
 
         // Create the user in Keycloak
         val response = keycloak.realm(properties.realm).users().create(user)
-        println(response.status)
+
         // if error
         if(response.status != HttpStatus.CREATED.value())
             throw ProfileAlreadyExistsException("Profile Already Exists")
@@ -183,7 +183,6 @@ class AuthServiceImpl(
 
     private fun createUserRepresentation(profileDTO: ProfileDTO): UserRepresentation{
         val user = UserRepresentation()
-        println(profileDTO.username)
         user.username = profileDTO.username
         user.email = profileDTO.email
         user.firstName = profileDTO.name
