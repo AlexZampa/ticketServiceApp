@@ -51,8 +51,8 @@ class IntegrationProfileTest {
     @Autowired
     private lateinit var profileRepository: ProfileRepository
 
-    val user1 = ProfileDTO(1, "user1@mail.com", "user1", "Frank", "Matano", "1989-09-14" )
-    val user2 = ProfileDTO(2, "user2@mail.com", "user2", "Marco", "Bay", "1999-10-02" )
+    val user1 = ProfileDTO(1, "user1@mail.com", "user1", "Frank", "Matano", "1989-09-14" , "manager")
+    val user2 = ProfileDTO(2, "user2@mail.com", "user2", "Marco", "Bay", "1999-10-02" , "client")
 
 
     @BeforeEach
@@ -81,7 +81,7 @@ class IntegrationProfileTest {
 
     @Test
     fun createUserTest() {
-        val profileDTO = ProfileDTO(null, "marco.bay@gmail.com", "marco_seaside", "Marco", "Bay", "1999-10-02")
+        val profileDTO = ProfileDTO(null, "marco.bay@gmail.com", "marco_seaside", "Marco", "Bay", "1999-10-02", "client")
 
         val headers = HttpHeaders()
         val requestEntity= HttpEntity<ProfileDTO>(profileDTO, headers)
@@ -97,7 +97,7 @@ class IntegrationProfileTest {
     @Test
     fun modifyUserTest() {
         val profileDTO = profileService.getByEmail(user1.email)
-        val newProfileDTO = ProfileDTO(profileDTO.id, profileDTO.email, "f_mark", "Franky", "Marky", "1999-10-02")
+        val newProfileDTO = ProfileDTO(profileDTO.id, profileDTO.email, "f_mark", "Franky", "Marky", "1999-10-02", "client")
 
         val headers = HttpHeaders()
         val requestEntity= HttpEntity<ProfileDTO>(newProfileDTO, headers)
@@ -126,7 +126,7 @@ class IntegrationProfileTest {
     @Test
     fun profileAlreadyExists() {
 
-        val profileDTO = ProfileDTO(null, "user1@mail.com", "marco_seaside", "Marco", "Bay", "1999-10-02")
+        val profileDTO = ProfileDTO(null, "user1@mail.com", "marco_seaside", "Marco", "Bay", "1999-10-02", "client")
 
         val headers = HttpHeaders()
         val requestEntity= HttpEntity<ProfileDTO>(profileDTO, headers)

@@ -18,7 +18,7 @@ import org.keycloak.admin.client.KeycloakBuilder
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.http.HttpStatus
-
+import java.time.LocalDate
 
 
 @Service
@@ -69,7 +69,7 @@ class AuthServiceImpl(
 
         // Create the user in Keycloak
         val response = keycloak.realm(properties.realm).users().create(user)
-
+        println(response.status)
         // if error
         if(response.status != HttpStatus.CREATED.value())
             throw ProfileAlreadyExistsException("Profile Already Exists")
@@ -118,6 +118,7 @@ class AuthServiceImpl(
         profile.name = profileDTO.name
         profile.surname = profileDTO.surname
         profile.username = profileDTO.username
+        profile.dateofbirth = LocalDate.parse(profileDTO.dateOfBirth)
 
         profileRepository.save(profile)
     }
@@ -152,6 +153,20 @@ class AuthServiceImpl(
 
         val newProfile = profileRepository.save(profileDTO.toProfile())
         return newProfile.toDTO()
+    }
+
+    override fun deleteProfile(email: String) {
+        val keycloak = createKeycloakAdminClient()
+        // get profile
+        val profile = profileRepository.findByEmail(email)
+        val user = keycloak.realm(properties.realm).users().searchByEmail(email,true)
+
+        if(profile != null ){
+            profileRepository.delete(profile)
+        }
+        if(user.size != 0){
+            keycloak.realm(properties.realm).users().delete(user[0].id)
+        }
     }
 
     // keycloak factory
