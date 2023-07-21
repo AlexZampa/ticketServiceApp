@@ -155,6 +155,37 @@ class AuthServiceImpl(
         return newProfile.toDTO()
     }
 
+    override fun createManager(profileDTO: ProfileDTO): ProfileDTO {
+        val keycloak = createKeycloakAdminClient()
+        val realmResource = keycloak.realm(properties.realm)
+
+        // Create a UserRepresentation object and set the user details
+        val user = createUserRepresentation(profileDTO)
+
+        // Create a CredentialRepresentation object and set the password
+        val credential = createCredentialRepresentation(profileDTO.password)
+
+        // Add the credential to the user
+        user.credentials = listOf(credential)
+
+        // Create the user in Keycloak
+        val response = keycloak.realm(properties.realm).users().create(user)
+
+        // if error
+        if(response.status != HttpStatus.CREATED.value())
+            throw ProfileAlreadyExistsException("Profile Already Exists")
+
+        // get user UUID
+        val userId = response.location.toString().split("/").last()
+
+        // Assign a realm-level role to the user
+        val roleRepresentation = realmResource.roles().get("app-manager").toRepresentation()
+        keycloak.realm(properties.realm).users().get(userId).roles().realmLevel().add(mutableListOf(roleRepresentation))
+
+        val newProfile = profileRepository.save(profileDTO.toProfile())
+        return newProfile.toDTO()
+    }
+
     override fun deleteProfile(email: String) {
         val keycloak = createKeycloakAdminClient()
         // get profile

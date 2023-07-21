@@ -2,7 +2,6 @@ package it.polito.wa2.g27.server.profiles
 
 import io.micrometer.observation.annotation.Observed
 import jakarta.validation.*
-import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController

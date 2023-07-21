@@ -9,5 +9,6 @@ interface AuthService {
     fun logout(token: String): HttpStatusCode
     fun modifyProfile(token: String, profileDTO: ProfileDTO)
     fun createExpert(profileDTO: ProfileDTO): ProfileDTO
+    fun createManager(profileDTO: ProfileDTO): ProfileDTO
     fun deleteProfile(email:String)
 }

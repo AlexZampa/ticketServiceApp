@@ -1,8 +1,9 @@
 package it.polito.wa2.g27.server.test.integrationTest
 import it.polito.wa2.g27.server.profiles.ProfileDTO
-import it.polito.wa2.g27.server.profiles.ProfileRepository
 import it.polito.wa2.g27.server.profiles.ProfileService
-import it.polito.wa2.g27.server.profiles.toProfile
+import it.polito.wa2.g27.server.security.AuthDTO
+import it.polito.wa2.g27.server.security.AuthService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -45,48 +46,83 @@ class IntegrationProfileTest {
 
     @Autowired
     lateinit var restTemplate: TestRestTemplate
-
     @Autowired
     lateinit var profileService: ProfileService
     @Autowired
-    private lateinit var profileRepository: ProfileRepository
+    lateinit var authService: AuthService
 
-    val user1 = ProfileDTO(1, "user1@mail.com", "user1", "Frank", "Matano", "1989-09-14" , "manager")
-    val user2 = ProfileDTO(2, "user2@mail.com", "user2", "Marco", "Bay", "1999-10-02" , "client")
+    val user1 = ProfileDTO(1, "usertest1@mail.com", "usertest1", "Frank", "Matano", "1989-09-14" , "client", "password")
+    val user2 = ProfileDTO(2, "usertest2@mail.com", "usertest2", "Marco", "Bay", "1999-10-02" , "manager", "password")
+    val user3 = ProfileDTO(3, "usertest3@mail.com", "usertest3", "Mary", "White", "1992-08-02", "expert", "password")
 
+    var authenticatedProfile1: ProfileDTO? = null
+    var authenticatedProfile2: ProfileDTO? = null
 
     @BeforeEach
     fun populateDB() {
-        val profile1 = user1.toProfile()
-        val profile2 = user2.toProfile()
+        authenticatedProfile1 = authService.signup(user1)
+        authenticatedProfile2 = authService.createManager(user2)
+        authenticatedProfile1 = authService.login(AuthDTO(user1.email, user1.password!!))
+        authenticatedProfile2 = authService.login(AuthDTO(user2.email, user2.password!!))
+    }
 
-        profileRepository.deleteAll()
-        profileRepository.save(profile1)
-        profileRepository.save(profile2)
+    @AfterEach
+    fun deleteDB() {
+        authService.deleteProfile(user1.email)
+        authService.deleteProfile(user2.email)
+        authService.deleteProfile(user3.email)
+    }
 
+    @Test
+    fun userLoginTest() {
+        val authDTO = AuthDTO(user1.email, user1.password!!)
+        val headers = HttpHeaders()
+        val requestEntity= HttpEntity<AuthDTO>(authDTO, headers)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/public/login",
+            HttpMethod.POST,
+            requestEntity,
+            ProfileDTO::class.java)
+
+        Assertions.assertEquals(HttpStatus.OK, response.statusCode)
+       Assertions.assertTrue { response.body?.token != ""}
+    }
+
+    @Test
+    fun userLogouTest() {
+        val headers = HttpHeaders()
+        headers.set("Authorization", "Bearer " + authenticatedProfile1?.token )
+        val requestEntity= HttpEntity<Unit>(headers)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/authenticated/logout",
+            HttpMethod.DELETE,
+            requestEntity,
+            Any::class.java)
+        Assertions.assertEquals(HttpStatus.OK, response.statusCode)
     }
 
     @Test
     fun getUserByEmailTest() {
         val headers = HttpHeaders()
+        headers.set("Authorization", "Bearer " + authenticatedProfile1?.token )
         val requestEntity= HttpEntity<Unit>(headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/profiles/${user1.email}",
+            "http://localhost:$port/authenticated/profiles/${user1.email}",
             HttpMethod.GET,
             requestEntity,
-            Any::class.java)
+            ProfileDTO::class.java)
 
         Assertions.assertEquals(HttpStatus.OK, response.statusCode)
+        Assertions.assertTrue { response.body?.id == authenticatedProfile1?.id }
+        Assertions.assertTrue { response.body?.email == authenticatedProfile1?.email }
     }
 
     @Test
     fun createUserTest() {
-        val profileDTO = ProfileDTO(null, "marco.bay@gmail.com", "marco_seaside", "Marco", "Bay", "1999-10-02", "client")
-
         val headers = HttpHeaders()
-        val requestEntity= HttpEntity<ProfileDTO>(profileDTO, headers)
+        val requestEntity= HttpEntity<ProfileDTO>(user3, headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/profiles",
+            "http://localhost:$port/public/signup",
             HttpMethod.POST,
             requestEntity,
             Any::class.java)
@@ -97,12 +133,14 @@ class IntegrationProfileTest {
     @Test
     fun modifyUserTest() {
         val profileDTO = profileService.getByEmail(user1.email)
-        val newProfileDTO = ProfileDTO(profileDTO.id, profileDTO.email, "f_mark", "Franky", "Marky", "1999-10-02", "client")
+        val newProfileDTO = ProfileDTO(profileDTO.id, profileDTO.email, "newusername", "newname", "newsurname", "1980-06-02", "client")
 
         val headers = HttpHeaders()
+        headers.set("Authorization", "Bearer " + authenticatedProfile1?.token )
+
         val requestEntity= HttpEntity<ProfileDTO>(newProfileDTO, headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/profiles/${profileDTO.email}",
+            "http://localhost:$port/authenticated/profiles/${profileDTO.email}",
             HttpMethod.PUT,
             requestEntity,
             Any::class.java)
@@ -111,11 +149,26 @@ class IntegrationProfileTest {
     }
 
     @Test
-    fun getUserByEmailNotExists() {
+    fun signupExpert() {
         val headers = HttpHeaders()
+        headers.set("Authorization", "Bearer " + authenticatedProfile2?.token )
+        val requestEntity= HttpEntity<ProfileDTO>(user3, headers)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/manager/createExpert",
+            HttpMethod.POST,
+            requestEntity,
+            Any::class.java)
+
+        Assertions.assertEquals(HttpStatus.CREATED, response.statusCode)
+    }
+
+    @Test
+    fun getUserByEmailNotExistsTest() {
+        val headers = HttpHeaders()
+        headers.set("Authorization", "Bearer " + authenticatedProfile1?.token )
         val requestEntity= HttpEntity<Unit>(headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/profiles/marco.bay@gmail.com",
+            "http://localhost:$port/authenticated/profiles/fakeuser@mail.com",
             HttpMethod.GET,
             requestEntity,
             Any::class.java)
@@ -124,19 +177,48 @@ class IntegrationProfileTest {
     }
 
     @Test
-    fun profileAlreadyExists() {
-
-        val profileDTO = ProfileDTO(null, "user1@mail.com", "marco_seaside", "Marco", "Bay", "1999-10-02", "client")
+    fun profileAlreadyExistsTest() {
+        val profileDTO = ProfileDTO(null, "usertest1@mail.com", "newusername", "newname", "newsurname", "1993-10-02", "client")
 
         val headers = HttpHeaders()
         val requestEntity= HttpEntity<ProfileDTO>(profileDTO, headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/profiles",
+            "http://localhost:$port/public/signup",
             HttpMethod.POST,
             requestEntity,
             Any::class.java)
 
         Assertions.assertEquals(HttpStatus.CONFLICT, response.statusCode)
     }
+
+    @Test
+    fun signupExpertForbiddenTest() {
+        val headers = HttpHeaders()
+        headers.set("Authorization", "Bearer " + authenticatedProfile1?.token )
+        val requestEntity= HttpEntity<ProfileDTO>(user3, headers)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/manager/createExpert",
+            HttpMethod.POST,
+            requestEntity,
+            Any::class.java)
+
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
+    }
+
+    @Test
+    fun getUserByEmailUnauthorized() {
+        val headers = HttpHeaders()
+        val requestEntity= HttpEntity<Unit>(headers)
+        val response = restTemplate.exchange(
+            "http://localhost:$port/authenticated/profiles/${user1.email}",
+            HttpMethod.GET,
+            requestEntity,
+            Any::class.java)
+
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+    }
+
+
+
 
 }

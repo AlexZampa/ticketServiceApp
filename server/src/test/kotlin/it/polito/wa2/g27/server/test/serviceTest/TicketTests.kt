@@ -84,7 +84,6 @@ class TicketTests {
         authenticatedProfile1 = authService.login(AuthDTO(user1.email, user1.password!!))
         authenticatedProfile2 = authService.login(AuthDTO(user2.email, user2.password!!))
         authenticatedProfile3 = authService.login(AuthDTO(user3.email, user3.password!!))
-        println(authenticatedProfile1)
 
         val product1 = prod1.toProduct()
         val product2 = prod2.toProduct()
