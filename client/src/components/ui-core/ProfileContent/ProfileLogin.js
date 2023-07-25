@@ -34,6 +34,7 @@ function ProfileLogin() {
                 localStorage.setItem("token", user.token)
                 localStorage.setItem("email", user.email)
                 localStorage.setItem("role",user.role)
+                localStorage.setItem("id",user.id)
                 notify.success(`Welcome ${user.username}!`)
                 navigate('/profile');
             })

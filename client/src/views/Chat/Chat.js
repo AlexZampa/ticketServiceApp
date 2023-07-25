@@ -17,15 +17,7 @@ import {useParams} from "react-router-dom";
 
 const Chat = () => {
     const params = useParams()
-    // useEffect(() => {
-    //     Api.getAllProduct()
-    //         .then(products =>{
-    //             setProducts(products);
-    //         })
-    //         .catch( err =>{
-    //             notify.error("Server error")
-    //         })
-    // }, []); //eslint-disable-line react-hooks/exhaustive-deps
+
 
     return (
         <>

@@ -223,8 +223,13 @@ const Api = {
 
     addNewMessage: (ticketId, message, token) => {
         axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
+
         return new Promise((resolve, reject) => {
-            axios.post(SERVER_URL + `authenticated/tickets/${ticketId}/chat`, message)
+            axios.post(SERVER_URL + `authenticated/tickets/${ticketId}/chat`, message ,{
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })

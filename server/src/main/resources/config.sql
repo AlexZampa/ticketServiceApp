@@ -172,7 +172,16 @@ COPY public.attachments (id, data, name, size, type, message_id) FROM stdin;
 --
 
 COPY public.messages (id, datetime, text, receiver_id, sender_id, ticket_id) FROM stdin;
-0	2000-07-16 19:20:00	Ciao bella	32	33	10
+0	2000-07-16 19:20:00	Prodotto non funziona	33	32	10
+1	2000-07-16 19:21:00	Impossibile ti sbagli!	32	33	10
+2	2000-07-16 19:22:00	Ma ti dico che non va	33	32	10
+3	2000-07-16 19:23:00	Non mi pagano abbastanza	32	33	10
+4	2000-07-16 19:24:00	Aggiustalo!	33	32	10
+5	2000-07-16 19:25:00	Non mi interessa :D	32	33	10
+6	2000-07-16 19:26:00	Reportato	33	32	10
+7	2000-07-16 19:24:00	Rispondimi!!!	33	32	10
+8	2000-07-16 19:24:00	Sta zitto!	32	33	10
+9	2000-07-16 19:24:00	Mah ...	33	32	10
 \.
 
 
