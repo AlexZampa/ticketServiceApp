@@ -1,7 +1,6 @@
 package it.polito.wa2.g27.server.test.integrationTest
 import it.polito.wa2.g27.server.products.ProductDTO
 import it.polito.wa2.g27.server.products.ProductRepository
-import it.polito.wa2.g27.server.products.ProductService
 import it.polito.wa2.g27.server.products.toProduct
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -46,10 +45,6 @@ class IntegrationProductTest {
     @Autowired
     lateinit var restTemplate: TestRestTemplate
 
-
-    @Autowired
-    lateinit var productService: ProductService
-
     val prod1 = ProductDTO("A01", "Lego Star Wars", "LEGO", "Space");
     val prod2 = ProductDTO("A02", "Lego Indiana Jones", "LEGO", "Historical");
     val prod3 = ProductDTO("B01", "Lego Duplo Fashion Blogger", "LEGO Duplo", "Fashion");
@@ -77,24 +72,26 @@ class IntegrationProductTest {
         val headers = HttpHeaders()
         val requestEntity= HttpEntity<Unit>(headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/products",
+            "http://localhost:$port/public/products",
             HttpMethod.GET,
             requestEntity,
             Any::class.java)
 
         Assertions.assertEquals(HttpStatus.OK, response.statusCode)
     }
+
     @Test
     fun getProductByIdCorrectId() {
         val headers = HttpHeaders()
         val requestEntity= HttpEntity<Unit>(headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/products/${prod1.id}",
+            "http://localhost:$port/public/products/${prod1.id}",
             HttpMethod.GET,
             requestEntity,
-            Any::class.java)
+            ProductDTO::class.java)
 
         Assertions.assertEquals(HttpStatus.OK, response.statusCode)
+        Assertions.assertEquals(response.body, prod1)
     }
 
     @Test
@@ -102,7 +99,7 @@ class IntegrationProductTest {
         val headers = HttpHeaders()
         val requestEntity= HttpEntity<Unit>(headers)
         val response = restTemplate.exchange(
-            "http://localhost:$port/products/10",
+            "http://localhost:$port/public/products/10",
             HttpMethod.GET,
             requestEntity,
             Any::class.java)
