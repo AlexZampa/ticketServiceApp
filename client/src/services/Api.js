@@ -215,7 +215,7 @@ const Api = {
     getAttachment: (ticketId, attId, token) => {
         axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {
-            axios.get(SERVER_URL + `authenticated/tickets/${ticketId}/chat/${attId}`)
+            axios.get(SERVER_URL + `authenticated/tickets/${ticketId}/chat/${attId}`,{responseType:"blob"})
                 .then((res) => resolve(res.data))
                 .catch((err) => reject(err.response.data));
         })
