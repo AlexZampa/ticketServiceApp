@@ -43,7 +43,7 @@ class TicketController(private val ticketService: TicketService,
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
-        @PostMapping("/client/tickets")
+    @PostMapping("/client/tickets")
     @ResponseStatus(HttpStatus.CREATED)
     fun postCreateTicket(@Valid @RequestBody ticketDTO: TicketDTO) {
         ticketService.createTicket(ticketDTO)

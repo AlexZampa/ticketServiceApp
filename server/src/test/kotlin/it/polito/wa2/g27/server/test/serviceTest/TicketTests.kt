@@ -73,8 +73,6 @@ class TicketTests {
     var prod1 = ProductDTO("A01", "Lego Star Wars", "LEGO", "Space")
     var prod2 = ProductDTO("B01", "Lego Duplo Fashion Blogger", "LEGO Duplo", "Fashion")
 
-    //var ticket1 = TicketDTO(0, "A01", "Lego", 0, "Non funziona", null, null, null)
-    //var ticket2 = TicketDTO(0, "B01", "Duplo", 0, "NO istruzioni", null, null, null)
 
     @BeforeEach
     fun populateDB() {
