@@ -33,17 +33,12 @@ const TicketCreateComponent = (props) => {
     const [product,setProduct] = useState(null)
     const [description,setDescription] = useState(null)
 
-
-    console.log(props.products)
     const handleProduct = (p) =>{
         setProduct(p.target.value.split(' - ')[0])
     }
 
     const handleSubmit = () =>{
-        console.log(product)
-        console.log(description)
         const filter = props.products.filter((prod) => prod.id == product)[0];
-        console.log(filter)
         Api.getProfileByEmail(authContext.user.email,authContext.user.token).then(
             user =>{
                 const ticket = {
@@ -56,7 +51,6 @@ const TicketCreateComponent = (props) => {
                     status: 'OPEN'
 
                 }
-                console.log(ticket)
                 Api.addNewTicket(ticket, authContext.user.token).then(()=>{
                         notify.success('ticket created successfully')
                         navigate('/dashboard')

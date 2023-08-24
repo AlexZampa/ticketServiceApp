@@ -18,8 +18,6 @@ const ProductCreateComponent = (props) => {
     const [brand, setBrand] = useState("")
     const [description,setDescription] = useState("")
     const disable= param.productId? true: false;
-    console.log(disable)
-    console.log(param)
 
     useEffect(() =>{
         if(param.productId){

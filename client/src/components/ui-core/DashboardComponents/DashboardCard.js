@@ -26,7 +26,6 @@ const priorityMap ={
 }
 
 const DashboardCard = (props) => {
-	console.log('ticket passato', props.ticket)
 	const navigate = useNavigate();
 
 	return (

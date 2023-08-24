@@ -25,8 +25,6 @@ const ProfileContent = () => {
     const notify = useNotification()
     const navigate = useNavigate();
 
-    console.log(authContext.user)
-
     useEffect(() => {
         API.getProfileByEmail(authContext.user.email, authContext.user.token)
             .then((user) => {

@@ -113,7 +113,6 @@ const Api = {
         return new Promise((resolve, reject) => {
             axios.get(SERVER_URL + `manager/tickets/open`)
                 .then((res) => {
-                    console.log(res)
                     resolve(res.data)
                 })
                 .catch((err) => reject(err.response.data));

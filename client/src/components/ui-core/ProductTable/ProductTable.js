@@ -43,7 +43,6 @@ const ProductTable = (props) => {
 };
 
 function ProductRow(props){
-    //console.log(props.product)
     return(
         <tr>
             <ProductData product = {props.product}/>

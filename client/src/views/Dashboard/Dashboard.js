@@ -28,11 +28,10 @@ const Dashboard = () => {
 			case 'manager':
 				Api.getOpenTickets(authContext.user.token)
 					.then(tickets =>{
-						console.log("questi sono i ticket aperti", tickets)
 						setTickets(tickets)
 					})
 					.catch(err =>{
-						console.log(err)
+
 						notify.error("Server error")
 					})
 
@@ -43,7 +42,7 @@ const Dashboard = () => {
 						setTickets(tickets)
 					})
 					.catch(err =>{
-						console.log(err)
+
 						notify.error("Server error")
 					})
 
@@ -51,17 +50,15 @@ const Dashboard = () => {
 			case 'user':
 				Api.getTicketsByProfile(authContext.user.email,authContext.user.token)
 					.then(tickets =>{
-						console.log(tickets)
 						setTickets(tickets)
 					})
 					.catch(err =>{
-						console.log(err)
+
 						notify.error("Server error")
 					})
 
 				break;
 			default:
-				console.log(`it is not possible to change priority`);
 		}
 
 		},[])

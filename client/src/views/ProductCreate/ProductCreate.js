@@ -26,7 +26,6 @@ const ProductCreate = () => {
     const [products,setProducts] = useState([])
     const notify = useNotification()
     const navigate = useNavigate()
-    console.log(params)
 
     useEffect(() => {
 
