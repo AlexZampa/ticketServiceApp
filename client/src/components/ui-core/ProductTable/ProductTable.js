@@ -11,6 +11,10 @@
 //Imports
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Table} from "react-bootstrap";
+import {useContext} from "react";
+import {AuthContext} from "../../utils/AuthContext";
+import {Button} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 
 const ProductTable = (props) => {
     return (
@@ -48,6 +52,8 @@ function ProductRow(props){
 }
 
 function ProductData(props){
+    const authContext = useContext(AuthContext);
+    const navigate  = useNavigate();
     return(
         <>
             <td>
@@ -62,6 +68,9 @@ function ProductData(props){
             <td>
                 {props.product.description}
             </td>
+            {authContext.user.role == 'manager'?
+                <td><Button onClick={()=>{navigate(`/product/${props.product.id}`)}}>Edit</Button></td>:
+                <></>}
         </>
     )
 }

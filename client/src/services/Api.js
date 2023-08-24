@@ -234,6 +234,23 @@ const Api = {
                 .catch((err) => reject(err.response.data));
         })
     },
+    addNewProduct: (product, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
+        return new Promise((resolve, reject) => {
+            axios.post(SERVER_URL + 'manager/products', product)
+                .then((res) => resolve(res.data))
+                .catch((err) => reject(err.response.data));
+        })
+    },
+    modifyProduct: (productId, product, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
+        return new Promise((resolve, reject) => {
+            axios.put(SERVER_URL + `manager/products/${productId}`,product)
+                .then((res) => resolve(res.data))
+                .catch((err) => reject(err.response.data));
+        })
+    }
+
 }
 
 

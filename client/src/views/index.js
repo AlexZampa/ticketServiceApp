@@ -7,5 +7,6 @@ import Dashboard from "./Dashboard/Dashboard"
 import Ticket from "./Ticket/Ticket"
 import Chat from "./Chat/Chat"
 import TicketCreate from "./TicketCreate/TicketCreate";
+import ProductCreate from "./ProductCreate/ProductCreate";
 
-export {Home,Profile,EditProfile,Error,Login,Dashboard,Ticket,Chat,TicketCreate}
+export {Home,Profile,EditProfile,Error,Login,Dashboard,Ticket,Chat,TicketCreate,ProductCreate}
