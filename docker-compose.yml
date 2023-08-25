@@ -83,3 +83,10 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     ports:
       - 3000:3000
+
+  promtail:
+    image: grafana/promtail:2.2.1
+    container_name: promtail-service
+    volumes:
+      - ./docker/promtail:/etc/promtail/
+    command: -config.file=/etc/promtail/promtail.yml
