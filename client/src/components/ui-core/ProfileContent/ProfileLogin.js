@@ -20,7 +20,6 @@ function ProfileLogin() {
 
         API.login(credentials)
             .then((user) => {
-                console.log("ruolo dello user", user.role)
                 authContext.setUser({
                     id: user.id,
                     email: user.email,

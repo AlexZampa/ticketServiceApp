@@ -52,7 +52,6 @@ const Ticket = () => {
 	const ticketId = params.ticketId;
 	const [ticket,setTicket] = useState(false)
 	const notify = useNotification()
-	console.log(ticketId)
 
 	useEffect(() =>{
 		Api.getTicketById(ticketId,authContext.user.token).then(t =>{

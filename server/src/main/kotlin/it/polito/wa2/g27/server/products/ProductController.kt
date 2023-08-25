@@ -28,15 +28,15 @@ class ProductController(private val productService: ProductService) {
     @CrossOrigin(origins = ["http://localhost:3000"])
     @PostMapping("/manager/products")
     @ResponseStatus(HttpStatus.CREATED)
-    fun postCreateTicket(@Valid @RequestBody productDTO: ProductDTO) {
-        productService.createProduct(productDTO)
+    fun postCreateTicket(@Valid @RequestBody productDTO: ProductDTO): ProductDTO? {
+        return productService.createProduct(productDTO)
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
     @PutMapping("/manager/products/{productId}")
     @ResponseStatus(HttpStatus.CREATED)
-    fun putModifyPriority(@PathVariable productId: String, @Valid @RequestBody productDTO: ProductDTO) {
-        productService.modifyProduct(productId, productDTO)
+    fun putModifyPriority(@PathVariable productId: String, @Valid @RequestBody productDTO: ProductDTO): ProductDTO? {
+        return productService.modifyProduct(productId, productDTO)
     }
 
 }

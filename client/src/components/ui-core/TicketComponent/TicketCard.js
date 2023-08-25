@@ -39,11 +39,9 @@ const TicketCard = (props) => {
 		if(authContext.user.role == 'manager'){
 		Api.getAllExperts(authContext.user.token)
 			.then(experts =>{
-				console.log(experts)
 				setExperts(experts)
 			})
 			.catch(err =>{
-				console.log(err)
 				notify.error("Server error")
 			})}},[])
 
@@ -62,12 +60,9 @@ const TicketCard = (props) => {
 				setPriority(3)
 				break;
 			default:
-				console.log(`it is not possible to change priority`);
 		}
 	}
 	const handleExpert = (expert) =>{
-		console.log(expert.target.value.split(' - ')[1])
-
 		setExpert(expert.target.value)
 	}
 	const handleSave = () =>{
@@ -82,12 +77,10 @@ const TicketCard = (props) => {
 					email: expert.split(' - ')[1].trim(),
 					priority: priority
 				}
-				console.log(form)
 				Api.assignExpert(props.ticket.id,form,authContext.user.token).then(
 					notify.success("Ticket modified correctly")
 				).catch(
 					err =>{
-						console.log(err)
 						notify.error('server error')
 					}
 				)
@@ -99,7 +92,6 @@ const TicketCard = (props) => {
 			notify.success("Ticket closed successfully")
 		).catch(
 			err =>{
-				console.log(err)
 				notify.error('server error')
 			}
 		)
@@ -110,7 +102,7 @@ const TicketCard = (props) => {
 			notify.success("Ticket Stopped successfully")
 		).catch(
 			err =>{
-				console.log(err)
+
 				notify.error('server error')
 			}
 		)
@@ -121,7 +113,7 @@ const TicketCard = (props) => {
 			notify.success("Ticket closed successfully")
 		).catch(
 			err =>{
-				console.log(err)
+
 				notify.error('server error')
 			}
 		)
@@ -132,7 +124,7 @@ const TicketCard = (props) => {
 			notify.success("Ticket resolve successfully")
 		).catch(
 			err =>{
-				console.log(err)
+
 				notify.error('server error')
 			}
 		)
@@ -273,7 +265,6 @@ const TicketCard = (props) => {
 						{props.ticket.expertId? props.ticket.expertId : 'expert not assigned'}
 					</option>
 					{experts ? experts.map((e) =>{
-						console.log(e)
 						return(
 
 							<option key={e.id}>{e.id} - { e.email}</option>

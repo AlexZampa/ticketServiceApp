@@ -50,6 +50,10 @@ function App() {
                            element={user.token ? <View.Chat/> : <Navigate replace to='/login'/>}/>
                     <Route path='/ticket/create'
                            element={user.token ? <View.TicketCreate/> : <Navigate replace to='/login'/>}/>
+                    <Route path='/product/create'
+                           element={user.token ? <View.ProductCreate/> : <Navigate replace to='/login'/>}/>
+                    <Route path='/product/:productId'
+                        element={user.token ? <View.ProductCreate/> : <Navigate replace to='/login'/>}/>
                     <Route path='*' element={<View.Error/>}/>
                 </Routes>
             </AppContainer>

@@ -22,11 +22,6 @@ const ChatComponent = (props) => {
     useEffect(()=>{
         Api.getMessages(props.ticketId,authContext.user.token)
             .then(m =>{
-                var t;
-                console.log(m)
-                for( t of m){
-                    console.log(t.attachments)
-                }
                 setMessages(m);
             } )
             .catch(err =>{notify.error('Database Error')})
@@ -44,11 +39,6 @@ const ChatComponent = (props) => {
         setFiles(null)
         Api.getMessages(props.ticketId,authContext.user.token)
             .then(m =>{
-                var t;
-                console.log(m)
-                for( t of m){
-                    console.log(t.attachments)
-                }
                 setMessages(m);
             } )
             .catch(err =>{notify.error('Database Error')})
@@ -63,10 +53,8 @@ const ChatComponent = (props) => {
 
 
     const handleDownload = async (attId) => {
-        console.log(attId)
         var file;
         for (file of attId) {
-            console.log(file)
             await Api.getAttachment(props.ticketId, file.id, authContext.user.token)
                 .then(d => {
                     const url = window.URL.createObjectURL(d);
@@ -77,7 +65,7 @@ const ChatComponent = (props) => {
                     link.click();
                     this.setState({downloading: false});
                 }).catch(err => {
-                    console.log(err)
+
                 })
         }
     }
@@ -93,7 +81,6 @@ const ChatComponent = (props) => {
             "text": message,
         }
         
-        console.log(m)
         const formData = new FormData();
         formData.append('ticketId', m.ticketId);
         formData.append('senderId', m.senderId);
@@ -109,20 +96,12 @@ const ChatComponent = (props) => {
             formData.append('attachments', new Blob());
         }
 
-
-
-        console.log(formData.get('attachments'))
-
-        for (const [key, value] of formData.entries()) {
-            console.log(`Key: ${key}, Value:`, value);
-        }
-
         Api.addNewMessage(props.ticketId,formData,authContext.user.token)
             .then(() => {
                 refresh()
 
             })
-            .catch(err => {console.log(err)})
+            .catch(err => {})
     }
 
     return(

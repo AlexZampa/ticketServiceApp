@@ -26,7 +26,6 @@ const priorityMap ={
 }
 
 const DashboardCard = (props) => {
-	console.log('ticket passato', props.ticket)
 	const navigate = useNavigate();
 
 	return (
@@ -101,9 +100,9 @@ const DashboardCard = (props) => {
 				<Link to={`/ticket/${props.ticket.id}`}>
 					<Button variant="info" >More Options</Button>
 				</Link>
-				<Link to={`/ticket/${props.ticket.id}/chat`}>
+				{props.ticket.expertId ?<Link to={`/ticket/${props.ticket.id}/chat`}>
 					<Button variant="info" className="ms-2">Chat</Button>
-				</Link>
+				</Link>: <></>}
 
 			</Card.Body>
 		</Card>
