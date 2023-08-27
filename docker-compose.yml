@@ -90,3 +90,5 @@ services:
     volumes:
       - ./docker/promtail:/etc/promtail/
     command: -config.file=/etc/promtail/promtail.yml
+    ports:
+      - 3101:3101

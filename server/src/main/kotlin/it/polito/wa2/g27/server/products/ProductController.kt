@@ -1,7 +1,6 @@
 package it.polito.wa2.g27.server.products
 
 import io.micrometer.observation.annotation.Observed;
-import it.polito.wa2.g27.server.ticket.TicketDTO
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
