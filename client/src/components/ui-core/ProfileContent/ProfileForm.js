@@ -17,6 +17,7 @@ function ProfileForm() {
     const [name, setName] = useState(location.state ? location.state.name:"");
     const [surname, setSurname] = useState(location.state ? location.state.surname:"");
     const [username, setUsername] = useState(location.state ? location.state.username:"");
+    const [role, setRole] = useState(location.state ? location.state.role:"user");
     const [password, setPassword] = useState("");
     const [date, setDate] = useState(location.state ? location.state.dateOfBirth:dayjs().format('YYYY-MM-DD'));
 
@@ -28,7 +29,7 @@ function ProfileForm() {
         event.preventDefault();
 
         const profile =
-            { email: email, name: name, surname: surname, username: username, dateOfBirth: dayjs(date).format("YYYY-MM-DD") , password: password};
+            { email: email, name: name, surname: surname, username: username, dateOfBirth: dayjs(date).format("YYYY-MM-DD") , password: password, role: role};
         if (isSignup) {
             // API CALL
             Api.signup(profile)
