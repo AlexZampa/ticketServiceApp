@@ -32,12 +32,21 @@ const TicketCreateComponent = (props) => {
     const navigate  = useNavigate();
     const [product,setProduct] = useState(null)
     const [description,setDescription] = useState(null)
+    const [validationError, setValidationError] = useState(false);
 
     const handleProduct = (p) =>{
         setProduct(p.target.value.split(' - ')[0])
+        setValidationError(false);
     }
 
-    const handleSubmit = () =>{
+    const handleSubmit = (event) =>{
+        event.preventDefault();
+
+        // Validate the form before proceeding
+        if (!product) {
+            setValidationError(true); // Show validation error if no value is selected
+        } else {
+
         const filter = props.products.filter((prod) => prod.id == product)[0];
         Api.getProfileByEmail(authContext.user.email,authContext.user.token).then(
             user =>{
@@ -53,7 +62,7 @@ const TicketCreateComponent = (props) => {
                 }
                 Api.addNewTicket(ticket, authContext.user.token).then(()=>{
                         notify.success('ticket created successfully')
-                        navigate('/dashboard')
+
                     }
                 ).catch( err =>{
                     notify.error("Server error")
@@ -62,17 +71,17 @@ const TicketCreateComponent = (props) => {
         ).catch( err =>{
             notify.error("Server error")
         })
-
+        navigate('/dashboard')}
     }
 
     // props.products.filter((prod) => prod.id == p.target.value.split(' - ')[0])[0]
 
     return (
         <>
-            <Form>
+            <Form onSubmit={handleSubmit} >
                 <Form.Group className="mb-3">
                     <Form.Label>ProductId</Form.Label>
-                    <Form.Select onChange={handleProduct}>
+                    <Form.Select onChange={handleProduct} isInvalid={validationError} >
                         <option>select a product</option>
                         {
                             props.products.map(product =>{
@@ -81,18 +90,21 @@ const TicketCreateComponent = (props) => {
                         }
 
                     </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                        Please select an option.
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Description</Form.Label>
                     <Form.Control placeholder="Insert description" onChange={(event) => {
                         setDescription(event.target.value)
-                    }} />
+                    }} required={true}/>
                     <Form.Text className="text-muted">
                         Insert a description to explain the problem
                     </Form.Text>
                 </Form.Group>
 
-                <Button variant="primary"  onClick={handleSubmit}>
+                <Button variant="primary"  type={"submit"}>
                     Submit
                 </Button>
             </Form>

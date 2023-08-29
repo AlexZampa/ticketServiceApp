@@ -44,29 +44,27 @@ const ProductCreateComponent = (props) => {
             Api.modifyProduct(param.productId, product, authContext.user.token).then(()=> {
 
                 notify.success('product modified successfully')
-                navigate('/')
             }
             ).catch(()=>{notify.err('Server Error')})
         }
         else {
             Api.addNewProduct(product, authContext.user.token).then(()=>{
                     notify.success('product created successfully')
-                    navigate('/')
                 }
             ).catch( err =>{
                 notify.error("Server error")
             })
         }
-
+        navigate('/')
 
     }
 
     return (
         <>
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>ID</Form.Label>
-                    <Form.Control placeholder="Insert description" value={id} disabled={disable} onChange={(event) => {
+                    <Form.Control placeholder="Insert description" value={id} required={true} disabled={disable} onChange={(event) => {
                         setId(event.target.value)
                     }} />
                     <Form.Text className="text-muted">
@@ -75,7 +73,7 @@ const ProductCreateComponent = (props) => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Name</Form.Label>
-                    <Form.Control placeholder="Insert description" value={name} onChange={(event) => {
+                    <Form.Control placeholder="Insert description" value={name} required={true} onChange={(event) => {
                         setName(event.target.value)
                     }} />
                     <Form.Text className="text-muted">
@@ -84,7 +82,7 @@ const ProductCreateComponent = (props) => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Brand</Form.Label>
-                    <Form.Control placeholder="Insert description" value={brand} onChange={(event) => {
+                    <Form.Control placeholder="Insert description" value={brand} required={true} onChange={(event) => {
                         setBrand(event.target.value)
                     }} />
                     <Form.Text className="text-muted">
@@ -93,7 +91,7 @@ const ProductCreateComponent = (props) => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control placeholder="Insert description" value={description} onChange={(event) => {
+                    <Form.Control placeholder="Insert description" value={description} required={true} onChange={(event) => {
                         setDescription(event.target.value)
                     }} />
                     <Form.Text className="text-muted">
@@ -101,7 +99,7 @@ const ProductCreateComponent = (props) => {
                     </Form.Text>
                 </Form.Group>
 
-                <Button variant="primary"  onClick={handleSubmit}>
+                <Button variant="primary"  type={"submit"}>
                     Submit
                 </Button>
             </Form>

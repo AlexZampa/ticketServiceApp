@@ -59,38 +59,38 @@ function ProfileForm() {
                 <Form.Group className="mb-3">
                     <Form.Label>Email</Form.Label>
                     <Form.Control type="email" maxLength={50} required={true} disabled={!isSignup} value={email}
-                                  onChange={event => setEmail(event.target.value)}/>
+                                  onChange={event => setEmail(event.target.value)} placeholder="Insert email"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" maxLength={50} required={true} value={username}
-                                  onChange={event => setUsername(event.target.value)}/>
+                                  onChange={event => setUsername(event.target.value)} placeholder="Insert Username"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
                     <Form.Control type="text" maxLength={50} required={true} value={name}
-                                  onChange={event => setName(event.target.value)}/>
+                                  onChange={event => setName(event.target.value)} placeholder="Insert Name"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Surname</Form.Label>
                     <Form.Control type="text" maxLength={50} required={true} value={surname}
-                                  onChange={event => setSurname(event.target.value)}/>
+                                  onChange={event => setSurname(event.target.value)} placeholder="Insert Surname"/>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Date of Birth</Form.Label>
                     <Form.Control type="date" required={true} max={dayjs().format('YYYY-MM-DD')} value={date}
-                                  onChange={event => setDate(dayjs(event.target.value).format('YYYY-MM-DD'))}/>
+                                  onChange={event => setDate(dayjs(event.target.value).format('YYYY-MM-DD'))} placeholder="Insert Date of Birth"/>
                 </Form.Group>
                 {
                     isSignup ?
                         <Form.Group className="mb-3">
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" maxLength={16} required={true} value={password}
-                                          onChange={event => setPassword(event.target.value)}/>
+                                          onChange={event => setPassword(event.target.value)} placeholder="Insert password"/>
                         </Form.Group>
                         :
                         <></>

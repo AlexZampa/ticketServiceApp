@@ -77,7 +77,7 @@ const Dashboard = () => {
 							<DashboardCard key={ticket.id} ticket={ticket}/>
 						)
 
-					}): <></>}
+					}): <h1>There are no Ticket for you</h1>}
 				</Row>
 			</div>
 		</>

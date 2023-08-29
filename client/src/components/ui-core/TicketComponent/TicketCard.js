@@ -66,6 +66,7 @@ const TicketCard = (props) => {
 		setExpert(expert.target.value)
 	}
 	const handleSave = () =>{
+
 				Api.modifyPriority(props.ticket.id,priority,authContext.user.token).then(
 					notify.success("Ticket modified correctly")
 				).catch(
@@ -74,16 +75,17 @@ const TicketCard = (props) => {
 					}
 				)
 				const form={
-					email: expert.split(' - ')[1].trim(),
+					email: expert? expert.split(' - ')[1].trim():expert,
 					priority: priority
 				}
+				if(expert){
 				Api.assignExpert(props.ticket.id,form,authContext.user.token).then(
 					notify.success("Ticket modified correctly")
 				).catch(
 					err =>{
 						notify.error('server error')
 					}
-				)
+				)}
 				navigate('/dashboard')
 	}
 
