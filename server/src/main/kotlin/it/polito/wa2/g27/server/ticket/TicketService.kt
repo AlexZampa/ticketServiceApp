@@ -3,6 +3,7 @@ package it.polito.wa2.g27.server.ticket
 import it.polito.wa2.g27.server.profiles.ProfileDTO
 
 interface TicketService {
+    fun getAllTickets(): List<TicketDTO>
     fun getOpenTickets(): List<TicketDTO>
     fun getTicketsByProfile(profileDTO: ProfileDTO): List<TicketDTO>
     fun getAssignedTickets(profileDTO: ProfileDTO): List<TicketDTO>

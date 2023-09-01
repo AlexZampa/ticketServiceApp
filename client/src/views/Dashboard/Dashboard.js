@@ -26,7 +26,7 @@ const Dashboard = () => {
 	useEffect(() =>{
 		switch (authContext.user.role) {
 			case 'manager':
-				Api.getOpenTickets(authContext.user.token)
+				Api.getAllTickets(authContext.user.token)
 					.then(tickets =>{
 						setTickets(tickets)
 					})

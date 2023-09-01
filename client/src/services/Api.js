@@ -108,6 +108,17 @@ const Api = {
         })
     },
 
+    getAllTickets: (token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
+        return new Promise((resolve, reject) => {
+            axios.get(SERVER_URL + `manager/tickets/all`)
+                .then((res) => {
+                    resolve(res.data)
+                })
+                .catch((err) => reject(err.response.data));
+        })
+    },
+
     getOpenTickets: (token) => {
         axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
         return new Promise((resolve, reject) => {

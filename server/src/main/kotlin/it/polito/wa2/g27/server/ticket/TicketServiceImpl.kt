@@ -21,6 +21,12 @@ class TicketServiceImpl(private val ticketRepository: TicketRepository,
 ): TicketService {
 
     @Transactional(readOnly = true)
+    override fun getAllTickets(): List<TicketDTO> {
+        return ticketRepository.findAll()
+            .map { it.toDTO() }
+    }
+
+    @Transactional(readOnly = true)
     override fun getOpenTickets(): List<TicketDTO> {
         return ticketRepository.findAll().filter {ticket -> ticket.ticketHistory.sortedByDescending { it.date }[0].status == TicketStatus.OPEN.name
                 || ticket.ticketHistory.sortedByDescending { it.date }[0].status == TicketStatus.REOPENED.name}

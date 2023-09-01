@@ -29,6 +29,12 @@ class TicketController(private val ticketService: TicketService,
     }
 
     @CrossOrigin(origins = ["http://localhost:3000"])
+    @GetMapping("/manager/tickets/all")
+    fun getAllTickets() : List<TicketDTO> {
+        return ticketService.getAllTickets()
+    }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
     @GetMapping("/client/tickets/created/{email}")
     fun getTicketsByProfile(@PathVariable email: String) : List<TicketDTO> {
         val profileDTO: ProfileDTO = profileService.getByEmail(email)

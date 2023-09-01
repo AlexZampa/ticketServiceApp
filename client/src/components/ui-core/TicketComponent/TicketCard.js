@@ -40,6 +40,12 @@ const TicketCard = (props) => {
 		Api.getAllExperts(authContext.user.token)
 			.then(experts =>{
 				setExperts(experts)
+				for (var i = 0; i < experts.length; i++) {
+					if (experts[i].id == expert) {
+						setExpert({id: expert, email: experts[i].email})
+						break;
+					}
+				}
 			})
 			.catch(err =>{
 				notify.error("Server error")
@@ -264,9 +270,10 @@ const TicketCard = (props) => {
 				<Form.Label><b>ASSIGN AN EXPERT</b></Form.Label>
 				<Form.Select onChange={handleExpert} disabled={authContext.user.role == 'manager'? false:true}>
 					<option>
-						{props.ticket.expertId? props.ticket.expertId : 'expert not assigned'}
+
+						{props.ticket.expertId ? experts : 'expert not assigned'}
 					</option>
-					{experts ? experts.map((e) =>{
+					{experts ? experts.filter((e) => e.id !== props.ticket.expertId).map((e) =>{
 						return(
 
 							<option key={e.id}>{e.id} - { e.email}</option>
