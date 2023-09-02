@@ -42,7 +42,7 @@ const TicketCard = (props) => {
 				setExperts(experts)
 				for (var i = 0; i < experts.length; i++) {
 					if (experts[i].id == expert) {
-						setExpert({id: expert, email: experts[i].email})
+						setExpert(expert + " - " + experts[i].email)
 						break;
 					}
 				}
@@ -66,12 +66,21 @@ const TicketCard = (props) => {
 				setPriority(3)
 				break;
 			default:
+				setPriority(null)
 		}
 	}
 	const handleExpert = (expert) =>{
-		setExpert(expert.target.value)
+		if (expert.target.value !== 'expert not assigned')
+			setExpert(expert.target.value)
+		else
+			setExpert(null)
 	}
 	const handleSave = () =>{
+
+				if (!priority || !expert) {
+					notify.error('Select both priority and expert')
+					return
+				}
 
 				Api.modifyPriority(props.ticket.id,priority,authContext.user.token).then(
 					notify.success("Ticket modified correctly")
@@ -223,7 +232,7 @@ const TicketCard = (props) => {
                 <ListGroup>
                 <Row align="left">
 							<Col>
-								{authContext.user.role == 'manager' ?<Button variant="success" onClick={handleSave}>Save</Button>:<></>}
+								{authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPEN') ?<Button variant="success" onClick={handleSave}>Save</Button>:<></>}
 							</Col>
 
 							<Col align="right">
@@ -245,7 +254,7 @@ const TicketCard = (props) => {
 			<Col className='m-3'>
 			<Form.Group className="mb-3">
 				<Form.Label><b>CHANGE PRIORITY</b></Form.Label>
-				<Form.Select onChange={handlePriority} disabled={authContext.user.role == 'manager'? false:true}>
+				<Form.Select onChange={handlePriority} disabled={authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPEN') ? false:true}>
 					<option>
 						set priority
 					</option>
@@ -268,11 +277,14 @@ const TicketCard = (props) => {
 			</Form.Group>
 			<Form.Group className="mb-3">
 				<Form.Label><b>ASSIGN AN EXPERT</b></Form.Label>
-				<Form.Select onChange={handleExpert} disabled={authContext.user.role == 'manager'? false:true}>
-					<option>
+				<Form.Select onChange={handleExpert} disabled={authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPEN') ? false:true}>
+					{props.ticket.expertId && experts ? experts.filter((e) => e.id == props.ticket.expertId).map((e) =>{
+						return(
 
-						{props.ticket.expertId ? experts : 'expert not assigned'}
-					</option>
+							<option key={e.id}>{e.id} - { e.email}</option>
+						)})
+					: <option>expert not assigned</option>
+					}
 					{experts ? experts.filter((e) => e.id !== props.ticket.expertId).map((e) =>{
 						return(
 
