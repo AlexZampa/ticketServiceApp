@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react'
+import React, {useState, useCallback, useEffect, useRef} from 'react'
 import {Button, Col, Form, FormGroup, InputGroup, Row} from 'react-bootstrap'
 import {Download} from "react-bootstrap-icons";
 import {AuthContext} from "../../utils/AuthContext";
@@ -15,6 +15,7 @@ const ChatComponent = (props) => {
     const authContext = useContext(AuthContext);
     const notify  = useNotification();
     const [files,setFiles] = useState(null)
+    const inputRef = useRef(null);
 
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('')
@@ -38,6 +39,7 @@ const ChatComponent = (props) => {
     const refresh = ()=>{
         setMessage("")
         setFiles(null)
+        resetFileInput()
         Api.getMessages(props.ticketId,authContext.user.token)
             .then(m =>{
                 setMessages(m);
@@ -52,7 +54,10 @@ const ChatComponent = (props) => {
 
     }
 
-
+    const resetFileInput = () => {
+        // 👇️ reset input value
+        inputRef.current.value = null;
+    };
     const handleDownload = async (attId) => {
         var file;
         for (file of attId) {
@@ -75,6 +80,7 @@ const ChatComponent = (props) => {
         var files = e.currentTarget.files
         for (var i = 0; i < files.length; i++) {
             if (files[i].size > 1000000) {
+                e.target.value = null
                 notify.error('Files exceed maximum size (1MB)')
                 return
             }
@@ -114,7 +120,6 @@ const ChatComponent = (props) => {
         Api.addNewMessage(props.ticketId,formData,authContext.user.token)
             .then(() => {
                 refresh()
-
             })
             .catch(err => {})
     }
@@ -172,9 +177,8 @@ const ChatComponent = (props) => {
                         </FormGroup>
                     </Col>
                 </Row>
-
                 <Form.Group controlId="formFileMultiple" className="mb-3">
-                    <Form.Control type="file" multiple onChange={e => handleUpload(e)}/>
+                    <Form.Control ref={inputRef} type="file" filename='aaaa' multiple onChange={e => handleUpload(e)}/>
                 </Form.Group>
             </Form>
             </div>
