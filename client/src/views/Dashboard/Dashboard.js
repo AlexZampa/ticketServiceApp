@@ -17,24 +17,26 @@ import { Row, Col } from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../components/utils/AuthContext";
 import useNotification from "../../components/utils/useNotification";
+import Button from "react-bootstrap/Button";
+import {ArrowLeftCircle} from "react-bootstrap-icons";
 
 const Dashboard = () => {
 	const authContext = useContext(AuthContext);
 	const notify = useNotification()
 	const [tickets,setTickets] = useState([])
+	const [showAll, setShowAll] = useState(false)
 
 	useEffect(() =>{
 		switch (authContext.user.role) {
 			case 'manager':
-				Api.getAllTickets(authContext.user.token)
-					.then(tickets =>{
+				Api.getOpenTickets(authContext.user.token)
+					.then(tickets => {
 						setTickets(tickets)
 					})
-					.catch(err =>{
+					.catch(err => {
 
 						notify.error("Server error")
 					})
-
 				break;
 			case 'expert':
 				Api.getAssignedTickets(authContext.user.email,authContext.user.token)
@@ -63,12 +65,39 @@ const Dashboard = () => {
 
 		},[])
 
+	useEffect(() => {
+		if (showAll) {
+			Api.getAllTickets(authContext.user.token)
+				.then(tickets => {
+					setTickets(tickets)
+				})
+				.catch(err => {
+
+					notify.error("Server error")
+				})
+		} else {
+			Api.getOpenTickets(authContext.user.token)
+				.then(tickets => {
+					setTickets(tickets)
+				})
+				.catch(err => {
+
+					notify.error("Server error")
+				})
+		}
+	}, [showAll]);
+
 	return (
 		<>
 			<div className="mt-4 d-flex flex-column justify-content-center align-items-center">
 				<Row className="w-75">
 					<Col align="center">
 						<h1 className="fw-bold fst-italic mt-4">TICKET DASHBOARD</h1>
+					</Col>
+				</Row>
+				<Row className="w-75">
+					<Col align="center">
+						<Button onClick={() => setShowAll(!showAll)}>{showAll ? 'SHOW ONLY OPEN TICKETS' : 'SHOW ALL TICKETS'}</Button>
 					</Col>
 				</Row>
 				<Row>
