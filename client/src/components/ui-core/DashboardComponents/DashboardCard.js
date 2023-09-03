@@ -4,6 +4,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Api from "../../../services/Api";
 import { Badge, Row, Col } from "react-bootstrap";
 import {useNavigate,Link} from "react-router-dom";
+import {useContext} from "react";
+import {AuthContext} from "../../utils/AuthContext";
 
 
 const priorityMap ={
@@ -27,6 +29,7 @@ const priorityMap ={
 
 const DashboardCard = (props) => {
 	const navigate = useNavigate();
+	const authContext = useContext(AuthContext);
 
 	return (
 		<Card style={{ width: "18rem", margin: "1rem" }}>
@@ -100,7 +103,7 @@ const DashboardCard = (props) => {
 				<Link to={`/ticket/${props.ticket.id}`}>
 					<Button variant="info" >More Options</Button>
 				</Link>
-				{props.ticket.expertId ?<Link to={`/ticket/${props.ticket.id}/chat`}>
+				{props.ticket.expertId && authContext.user.role !== 'manager' ? <Link to={`/ticket/${props.ticket.id}/chat`}>
 					<Button variant="info" className="ms-2">Chat</Button>
 				</Link>: <></>}
 

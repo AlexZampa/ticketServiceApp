@@ -66,24 +66,26 @@ const Dashboard = () => {
 		},[])
 
 	useEffect(() => {
-		if (showAll) {
-			Api.getAllTickets(authContext.user.token)
-				.then(tickets => {
-					setTickets(tickets)
-				})
-				.catch(err => {
+		if (authContext.user.role === 'manager') {
+			if (showAll) {
+				Api.getAllTickets(authContext.user.token)
+					.then(tickets => {
+						setTickets(tickets)
+					})
+					.catch(err => {
 
-					notify.error("Server error")
-				})
-		} else {
-			Api.getOpenTickets(authContext.user.token)
-				.then(tickets => {
-					setTickets(tickets)
-				})
-				.catch(err => {
+						notify.error("Server error")
+					})
+			} else {
+				Api.getOpenTickets(authContext.user.token)
+					.then(tickets => {
+						setTickets(tickets)
+					})
+					.catch(err => {
 
-					notify.error("Server error")
-				})
+						notify.error("Server error")
+					})
+			}
 		}
 	}, [showAll]);
 
@@ -95,11 +97,12 @@ const Dashboard = () => {
 						<h1 className="fw-bold fst-italic mt-4">TICKET DASHBOARD</h1>
 					</Col>
 				</Row>
+				{authContext.user.role === 'manager' ?
 				<Row className="w-75">
 					<Col align="center">
 						<Button onClick={() => setShowAll(!showAll)}>{showAll ? 'SHOW ONLY OPEN TICKETS' : 'SHOW ALL TICKETS'}</Button>
 					</Col>
-				</Row>
+				</Row> : ''}
 				<Row>
 					{tickets.length>0 ? tickets.map((ticket)=>{
 						return(

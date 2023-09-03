@@ -166,7 +166,7 @@ ALTER TABLE public.tickets_seq OWNER TO postgres;
 COPY public.attachments (id, data, name, size, type, message_id) FROM stdin;
 \.
 
-
+/*
 --
 -- Data for Name: messages; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -183,7 +183,7 @@ COPY public.messages (id, datetime, text, receiver_id, sender_id, ticket_id) FRO
 8	2000-07-16 19:24:00	Sta zitto!	32	33	10
 9	2000-07-16 19:24:00	Mah ...	33	32	10
 \.
-
+*/
 
 --
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres

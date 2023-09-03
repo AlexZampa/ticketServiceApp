@@ -6,6 +6,7 @@ import {useContext} from "react";
 import Api from "../../../services/Api";
 import useNotification from "../../utils/useNotification";
 import {BiRefresh} from "react-icons/bi";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 
 
@@ -70,9 +71,23 @@ const ChatComponent = (props) => {
         }
     }
 
+    const handleUpload = (e) => {
+        var files = e.currentTarget.files
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size > 1000000) {
+                notify.error('Files exceed maximum size (1MB)')
+                return
+            }
+        }
+        setFiles(files)
+    }
+
     const handleSend = () => {
 
-
+        if (message === '') {
+            notify.error('The message can not be empty')
+            return
+        }
 
         const m = {
             "ticketId": props.ticketId,
@@ -139,7 +154,7 @@ const ChatComponent = (props) => {
                     })}
                 </div>
             </div>
-            <Form >
+            <Form>
                 <Row className="d-flex">
                     <Col xs={1}>
                         <Button style={{height: "50px"}} className="mt-2 ms-2 pe-3 ps-3 " ><BiRefresh onClick={refresh}>Refresh</BiRefresh></Button>
@@ -149,7 +164,7 @@ const ChatComponent = (props) => {
                         <FormGroup className="m-2">
                             <InputGroup>
                                 <Form.Control as="textarea"
-                                              required value={message}
+                                              value={message}
                                               onChange={e => setMessage(e.target.value)}
                                               style={{height: "50px", resize: "none"}}/>
                                 <Button onClick={handleSend}>Send</Button>
@@ -159,7 +174,7 @@ const ChatComponent = (props) => {
                 </Row>
 
                 <Form.Group controlId="formFileMultiple" className="mb-3">
-                    <Form.Control type="file" multiple onChange={e => setFiles(e.currentTarget.files)}/>
+                    <Form.Control type="file" multiple onChange={e => handleUpload(e)}/>
                 </Form.Group>
             </Form>
             </div>
