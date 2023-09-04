@@ -225,7 +225,7 @@ COPY public.ticket_history (id, date, status, ticket_id) FROM stdin;
 
 COPY public.tickets (id, category, description, priority, expert_id, product_id, profile_id) FROM stdin;
 10	Lego	Does not work	1	\N	A01	32
-11	Duplo	No istruction found	2	\N	B01	32
+11	Duplo	No istruction found	2	33	B01	32
 \.
 
 
