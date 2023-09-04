@@ -190,10 +190,10 @@ COPY public.messages (id, datetime, text, receiver_id, sender_id, ticket_id) FRO
 --
 
 COPY public.products (id, brand, description, name) FROM stdin;
-A01	LEGO	Space	Lego Star Wars
+A01 LEGO	Space	Lego Star Wars
 A02	LEGO	Historical	Lego Indiana Jones
-B01	LEGO Duplo	Fashion	Lego Duplo Fashion Blogger
-B02	LEGO Duplo	Influencer	Lego Dublo TikToker
+B01	LEGO Duplo	Fashion	Lego Duplo Barbie
+B02	LEGO Duplo	Nature	Lego Duplo Animals
 \.
 
 
@@ -202,9 +202,9 @@ B02	LEGO Duplo	Influencer	Lego Dublo TikToker
 --
 
 COPY public.profiles (id, dateofbirth, email, name, surname, username, role) FROM stdin;
-32	1989-09-14	user1@mail.com	Frank	Matano	user1	user
+32	1989-09-14	user1@mail.com	John	Black	user1	user
 33	1992-09-20	expert1@mail.com	Mary	White	expert1	expert
-34	1987-02-15	manager1@mail.com	Maccio	Capatonda	manager1	manager
+34	1987-02-15	manager1@mail.com	Robert	Brown	manager1	manager
 \.
 
 

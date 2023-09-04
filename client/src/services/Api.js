@@ -10,7 +10,6 @@
 
 //imports
 import axios from "axios";
-import {useEffect} from "react";
 
 //Server setup
 const SERVER_URL = 'http://localhost:8080/';
@@ -69,6 +68,15 @@ const Api = {
         })
     },
     //PROFILE API
+
+    getProfileById: (id, token) => {
+        axios.defaults.headers.common['Authorization'] =`Bearer ${token}`
+        return new Promise((resolve, reject) => {
+            axios.get(SERVER_URL + `authenticated/profiles/id/${id}`)
+                .then((res) => resolve(res.data))
+                .catch((err) => reject(err.response.data));
+        })
+    },
 
     getProfileByEmail: (email, token) => {
         axios.defaults.headers.common['Authorization'] =`Bearer ${token}`

@@ -8,7 +8,6 @@ import {AuthContext} from "../../utils/AuthContext";
 import Api from "../../../services/Api";
 import {useNavigate} from "react-router-dom";
 import {ArrowLeftCircle} from "react-bootstrap-icons";
-import ticket from "../../../views/Ticket/Ticket";
 
 
 const priorityMap = {
@@ -33,6 +32,7 @@ const TicketCard = (props) => {
 
 	const [priority, setPriority] = useState(props.ticket.priority)
 	const [expert, setExpert] = useState(props.ticket.expertId);
+	const [expertMail, setExpertMail] = useState("");
 	const [experts, setExperts] = useState([]);
 
 	useEffect(() =>{
@@ -51,8 +51,17 @@ const TicketCard = (props) => {
 				notify.error("Server error")
 			})}},[])
 
-
-
+	useEffect(() => {
+		if (expert){
+			Api.getProfileById(expert, authContext.user.token)
+				.then(expert => {
+					setExpertMail(expert.email)
+				})
+				.catch(err => {
+					notify.error("Server error")
+				})
+		}
+		},[])
 
 	const handlePriority = (priority) =>{
 		switch (priority.target.value) {
@@ -157,9 +166,7 @@ const TicketCard = (props) => {
 				<Card.Title>
 					<Row align="left">
 						<Col className='mb-2'>
-
-
-						<Button variant="danger" onClick={() => navigate('/dashboard')}><ArrowLeftCircle className='me-2'/>Back</Button>
+							<Button variant="danger" onClick={() => navigate('/dashboard')}><ArrowLeftCircle className='me-2'/>Back</Button>
 						</Col>
 						</Row>
 
@@ -215,11 +222,11 @@ const TicketCard = (props) => {
 					<ListGroup.Item>
 						<Row align="left">
 							<Col>
-								<b>ExpertId</b>
+								<b>Expert assigned</b>
 							</Col>
 
 							<Col align="right">
-								{expert ? expert.toString().split(' - ')[0] : 'expert non assigned'}
+								{expertMail ? expertMail : 'expert non assigned'}
 							</Col>
 						</Row>
 					</ListGroup.Item>

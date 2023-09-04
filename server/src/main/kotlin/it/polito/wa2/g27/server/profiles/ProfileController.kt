@@ -7,6 +7,13 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @Observed
 class ProfileController(private val profileService: ProfileService) {
+
+    @GetMapping("/authenticated/profiles/id/{id}")
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    fun getById(@PathVariable id: Int): ProfileDTO? {
+        return profileService.getById(id)
+    }
+
     @GetMapping("/authenticated/profiles/{email}")
     @CrossOrigin(origins = ["http://localhost:3000"])
     fun getByEmail(@PathVariable email: String): ProfileDTO? {
