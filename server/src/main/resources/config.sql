@@ -159,41 +159,16 @@ CREATE SEQUENCE public.tickets_seq
 
 ALTER TABLE public.tickets_seq OWNER TO postgres;
 
---
--- Data for Name: attachments; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.attachments (id, data, name, size, type, message_id) FROM stdin;
-\.
-
-/*
---
--- Data for Name: messages; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.messages (id, datetime, text, receiver_id, sender_id, ticket_id) FROM stdin;
-0	2000-07-16 19:20:00	Prodotto non funziona	33	32	10
-1	2000-07-16 19:21:00	Impossibile ti sbagli!	32	33	10
-2	2000-07-16 19:22:00	Ma ti dico che non va	33	32	10
-3	2000-07-16 19:23:00	Non mi pagano abbastanza	32	33	10
-4	2000-07-16 19:24:00	Aggiustalo!	33	32	10
-5	2000-07-16 19:25:00	Non mi interessa :D	32	33	10
-6	2000-07-16 19:26:00	Reportato	33	32	10
-7	2000-07-16 19:24:00	Rispondimi!!!	33	32	10
-8	2000-07-16 19:24:00	Sta zitto!	32	33	10
-9	2000-07-16 19:24:00	Mah ...	33	32	10
-\.
-*/
 
 --
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.products (id, brand, description, name) FROM stdin;
-A01 LEGO	Space	Lego Star Wars
-A02	LEGO	Historical	Lego Indiana Jones
-B01	LEGO Duplo	Fashion	Lego Duplo Barbie
-B02	LEGO Duplo	Nature	Lego Duplo Animals
+COPY public.products (id, brand, description, name) FROM stdin (Delimiter ',');
+A01,LEGO,Space,Lego Star Wars
+A02,LEGO,Historical,Lego Indiana Jones
+B01,LEGO Duplo,Fashion,Lego Duplo Barbie
+B02,LEGO Duplo,Nature,Lego Duplo Animals
 \.
 
 
@@ -201,10 +176,10 @@ B02	LEGO Duplo	Nature	Lego Duplo Animals
 -- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.profiles (id, dateofbirth, email, name, surname, username, role) FROM stdin;
-32	1989-09-14	user1@mail.com	John	Black	user1	user
-33	1992-09-20	expert1@mail.com	Mary	White	expert1	expert
-34	1987-02-15	manager1@mail.com	Robert	Brown	manager1	manager
+COPY public.profiles (id, dateofbirth, email, name, surname, username, role) FROM stdin (Delimiter ',');
+32,1989-09-14,user1@mail.com,John,Black,user1,user
+33,1992-09-20,expert1@mail.com,Mary,White,expert1,expert
+34,1987-02-15,manager1@mail.com,Robert,Brown,manager1,manager
 \.
 
 
@@ -212,10 +187,10 @@ COPY public.profiles (id, dateofbirth, email, name, surname, username, role) FRO
 -- Data for Name: ticket_history; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.ticket_history (id, date, status, ticket_id) FROM stdin;
-12	2022-09-14 00:00:00	OPEN	11
-13	2022-09-15 00:00:00	PROGRESS	11
-14	2022-09-10 00:00:00	OPEN	10
+COPY public.ticket_history (id, date, status, ticket_id) FROM stdin (Delimiter ',');
+12,2022-09-14 00:00:00,OPEN,11
+13,2022-09-15 00:00:00,PROGRESS,11
+14,2022-09-10 00:00:00,OPEN,10
 \.
 
 
@@ -223,9 +198,9 @@ COPY public.ticket_history (id, date, status, ticket_id) FROM stdin;
 -- Data for Name: tickets; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.tickets (id, category, description, priority, expert_id, product_id, profile_id) FROM stdin;
-10	Lego	Does not work	1	\N	A01	32
-11	Duplo	No istruction found	2	33	B01	32
+COPY public.tickets (id, category, description, priority, expert_id, product_id, profile_id) FROM stdin (Delimiter ',');
+10,Lego,Does not work,1,\N,A01,32
+11,Duplo,No istruction found,2,33,B01,32
 \.
 
 
