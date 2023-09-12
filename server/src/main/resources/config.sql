@@ -165,10 +165,10 @@ ALTER TABLE public.tickets_seq OWNER TO postgres;
 --
 
 COPY public.products (id, brand, description, name) FROM stdin (Delimiter ',');
-A01,LEGO,Space,Lego Star Wars
-A02,LEGO,Historical,Lego Indiana Jones
-B01,LEGO Duplo,Fashion,Lego Duplo Barbie
-B02,LEGO Duplo,Nature,Lego Duplo Animals
+A01,Logitech,Gaming cabled keyboard,Logitech K120 Gaming Keyboard
+A02,HP,PC Wired Mouse, PC 150 Mouse
+B01,Samsung,Samsung Monitor S31C (S24C312) Flat 1920x1080 Full HD,Monitor S31C (S24C312)
+B02,Sony,Wireless Headset,Sony WH-CH520
 \.
 
 
@@ -199,8 +199,8 @@ COPY public.ticket_history (id, date, status, ticket_id) FROM stdin (Delimiter '
 --
 
 COPY public.tickets (id, category, description, priority, expert_id, product_id, profile_id) FROM stdin (Delimiter ',');
-10,Lego,Does not work,1,\N,A01,32
-11,Duplo,No istruction found,2,33,B01,32
+10,Logitech,Does not work,1,\N,A01,32
+11,Samsung,No istruction found,2,33,B01,32
 \.
 
 

@@ -33,6 +33,7 @@ const TicketCard = (props) => {
 	const [priority, setPriority] = useState(props.ticket.priority)
 	const [expert, setExpert] = useState(props.ticket.expertId);
 	const [expertMail, setExpertMail] = useState("");
+	const [userMail, setUserMail] = useState("");
 	const [experts, setExperts] = useState([]);
 
 	useEffect(() =>{
@@ -52,6 +53,11 @@ const TicketCard = (props) => {
 			})}},[])
 
 	useEffect(() => {
+		Api.getProfileById(props.ticket.profileId, authContext.user.token).then(
+			profile => {
+				setUserMail(profile.email)
+			}
+		).catch(err => {})
 		if (expert){
 			Api.getProfileById(expert, authContext.user.token)
 				.then(expert => {
@@ -213,10 +219,10 @@ const TicketCard = (props) => {
 					<ListGroup.Item>
 						<Row align="left">
 							<Col>
-								<b>ProfileId</b>
+								<b>Created by</b>
 							</Col>
 
-							<Col align="right">{props.ticket.profileId}</Col>
+							<Col align="right">{userMail}</Col>
 						</Row>
 					</ListGroup.Item>
 					<ListGroup.Item>
@@ -233,25 +239,26 @@ const TicketCard = (props) => {
 				<ListGroup>
 				</ListGroup>
 				</ListGroup>
-				<Card.Text>
+				<Card.Text className="mt-2">
 					<b>Description: </b>
 					{props.ticket.description}</Card.Text>
                 <ListGroup>
                 <Row align="left">
 							<Col>
-								{authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPEN') ?<Button variant="success" onClick={handleSave}>Save</Button>:<></>}
+								{authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPENED') ?
+									<Button className="m-1" variant="success" onClick={handleSave}>Save</Button>:<></>}
 							</Col>
 
 							<Col align="right">
-								{props.ticket.status == 'CLOSED' && authContext.user.role == 'user'
-									?<Button onClick={handleReopen} variant="success">Reopen</Button>: <></>}
+								{(props.ticket.status == 'CLOSED' || props.ticket.status == 'RESOLVED') && authContext.user.role == 'user'
+									?<Button className="m-1" onClick={handleReopen} variant="success">Reopen</Button>: <></>}
 								{props.ticket.status !== 'CLOSED'?
-									<Button variant="danger" onClick={handleClose}>Close</Button>:<></>}
-								{authContext.user.role == 'manager' && props.ticket.status == 'PROGRESS'?
-									<Button variant="danger" className='ms-1' onClick={handleStop}>Stop</Button>:<></>}
-								{authContext.user.role == 'expert' && props.ticket.status == 'PROGRESS'?
-									<Button variant="success" className='ms-1' onClick={handleResolve}>Resolve</Button>:<></>}
 
+									<Button className="m-1" variant="danger" onClick={handleClose}>Close</Button>:<></>}
+								{authContext.user.role == 'manager' && props.ticket.status == 'PROGRESS'?
+									<Button className="m-1"  variant="danger" className='ms-1' onClick={handleStop}>Stop</Button>:<></>}
+								{authContext.user.role == 'expert' && props.ticket.status == 'PROGRESS'?
+									<Button className="m-1" variant="success" className='ms-1' onClick={handleResolve}>Resolve</Button>:<></>}
 							</Col>
 						</Row>
                 </ListGroup>
@@ -261,7 +268,7 @@ const TicketCard = (props) => {
 			<Col className='m-3'>
 			<Form.Group className="mb-3">
 				<Form.Label><b>CHANGE PRIORITY</b></Form.Label>
-				<Form.Select onChange={handlePriority} disabled={authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPEN') ? false:true}>
+				<Form.Select onChange={handlePriority} disabled={authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPENED') ? false:true}>
 					<option>
 						set priority
 					</option>
@@ -269,32 +276,25 @@ const TicketCard = (props) => {
 						{priorityMap[1].name}
 					</option>
 					<option>
-
 							{priorityMap[2].name}
 					</option>
 					<option>
-
 							{priorityMap[3].name}
-
 					</option>
-
-
 				</Form.Select>
 
 			</Form.Group>
 			<Form.Group className="mb-3">
 				<Form.Label><b>ASSIGN AN EXPERT</b></Form.Label>
-				<Form.Select onChange={handleExpert} disabled={authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPEN') ? false:true}>
+				<Form.Select onChange={handleExpert} disabled={authContext.user.role == 'manager' && (props.ticket.status == 'OPEN' || props.ticket.status == 'REOPENED') ? false:true}>
 					{props.ticket.expertId && experts ? experts.filter((e) => e.id == props.ticket.expertId).map((e) =>{
 						return(
-
 							<option key={e.id}>{e.id} - { e.email}</option>
 						)})
 					: <option>expert not assigned</option>
 					}
 					{experts ? experts.filter((e) => e.id !== props.ticket.expertId).map((e) =>{
 						return(
-
 							<option key={e.id}>{e.id} - { e.email}</option>
 						)
 					}): <> Your not a manager</>}

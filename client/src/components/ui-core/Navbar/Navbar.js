@@ -33,17 +33,17 @@ const Navbar = () => {
                 {authContext.user.role == 'user'?<Button className='ms-4' variant={'secondary '}  onClick={()=>{navigate('/ticket/create')}}>Create Ticket</Button>:<></>}
 <Row  className='justify-content-end logout-text ms-lg-auto me-2'>
     <Col className='me-0 p-0'>
-        <PersonCircle className='person-circle ' color='white' size={25} onClick={()=>{navigate('/profile')}}/>
+        <PersonCircle className='person-circle ' color='white' size={35} onClick={()=>{navigate('/profile')}}/>
     </Col>
     <Col className='ms-1 p-0 me-2'>
 
         {
             authContext.user.token ?
-                <Button size='sm' className="ms-0" variant={'secondary '} onClick={()=>{navigate('/profile')}}>
+                <Button className="ms-2" variant={'secondary '} onClick={()=>{navigate('/profile')}}>
                     {authContext.user.role}
                 </Button>
                 :
-                <Button size='sm' className="ms-0" variant={'secondary '} onClick={()=>{navigate('/login')}}>
+                <Button className="ms-2" variant={'secondary '} onClick={()=>{navigate('/login')}}>
                     login
                 </Button>
         }
