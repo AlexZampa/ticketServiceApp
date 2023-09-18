@@ -29,14 +29,25 @@ const Dashboard = () => {
 	useEffect(() =>{
 		switch (authContext.user.role) {
 			case 'manager':
-				Api.getOpenTickets(authContext.user.token)
-					.then(tickets => {
-						setTickets(tickets)
-					})
-					.catch(err => {
+				if (showAll) {
+					Api.getAllTickets(authContext.user.token)
+						.then(tickets => {
+							setTickets(tickets)
+						})
+						.catch(err => {
 
-						notify.error("Server error")
-					})
+							notify.error("Server error")
+						})
+				} else {
+					Api.getOpenTickets(authContext.user.token)
+						.then(tickets => {
+							setTickets(tickets)
+						})
+						.catch(err => {
+
+							notify.error("Server error")
+						})
+				}
 				break;
 			case 'expert':
 				Api.getAssignedTickets(authContext.user.email,authContext.user.token)
@@ -63,31 +74,8 @@ const Dashboard = () => {
 			default:
 		}
 
-		},[])
+		},[tickets])
 
-	useEffect(() => {
-		if (authContext.user.role === 'manager') {
-			if (showAll) {
-				Api.getAllTickets(authContext.user.token)
-					.then(tickets => {
-						setTickets(tickets)
-					})
-					.catch(err => {
-
-						notify.error("Server error")
-					})
-			} else {
-				Api.getOpenTickets(authContext.user.token)
-					.then(tickets => {
-						setTickets(tickets)
-					})
-					.catch(err => {
-
-						notify.error("Server error")
-					})
-			}
-		}
-	}, [showAll]);
 
 	return (
 		<>
@@ -103,7 +91,7 @@ const Dashboard = () => {
 						<Button onClick={() => setShowAll(!showAll)}>{showAll ? 'SHOW ONLY OPEN TICKETS' : 'SHOW ALL TICKETS'}</Button>
 					</Col>
 				</Row> : ''}
-				<Row>
+				<Row className='justify-content-center'>
 					{tickets.length>0 ? tickets.map((ticket)=>{
 						return(
 							<DashboardCard key={ticket.id} ticket={ticket}/>
