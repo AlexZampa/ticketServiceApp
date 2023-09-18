@@ -20,8 +20,10 @@ import useNotification from "../../components/utils/useNotification";
 const Home = () => {
 
     const [products, setProducts] = useState([]);
+    const [vproducts, setVproducts] = useState([]);
     const [search, setSearch] = useState("");
     const notify = useNotification()
+    const [senable,setSenable] = useState(false);
 
     useEffect(() => {
         Api.getAllProduct()
@@ -37,7 +39,7 @@ const Home = () => {
         if (search === "" || search.includes(" ")) {
             Api.getAllProduct()
                 .then(products =>{
-                    setProducts(products);
+                    setVproducts(products);
                 })
                 .catch( err =>{
                     notify.error("Server error")
@@ -49,7 +51,8 @@ const Home = () => {
             .then(product =>{
                 let vproduct = [];
                 vproduct.push(product);
-                setProducts(vproduct);
+                setVproducts(vproduct);
+                setSenable(true)
             })
             .catch( err =>{
                 notify.error("Product not found")
@@ -82,7 +85,8 @@ const Home = () => {
                         </Form>
                     </Col>
                 </Row>
-                    <ProductTable products={products}/>
+                {senable?<ProductTable products={vproducts}/>:<ProductTable products={products}/>}
+
             </div>
         </>
     );
