@@ -31,7 +31,7 @@ const Home = () => {
             .catch( err =>{
                 notify.error("Server error")
             })
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps
+    }, [products]); //eslint-disable-line react-hooks/exhaustive-deps
     const handleSearch = (event) =>{
         event.preventDefault();
         if (search === "" || search.includes(" ")) {
