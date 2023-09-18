@@ -51,6 +51,20 @@ const ProfileContent = () => {
         event.preventDefault();
         API.logout(authContext.user.token).then((succes) => {
             authContext.resetUser()
+            authContext.setUser({
+                id: "",
+                email: "",
+                token: "",
+                username: "",
+                name: "",
+                surname: "",
+                dateOfBirth:"",
+                role: ""
+            });
+            localStorage.setItem("token", "")
+            localStorage.setItem("email", "")
+            localStorage.setItem("role","")
+            localStorage.setItem("id","")
             notify.success(succes.title ? succes.title.toString() : "Successfully logout!");
             navigate('/login')
         }).catch(err => {
