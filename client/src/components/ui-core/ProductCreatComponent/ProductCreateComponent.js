@@ -64,7 +64,7 @@ const ProductCreateComponent = (props) => {
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>ID</Form.Label>
-                    <Form.Control placeholder="Insert description" value={id} required={true} disabled={disable} onChange={(event) => {
+                    <Form.Control placeholder="Insert Identifier" value={id} required={true} disabled={disable} onChange={(event) => {
                         setId(event.target.value)
                     }} />
                     <Form.Text className="text-muted">
@@ -73,7 +73,7 @@ const ProductCreateComponent = (props) => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Name</Form.Label>
-                    <Form.Control placeholder="Insert description" value={name} required={true} onChange={(event) => {
+                    <Form.Control placeholder="Insert name" value={name} required={true} onChange={(event) => {
                         setName(event.target.value)
                     }} />
                     <Form.Text className="text-muted">
@@ -82,7 +82,7 @@ const ProductCreateComponent = (props) => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Brand</Form.Label>
-                    <Form.Control placeholder="Insert description" value={brand} required={true} onChange={(event) => {
+                    <Form.Control placeholder="Insert product brand" value={brand} required={true} onChange={(event) => {
                         setBrand(event.target.value)
                     }} />
                     <Form.Text className="text-muted">

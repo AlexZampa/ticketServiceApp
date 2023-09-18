@@ -488,8 +488,8 @@
     "enabled" : true,
     "totp" : false,
     "emailVerified" : true,
-    "firstName" : "Frank",
-    "lastName" : "Matano",
+    "firstName" : "John",
+    "lastName" : "Black",
     "email" : "user1@mail.com",
     "credentials" : [ {
       "id" : "1f166a6f-f737-4150-b8d6-bb6fa2d95083",
